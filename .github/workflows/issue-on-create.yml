@@ -3,6 +3,8 @@ name: issue-on-create
 # Cualquier Issue nuevo (tarea del backlog creada a mano por un practicante,
 # propuesta, o apoyo) entra solo al board con su Semana y Alumno si es parseable.
 # Así los que terminan antes pueden jalar el siguiente Issue sin esperar al martes.
+# OJO: se usa GraphQL directo (gh api graphql) y no `gh project` porque los
+# comandos de la CLI fallan con GH_TOKEN en CI ("unknown owner type").
 on:
   issues:
     types: [opened]
@@ -21,30 +23,54 @@ jobs:
       - name: Agregar al board con campos (o avisar si falta BOARD_PAT)
         env:
           TITLE: ${{ github.event.issue.title }}
-          URL: ${{ github.event.issue.html_url }}
+          NUM: ${{ github.event.issue.number }}
           ASSIGNEE: ${{ github.event.issue.assignee.login }}
           HAS_PAT: ${{ secrets.BOARD_PAT != '' }}
         run: |
           if [ "$HAS_PAT" = "false" ]; then
-            gh issue comment "${{ github.event.issue.number }}" --body "> ⚠️ No pude agregarlo al board automáticamente (falta el secreto \`BOARD_PAT\`). El monitor lo sincroniza en su revisión; igual trabaja normal."
+            gh issue comment "$NUM" --body "> ⚠️ No pude agregarlo al board automáticamente (falta el secreto \`BOARD_PAT\`). El monitor lo sincroniza en su revisión; igual trabaja normal."
             echo "sin BOARD_PAT — avisado, skip"
             exit 0
           fi
-          set +e
-          gh project item-add 3 --owner jackthony --url "$URL"
+          set -e
+          # IDs del board "AI Business Assistant — SDLC" (github.com/users/jackthony/projects/3).
+          # Si algún día se recrean los campos, actualizar estos IDs.
+          PROJECT_ID="PVT_kwHOApTTrs4Bl4tv"
+          F_SEMANA="PVTF_lAHOApTTrs4Bl4tvzhkj5ow"      # campo texto
+          F_ALUMNO="PVTSSF_lAHOApTTrs4Bl4tvzhkj5o4"     # selección única
+          F_AREA="PVTSSF_lAHOApTTrs4Bl4tvzhkj6ro"       # selección única
+
+          OWNER="${GH_REPO%/*}"; REPO="${GH_REPO#*/}"
+          ISSUE_ID=$(gh api graphql \
+            -f query='query($o:String!,$r:String!,$n:Int!){ repository(owner:$o,name:$r){ issue(number:$n){ id } } }' \
+            -f o="$OWNER" -f r="$REPO" -F n="$NUM" --jq '.data.repository.issue.id')
+          ITEM_ID=$(gh api graphql \
+            -f query='mutation($p:ID!,$c:ID!){ addProjectV2ItemById(input:{projectId:$p,contentId:$c}){ item { id } } }' \
+            -f p="$PROJECT_ID" -f c="$ISSUE_ID" --jq '.data.addProjectV2ItemById.item.id')
+
+          set_field() {
+            gh api graphql \
+              -f query="mutation(\$p:ID!,\$i:ID!,\$f:ID!,\$v:String!){ updateProjectV2ItemFieldValue(input:{projectId:\$p,itemId:\$i,fieldId:\$f,value:{$2:\$v}}){ projectV2Item { id } } }" \
+              -f p="$PROJECT_ID" -f i="$ITEM_ID" -f f="$1" -f v="$3" \
+              --jq '.data.updateProjectV2ItemFieldValue.projectV2Item.id' > /dev/null
+          }
+
           SEMANA=""
           if echo "$TITLE" | grep -qiE "\[S[0-9]+ D[0-9]+\]"; then
             SEMANA=$(echo "$TITLE" | sed -nE 's/.*\[S([0-9]+) D[0-9]+\].*/S\1/p')
           fi
-          [ -n "$SEMANA" ] && gh project item-edit 3 --owner jackthony --url "$URL" --field "Semana" --value "$SEMANA"
+          [ -n "$SEMANA" ] && set_field "$F_SEMANA" "textValue" "$SEMANA"
+
           case "$ASSIGNEE" in
-            adbon-dm1)     ALUMNO="Josue Marreros" ;;
-            WhoAllan)      ALUMNO="Allan Zerpa" ;;
-            estefanyP-hub) ALUMNO="Pilar Aguilar" ;;
-            *)             ALUMNO="" ;;
+            adbon-dm1)     ALUMNO_OPT="4add92a6" ;;
+            WhoAllan)      ALUMNO_OPT="385128c8" ;;
+            estefanyP-hub) ALUMNO_OPT="53e521a6" ;;
+            *)             ALUMNO_OPT="" ;;
           esac
-          [ -n "$ALUMNO" ] && gh project item-edit 3 --owner jackthony --url "$URL" --field "Alumno" --value "$ALUMNO"
+          [ -n "$ALUMNO_OPT" ] && set_field "$F_ALUMNO" "singleSelectOptionId" "$ALUMNO_OPT"
+
           case "$TITLE" in
-            Propuesta:*) gh project item-edit 3 --owner jackthony --url "$URL" --field "Area" --value "Gestión" ;;
+            Propuesta:*) set_field "$F_AREA" "singleSelectOptionId" "0b94bb84" ;;
           esac
+
           echo "board sync ok"

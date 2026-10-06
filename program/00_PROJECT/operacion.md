@@ -13,6 +13,25 @@
 | Dependabot (pip + Actions) | ✅ aplicado |
 | Board [projects/3](https://github.com/users/jackthony/projects/3) con campos Status/Semana/Alumno/Area/Complejidad — **público** (practicantes solo lectura), enlazado al repo | ✅ activo |
 | Ruleset `main protegido (TBD)`: PR obligatorio, squash/lineal, sin force-push, checks `guardian-tbd / reglas-tbd` **y** `CI estricto / calidad` + push protection | ✅ activo |
+
+## DevSecOps — toda la seguridad en GitHub (sin Google Drive)
+
+| Capa | Qué está activo | Dónde se ve |
+|---|---|---|
+| Calidad | 4 puertas en CI (ruff, mypy, pytest, bandit) — check obligatorio para mergear | Actions → `CI estricto` |
+| Reglas TBD | `tbd-guardian` (rama/`Closes #N`/≤6 commits/**commits convencionales**) + `tbd-enforcer` (revierte push directo, cierra PRs >48 h) | Actions |
+| SAST | CodeQL (default setup, python + actions) — corre en PRs y en `main` | Security → Code scanning |
+| Secretos | Secret scanning + **push protection** (bloquea el push si detecta un token) | Security → Secret scanning |
+| Dependencias | Dependabot alerts + Dependabot updates (pip semanal, github-actions semanal) | Security → Dependabot |
+| Suministro | `dependency-review-action` en cada PR (bloquea vulnerabilidades high) | Actions → `CI estricto` |
+| Auditoría | Todo con `persist-credentials: false` y acciones pineadas por SHA | `.github/workflows/*.yml` |
+
+### Secretos, tokens y acceso (política)
+
+- **Secrets del repo** (Settings → Secrets → Actions): `DEEPSEEK_API_KEY` (opcional, review en CI), `BOARD_PAT` (opcional, sync del board), `META_*` (desde que #16 esté listo). Nunca en código ni en docs: solo `.env.example` con los nombres.
+- **GITHUB_TOKEN**: permisos mínimos declarados por workflow (`contents: read`, `pull-requests: write`, `issues: write` según necesita); nada más.
+- **Acceso humano**: monitor = Admin; practicantes = Write pero `main` protegido (todo entra por PR con checks). Dependabot/CodeQL = apps autorizadas.
+- **Datos reales del negocio (KB-A)**: jamás en este repo público — van en un **repo privado** o en GitHub Secrets. Regla dura: el repo público solo lleva código y programa (sin contactos, precios reales ni CALENDAR_ID).
 | Guardianes TBD por workflow (`tbd-guardian` / `tbd-enforcer`) | ✅ en operación |
 | CI estricto: `ruff` + `mypy` + `pytest` + `bandit` (4 puertas, `.github/workflows/ci.yml`) | ✅ montado; entra con el Issue #2 |
 | Pre-commit local (`.pre-commit-config.yaml`: ruff + formateo + hooks base) | ✅ en raíz; cada practicante corre `pre-commit install` |

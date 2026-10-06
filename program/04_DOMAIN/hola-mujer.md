@@ -6,6 +6,17 @@
 
 Automatizar ubicación, servicios, agenda, recordatorios y derivación a **Jioysi** sin guardar datos clínicos. Público: mujeres; tono empático y humano.
 
+## Antecedente real — por qué este proyecto (no repetir lo que no gustó)
+
+> **Historia del negocio (del dueño, 2026-10-06):** primero se usaron automatizaciones (ManyChat, de ahí el Excel operativo), luego un **agente con n8n** — y **al público no le gustó: no atiende como humano**. Por eso este proyecto: un agente que **aprende de las conversaciones reales** ya tenidas, atiende personalizado y ejecuta acciones (agendar, confirmar, recordar, derivar).
+
+Consecuencias directas en el diseño (todas ya en el plan):
+
+1. **El corpus real es el activo:** exportar las conversaciones de la era ManyChat/n8n (anonimizadas) a `data/conversaciones/` (ver README ahí) — alimentan few-shot (S7), prompt v1/v2 (S5/S6), RAG de objeciones (S6) y evals (S12).
+2. **Atender como humano, en concreto:** saludar por nombre, recordar el hilo (memoria `thread_id` = teléfono), mensajes ≤3 líneas, máx 1 pregunta por turno, español peruano empático, nunca hablar de salud clínica (deriva a Jioysi).
+3. **El embudo ya está medido** (07_APRENDIZAJES_INBOX): 33 invitaciones → 2 horarios elegidos — el cuello está entre el CTA y la confirmación; el agente nuevo debe mejorar **esa transición** y compararse contra el baseline ManyChat/n8n (S13/S16).
+4. **Personalización > automatización:** las 14 reglas del negocio (abajo) son el piso; lo que se aprende de las conversaciones se versiona en `configs/hola_mujer/prompt_v*.md` con su tabla antes/después.
+
 ## Configuración del negocio (04_CONFIG)
 
 | Clave | Valor | Estado |

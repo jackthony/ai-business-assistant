@@ -4,6 +4,8 @@
 
 Construir un **asistente de IA empresarial multitenant para WhatsApp** (Hola Mujer + NeuraCode), **canal-agnóstico** (ADR-011): hoy Meta/WhatsApp, mañana TikTok u otra plataforma — la capa de agentes es el producto, el canal es un adapter. Software y contexto corriendo en local (DeepSeek), como producto real que además sirve de vehículo de formación para 3 practicantes SENATI durante 16 semanas (salen como AI engineers; el monitor lidera un proyecto en producción completo).
 
+**El porqué de fondo:** el negocio ya pasó por ManyChat y por un agente n8n — *el público no volvió: "no atiende como humano"*. Este agente existe para **aprender de esas conversaciones reales** (corpus anonimizado en `data/conversaciones/`), atender personalizado (memoria, tono, contexto del cliente) y ejecutar las acciones del negocio. La métrica que decide si sirve: el embudo conversación → lead → cita → pago contra el baseline ManyChat/n8n (S13/S16).
+
 ## Objetivos
 
 1. **Producto:** agente que informa, agenda, cierra ventas, recibe comprobantes (Yape/Plin), deriva a humano y se reactiva — sin alucinar, con trazabilidad.
@@ -54,5 +56,12 @@ Construir un **asistente de IA empresarial multitenant para WhatsApp** (Hola Muj
 - **HITO 2 (S9 D3):** agente único completo (4 agentes + handoff, sin supervisor todavía).
 - **HITO 3 (S12 D3):** NeuraCode atendiendo + notas de voz.
 - **Demo final (S16 D3):** E2E, informe SENATI y transferencia.
+
+## Miras a 2027 (post-S16)
+
+- **Operación y venta:** el bot queda corriendo 24/7 con evals continuos (LLM-as-judge sobre corpus real), alertas de degradación (Langfuse) y FinOps trimestral (revisar tarifas Meta cada 1-ene/abr/jul/oct).
+- **Aprender siempre:** cada conversación nueva alimenta datasets versionados; el prompt se actualiza con tabla antes/después (nunca se toca sin evidencia).
+- **Expansión:** NeuraCode como tenant 2 (S12) y canales nuevos vía ADR-011 (TikTok, Instagram) sin tocar la capa de agentes.
+- **Equipo:** los 3 practicantes salen como AI engineers que ya operaron un agente en producción real (evidencia: commits/PRs/dashboards/informes SENATI).
 
 > El detalle diario vigente (v2, 48 sesiones) está en `program/01_CURRICULUM/16_week_plan.md`.

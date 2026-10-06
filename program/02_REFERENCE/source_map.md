@@ -9,6 +9,7 @@
 | Material | Rol | Estado |
 |---|---|---|
 | `Hola Mujer · MVP WhatsApp ManyChat · Operativo (1).xlsx` (11 hojas) | KB-A: catálogo, reglas, config del negocio | ✅ verificada; resumida en `program/04_DOMAIN/hola-mujer.md`; bloqueantes en `hola-mujer.md` §Bloqueantes |
+| **Conversaciones reales de la era ManyChat/n8n** (export del negocio) | Corpus de aprendizaje del agente (anonimizado en `data/conversaciones/`): few-shot, objeciones, evals, baseline | ✅ autorizado por el dueño (negocio propio); pendiente exportar y anonimizar |
 | `Plan Maestro — HealthTech Software & AI — SENATI 2026 (EVALUABLE).xlsx` | Evaluación numérica (16 semanas × 3 alumnos) | vive en Drive (binario); fórmulas verificadas al migrar |
 | Informe FPE SENATI (CNIU-108, `.pages`) | Formato institucional quincenal: registro diario, PEA, tarea significativa | esquema documentado en `current_status.md`/`operacion.md`; el archivo vive en Descargas/Drive |
 | Docs originales del proyecto (README v1 y notas previas del monitor) | Material de arranque del programa | reemplazados por `program/` — fuera del repo, no se citan como fuente viva |

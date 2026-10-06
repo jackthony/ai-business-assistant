@@ -61,6 +61,8 @@ jobs:
           if [ -d src ]; then bandit -r src -x tests -ll; else echo "sin src — skip"; fi
 
   dependency-review:
+    # la acción solo entiende PRs; en push a main fallaría sin este if
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     permissions:
       contents: read

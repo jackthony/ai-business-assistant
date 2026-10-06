@@ -26,7 +26,7 @@ jobs:
           COMMITS: ${{ github.event.pull_request.commits }}
         run: |
           python3 - <<'PY'
-          import os, re, sys, json, subprocess
+          import os, re, sys, json, subprocess, base64
           errors = []
           base = os.environ["BASE"]
           head = os.environ["HEAD"]
@@ -42,17 +42,24 @@ jobs:
               print(f"::warning:: {commits} commits: no bloquea, pero TBD prefiere batches pequeños (el merge squash une todo igual).")
 
           # Mensajes de commit estrictos (convención en GUIA_PRACTICANTE.md §Commits)
+          # Parseo robusto: la primera línea de cada mensaje viaja en base64 (un mensaje
+          # multilínea rompía el parseo anterior por split de \n\n).
           msgs = subprocess.run(
               ["gh", "api", f"repos/{os.environ['GH_REPO']}/pulls/{os.environ['PR_NUM']}/commits",
-               "--jq", ".[].commit.message"], capture_output=True, text=True)
-          first_lines = [m.splitlines()[0] if m.splitlines() else "" for m in msgs.stdout.split("\n\n") if m.strip()]
-          PAT = re.compile(r"^(feat|fix|docs|test|refactor|ci|chore|perf|style)(\([a-z0-9/_-]+\))?: .{5,72}$")
+               "--jq", ".[] | .commit.message | split(\"\\n\")[0] | @base64"], capture_output=True, text=True)
+          first_lines = []
+          for b in msgs.stdout.splitlines():
+              b = b.strip()
+              if b:
+                  first_lines.append(base64.b64decode(b).decode("utf-8", "replace").strip())
+          PAT = re.compile(r"^(feat|fix|docs|test|refactor|ci|chore|perf|style)(\([a-z0-9/_-]+\))?: .{5,}$")
           for line in first_lines:
-              line = line.strip()
               if not line:
                   continue
-              if line.endswith(".") or ".." in line:
-                  errors.append(f"commit '{line}': sin punto final.")
+              if line.endswith(".") or "..." in line:
+                  errors.append(f"commit '{line}': sin punto final ni elipsis.")
+              if len(line) > 72:
+                  errors.append(f"commit '{line[:40]}…': supera los 72 caracteres ({len(line)}).")
               if not PAT.match(line):
                   errors.append(f"commit '{line}': debe ser 'tipo(alcance): verbo imperativo' (feat|fix|docs|test|refactor|ci|chore|perf|style) ≤72 chars.")
               if re.search(r"(?i)^(fix|update|cambios|wip|final)$", line):

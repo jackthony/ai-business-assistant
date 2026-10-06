@@ -17,9 +17,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 (pin por SHA)
         with:
           fetch-depth: 0
+          # BOARD_PAT (admin): el ruleset bloquea pushes del bot; el revert necesita
+          # el bypass de admin para restaurar main. Sin PAT: se intenta y queda en el log.
+          token: ${{ secrets.BOARD_PAT != '' && secrets.BOARD_PAT || github.token }}
       - name: Revertir push directo a main (solo alumnos)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -47,6 +50,8 @@ jobs:
           if not illegal:
               print("push válido (merge de PR)")
               sys.exit(0)
+          subprocess.run(["git", "config", "user.name", "enforcer-tbd"], check=True)
+          subprocess.run(["git", "config", "user.email", "enforcer@users.noreply.github.com"], check=True)
           if not linked:
               subprocess.run(["git", "reset", "--hard", before], check=True)
               subprocess.run(["git", "push", "--force", "origin", "main"], check=True)
@@ -63,10 +68,11 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }} # sin checkout, gh necesita el repo explícito
     steps:
       - name: Cerrar PR viejos y borrar ramas muertas
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
           import json, subprocess, time

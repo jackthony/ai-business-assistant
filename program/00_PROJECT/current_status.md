@@ -51,7 +51,7 @@
 
 ## Decisiones recientes (resumen)
 
-- 11 ADRs vigentes: FastAPI · LangGraph · WhatsApp Cloud API · ChromaDB · memoria Sqlite→Postgres · TBD · agente único primero · DeepSeek local first · harness/seguridad N1/N2/N3 · gobernanza de frameworks · **canal-agnóstico (ADR-011)**.
+- 11 ADRs vigentes: FastAPI · LangGraph · WhatsApp Cloud API · ChromaDB · memoria Sqlite→Postgres · TBD · agente único primero · **DeepSeek local first (ADR-008 — aplica al runtime M5; los practicantes usan PCs Windows con modelos chicos o DeepSeek web)** · harness/seguridad N1/N2/N3 · gobernanza de frameworks · canal-agnóstico (ADR-011).
 - Repo único `ai-business-assistant` con transparencia total (ver `program/00_PROJECT/operacion.md`).
 - Canal y Build/Buy/Integrate: se evaluará usar herramientas SaaS listas (**Kapso, n8n**) para capas no diferenciadoras según alcance; el núcleo (capa de agentes) sigue siendo propio (ADR-011). Decisión en el cierre B/B/I (S4 D3) y revisión en S10.
 - Guía MIT (Vasilyev) adoptada como apoyo; cursos Udemy verificados; malla Java archivada; Excel migrado a `(EVALUABLE).xlsx`.

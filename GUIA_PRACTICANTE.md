@@ -16,16 +16,17 @@
 
 1. Aceptar la invitación de colaborador (correo de GitHub).
 2. `git clone https://github.com/jackthony/ai-business-assistant.git && cd ai-business-assistant`
-3. Entorno: `python -m venv .venv && source .venv/bin/activate` y luego `pip install -e ".[dev]"` (o `uv sync`); si aún no hay `pyproject.toml`, `pip install -r requirements.txt`.
+3. Entorno (**Windows — tu caso**): `py -3.11 -m venv .venv` y activa con `.venv\Scripts\activate` (PowerShell: `.venv\Scripts\Activate.ps1`); luego `pip install -e ".[dev]"` (o `uv sync`); si aún no hay `pyproject.toml`, `pip install -r requirements.txt`. En macOS/Linux: `python -m venv .venv && source .venv/bin/activate`.
 4. `pip install pre-commit && pre-commit install` → ruff y el formateo corren solos en **cada commit**.
-5. `cp .env.example .env` (el `.env` jamás se commitea).
+5. `copy .env.example .env` (Windows) / `cp .env.example .env` (macOS) — el `.env` jamás se commitea.
+6. **Tu IA de apoyo:** tu PC no corre los modelos grandes del proyecto (esos viven en la M5 del monitor). Para dudas instala Ollama con un modelo chico según tu RAM (`qwen2.5-coder:1.5b` si tienes 8 GB, `:3b` si 16 GB) o usa **DeepSeek web gratis** (chat.deepseek.com). Detalle: `program/02_REFERENCE/deepseek-local.md`.
 
 ## 3. Antes de codear (10 min, obligatorio)
 
 1. `program/00_PROJECT/current_status.md` — dónde está el proyecto HOY.
 2. Tu Issue del día y sus criterios de aceptación.
 3. Tus fuentes: tabla **"Materiales por semana"** en `program/01_CURRICULUM/16_week_plan.md` + mapa `program/02_REFERENCE/source_map.md`. Lee, revisa, investiga; si contradicen algo, gana la doc oficial.
-4. Si usas IA (ChatGPT o un agente): pégale **solo** `AGENTS.md` + tu Issue + la guía de tu semana. Nunca el repo completo.
+4. Si usas IA (DeepSeek web, ChatGPT o un agente): pégale **solo** `AGENTS.md` + tu Issue + la guía de tu semana. Nunca el repo completo. En S4 (#2/#3/#4) la IA es para dudas y revisar tu código, no para que te haga el Issue entero: las preguntas de comprensión del Issue y del PR demuestran que lo entiendes tú.
 
 ## 4. Trabajar con TBD (correcto, sin excepciones)
 

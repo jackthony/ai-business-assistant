@@ -7,6 +7,8 @@
 
 El programa se ejecuta en un M5 Pro con 24 GB de RAM unificada. Se busca minimizar costos y dependencia de APIs.
 
+> **Nota (2026-10-06):** este ADR aplica al **runtime del producto** (la M5 del monitor). Los practicantes desarrollan en **PCs Windows más antiguas**: ahí corren solo modelos chicos de Ollama (1.5b–3b) o DeepSeek web gratis para dudas — nunca los modelos grandes. Ver `program/02_REFERENCE/deepseek-local.md`.
+
 ## Problema
 
 ¿Qué LLM usa el proyecto y las herramientas de tutoría?

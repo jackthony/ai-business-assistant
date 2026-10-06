@@ -4,7 +4,7 @@
 
 ## Qué es este repo
 
-`ai-business-assistant` — programa de prácticas **HealthTech Software & AI · SENATI 2026** + producto multitenant (Hola Mujer y NeuraCode) para WhatsApp: FastAPI + LangGraph + ChromaDB + Ollama (DeepSeek local). La gestión del programa (currículo, evaluación, ADRs) vive en `program/`; el código del producto en `src/` (desde S4).
+`ai-business-assistant` — programa de prácticas **HealthTech Software & AI · SENATI 2026** + producto multitenant (Hola Mujer y NeuraCode) para WhatsApp: FastAPI + LangGraph + ChromaDB + Ollama (DeepSeek local). La gestión del programa (currículo, evaluación, ADRs) vive en `program/`; el código del producto en `src/` (desde S4). El runtime (Ollama con modelos grandes) corre en la **M5 del monitor**; los practicantes desarrollan en **PCs Windows antiguas** (modelos chicos o DeepSeek web para dudas — `program/02_REFERENCE/deepseek-local.md`). Al darles instrucciones usa comandos Windows (`.venv\Scripts\activate`, `copy`, `py -3.11`).
 
 ## Protocolo de contexto (obligatorio)
 

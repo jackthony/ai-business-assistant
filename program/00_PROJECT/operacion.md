@@ -31,7 +31,7 @@
 - **Secrets del repo** (Settings → Secrets → Actions): `DEEPSEEK_API_KEY` (opcional, review en CI), `BOARD_PAT` (opcional, sync del board), `META_*` (desde que #16 esté listo). Nunca en código ni en docs: solo `.env.example` con los nombres.
 - **GITHUB_TOKEN**: permisos mínimos declarados por workflow (`contents: read`, `pull-requests: write`, `issues: write` según necesita); nada más.
 - **Acceso humano**: monitor = Admin; practicantes = Write pero `main` protegido (todo entra por PR con checks). Dependabot/CodeQL = apps autorizadas.
-- **Datos reales del negocio (KB-A)**: jamás en este repo público — van en un **repo privado** o en GitHub Secrets. Regla dura: el repo público solo lleva código y programa (sin contactos, precios reales ni CALENDAR_ID).
+- **Datos reales del negocio (KB-A)**: por decisión del dueño (2026-10-06) **todo vive en GitHub** — el Excel operativo se versiona en `data/` de este repo (GitHub sustituye a Google Drive). Regla de higiene que se mantiene: en **código y tests** solo fixtures anonimizados; los nombres reales de clientes no se meten en datos de prueba.
 | Guardianes TBD por workflow (`tbd-guardian` / `tbd-enforcer`) | ✅ en operación |
 | CI estricto: `ruff` + `mypy` + `pytest` + `bandit` (4 puertas, `.github/workflows/ci.yml`) | ✅ montado; entra con el Issue #2 |
 | Pre-commit local (`.pre-commit-config.yaml`: ruff + formateo + hooks base) | ✅ en raíz; cada practicante corre `pre-commit install` |

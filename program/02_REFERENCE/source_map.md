@@ -24,7 +24,7 @@
 | MCP spec (`modelcontextprotocol.io`) | Protocolo tools/context | activo | desacoplar herramientas (S10+, opcional) |
 | FastAPI docs | API async, BackgroundTasks, OpenAPI | activo | webhook y endpoints (S4+) |
 | Pydantic v2 docs | Schemas, validación, tools | activo | contratos y tools (S5+) |
-| Meta WhatsApp Cloud API | Canal: webhook, payloads, envío, precios | activo | S4–S16 (ver `whatsapp-cloud-api.md`); precios archivados en `meta-pricing.md` (captura 2026-10-06: Perú standalone desde 1-oct-2026) |
+| Meta WhatsApp Cloud API | Canal: webhook, payloads, envío, precios | activo | S4–S16 (ver `whatsapp-cloud-api.md`); precios archivados en `meta-pricing.md` (captura 2026-10-06: Perú standalone desde 1-oct-2026, valores de referencia vía plivo.com/whatsapp/pricing/pe y formbeep.com/whatsapp-api-pricing — confirmar contra el panel Billing del WABA) |
 | Ollama docs | Modelos locales (DeepSeek/Qwen) | activo | S4+ (ver `deepseek-local.md`) |
 | Docker docs | Imagen y compose | activo | S14 |
 | Trunk-Based Development | Flujo git/TBD | activo | S2+ (ver ADR-006) |

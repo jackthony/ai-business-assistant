@@ -8,22 +8,27 @@ on:
     types: [opened]
 
 permissions:
-  issues: read
+  issues: write
 
 jobs:
   board-sync:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     env:
-      GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ secrets.BOARD_PAT != '' && secrets.BOARD_PAT || github.token }}
     steps:
-      - name: Agregar al board con campos
+      - name: Agregar al board con campos (o avisar si falta BOARD_PAT)
         env:
           TITLE: ${{ github.event.issue.title }}
-          BODY: ${{ github.event.issue.body }}
           URL: ${{ github.event.issue.html_url }}
           ASSIGNEE: ${{ github.event.issue.assignee.login }}
+          HAS_PAT: ${{ secrets.BOARD_PAT != '' }}
         run: |
+          if [ "$HAS_PAT" = "false" ]; then
+            gh issue comment "${{ github.event.issue.number }}" --body "> ⚠️ No pude agregarlo al board automáticamente (falta el secreto \`BOARD_PAT\`). El monitor lo sincroniza en su revisión; igual trabaja normal."
+            echo "sin BOARD_PAT — avisado, skip"
+            exit 0
+          fi
           set +e
           gh project item-add 3 --owner jackthony --url "$URL"
           SEMANA=""

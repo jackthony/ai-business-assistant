@@ -18,6 +18,9 @@
 - ADR-008 DeepSeek local first (M5 Pro, 24 GB): nube solo WhatsApp Cloud API; voz/visión local si el hardware da.
 - ADR-009 Harness de seguridad: permisos N1/N2/N3, gating `draft→review→apply`, validación determinista primero.
 - ADR-010 Frameworks: LangGraph se queda; OpenAI SDK / MS Agent Framework / Strands solo como referencias de patrones.
+- Guía «Comprehensive Guide to AI Agent Engineering» (Vasilyev, MIT) adoptada como apoyo de alumnos; mapa semanal en `02_REFERENCE/agent-engineering-handbook.md` y PDF en Drive → `02_ALUMNOS/`.
+- Modelo DevOps en GitHub documentado en `00_PROJECT/github_devops.md` (Issues, Projects, CI, protecciones, releases); Drive solo para Excel de notas, PDFs e informes SENATI.
+- Cursos de refuerzo verificados y planificados en `01_CURRICULUM/cursos_de_refuerzo.md` (3 comprados; gaps WhatsApp/Ollama con opciones gratis u opcionales ~$10–15).
 - Curaduría de fuentes 2026 completada (`02_REFERENCE/source_map.md`): Koenigstein verificada (taller avanzado, no comprar), 3 cursos Udemy clasificados como opcionales, OWASP ASI 2026 integrado.
 - Se archivó la malla Java/Spring como plan de evaluación; el plan vigente es IA/WhatsApp S1–S16.
 - Excel maestro migrado a `(EVALUABLE).xlsx` con evaluación automática 16×3 (fórmulas verificadas).

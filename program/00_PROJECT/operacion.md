@@ -46,6 +46,20 @@
 
 Regla: la automatización dice **dónde** mirar; el monitor decide **cómo va**.
 
+## Métricas DORA (liderazgo)
+
+Miden la salud del delivery del equipo, no a personas.
+
+| Métrica | Definición | En este repo | Meta | Activa |
+|---|---|---|---|---|
+| Deployment Frequency | despliegues a producción por periodo | releases publicadas | ≥1 por quincena | S14 (con CD) |
+| Lead Time for Changes | primer commit → producción | proxy: PR abierto → merge | **<48 h** (regla TBD) | desde S4 |
+| Change Failure Rate | % de cambios que degradan el servicio | proxy: reverts + PRs abandonados sin merge | <15% | desde S4 |
+| Time to Restore Service | caída → recuperación | incidentes en producción | <1 h | S14+ |
+
+- Los **proxies se calculan solos** en cada `digest-semanal` (bloque «DORA» al inicio del Issue).
+- DORA plenas (DF/MTTR reales) desde que exista CD (S14). Si el cliente pregunta por resultados, se exponen en `roi_metrics.md`.
+
 ## Acceso y límites
 
 - Practicantes: colaboradores con push vía PR (rama corta por Issue); los guardianes hacen cumplir el flujo.

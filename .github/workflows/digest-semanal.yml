@@ -35,7 +35,38 @@ jobs:
             });
 
             const week = new Date().toISOString().slice(0, 10);
+
+            const mergedThisWeek = pulls.filter(
+              (p) => p.merged_at && new Date(p.merged_at) >= since
+            );
+            const leadHours = mergedThisWeek.map(
+              (p) => (new Date(p.merged_at) - new Date(p.created_at)) / 3600000
+            );
+            const avgLead = leadHours.length
+              ? Math.round(leadHours.reduce((a, b) => a + b, 0) / leadHours.length)
+              : null;
+            const abandoned = pulls.filter(
+              (p) => !p.merged_at && p.state === "closed" && p.closed_at && new Date(p.closed_at) >= since
+            );
+            let allCommits = [];
+            try {
+              ({ data: allCommits } = await github.rest.repos.listCommits({
+                owner, repo, since: sinceIso, per_page: 100,
+              }));
+            } catch {}
+            const reverts = allCommits.filter((c) => /revert/i.test(c.commit.message)).length;
+            let releases = 0;
+            try {
+              const r = await github.rest.repos.listReleases({ owner, repo, per_page: 20 });
+              releases = r.data.filter((x) => new Date(x.published_at) >= since).length;
+            } catch {}
+
             let body = `Digest automático del ${week} (últimos 7 días).\n\n`;
+            body += `## DORA (proxies de pre-producción)\n`;
+            body += `- Lead time PR→merge: ${avgLead === null ? "—" : `${avgLead} h`} (meta <48 h)\n`;
+            body += `- PRs mergeados: ${mergedThisWeek.length} · abandonados sin merge: ${abandoned.length} · reverts: ${reverts}\n`;
+            body += `- Releases publicadas: ${releases} (deployment frequency relevante desde S14)\n`;
+            body += `- MTTR: no aplica hasta producción (S14)\n\n`;
             for (const s of students) {
               let commits;
               try {

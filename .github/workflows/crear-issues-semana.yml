@@ -58,11 +58,52 @@ jobs:
                   break
 
           created = 0
+          s_pad = f"S{week:02d}"
+          MILESTONES = {
+              (4, 6): "HITO 1 — Bot Hola Mujer respondiendo (S6)",
+              (7, 9): "HITO 2 — Agente único completo + handoff (S9)",
+              (10, 12): "HITO 3 — NeuraCode + multimodal (S12)",
+              (13, 16): "Demo final — Transferencia (S16)",
+          }
+          milestone = next(t for (a, b), t in MILESTONES.items() if a <= week <= b)
+
+          def gh_run(args):
+              return subprocess.run(["gh"] + args, capture_output=True, text=True)
+
+          def gql(q):
+              r = gh_run(["api", "graphql", "-f", f"query={q}"])
+              try:
+                  return json.loads(r.stdout)
+              except Exception:
+                  return {}
+
+          def issue_id(num):
+              d = gql('query { repository(owner: "jackthony", name: "ai-business-assistant") '
+                      f'{{ issue(number: {num}) {{ id }} }} }}').get("data", {}).get("repository", {})
+              return d.get("issue", {}).get("id")
+
+          # Tracker semanal (idempotente): el padre de los sub-issues del día
+          ht = re.search(rf"(?m)^### Semana {week} — (.+)$", plan_text)
+          bloque_titulo = ht.group(1).strip() if ht else f"Semana {week}"
+          trl = json.loads(gh_run(["issue", "list", "-R", REPO, "--state", "all",
+                                   "--search", f'in:title "[{s_pad}] Semana {week}"', "--json", "number"]).stdout or "[]")
+          if trl:
+              tracker = trl[0]["number"]
+              print(f"tracker existe: #{tracker}")
+          else:
+              r = gh_run(["issue", "create", "-R", REPO,
+                          "-t", f"[{s_pad}] Semana {week} — tracker: {bloque_titulo}",
+                          "-b", (f"Tracker de la semana {week}. Los Issues del día se agregan como sub-issues.\n\n"
+                                 f"- Pack de contexto: `program/01_CURRICULUM/pack_contexto.md` §Semana {week}\n"
+                                 f"- Fundamentos: `program/01_CURRICULUM/ruta_fundamentos.md` §mapa semana→tema"),
+                          "-l", "senati", "--milestone", milestone])
+              tracker = int(r.stdout.strip().rstrip("/").split("/")[-1]) if r.stdout.startswith("https://") else 0
+              print(f"tracker creado: #{tracker}")
+
           for m in re.finditer(r"^\| #(\d+) \| S(\d+) D(\d+) \| (.+?) \| .* \|$", backlog, re.M):
               num, s, d, title = m.groups()
               if int(s) != week:
                   continue
-              s_pad = f"S{int(s):02d}"
               t = f"[{s_pad} D{d}] {title.strip()}"
               existing = subprocess.run(["gh", "issue", "list", "-R", REPO, "--state", "all",
                                          "--search", f'in:title "{s_pad} D{d}"', "--json", "number"],
@@ -115,12 +156,24 @@ jobs:
               subprocess.run(["gh", "label", "create", f"week:S{s}", "-R", REPO, "--force"],
                              capture_output=True, text=True)
               r = subprocess.run(["gh", "issue", "create", "-R", REPO, "-t", t, "-b", body,
-                                  "-l", f"week:S{s},senati"], capture_output=True, text=True)
+                                  "-l", f"week:S{s},senati", "--milestone", milestone],
+                                 capture_output=True, text=True)
               url = r.stdout.strip()
               if url.startswith("https://"):
                   created += 1
                   # El board lo sincroniza issue-on-create.yml al recibir el evento
                   # (por eso este step usa BOARD_PAT como actor). No duplicar aquí:
                   # los comandos `gh project` fallan en CI con GH_TOKEN.
-          print(f"S{week}: {created} issues creados")
+          # Enlazar los Issues del día como sub-issues del tracker (idempotente)
+          if tracker:
+              dailies = json.loads(gh_run(["issue", "list", "-R", REPO, "--state", "all",
+                                           "--search", f'in:title "[{s_pad} D', "--json", "number"]).stdout or "[]")
+              pid = issue_id(tracker)
+              for x in dailies:
+                  cid = issue_id(x["number"])
+                  if pid and cid:
+                      res = gql(f'mutation {{ addSubIssue(input: {{issueId: "{pid}", subIssueId: "{cid}"}}) {{ subIssue {{ number }} }} }}')
+                      ok2 = res.get("data", {}).get("addSubIssue")
+                      print(f"sub-issue #{x['number']}: {'vinculado' if ok2 else 'ya vinculado'}")
+          print(f"S{week}: {created} issues creados · tracker #{tracker or '-'} · milestone: {milestone}")
           PY

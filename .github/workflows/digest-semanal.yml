@@ -101,6 +101,18 @@ jobs:
                 const state = p.merged_at ? "✅ mergeado" : p.state === "closed" ? "❌ cerrado" : "🔄 abierto";
                 body += `  - #${p.number} ${p.title} — ${state}\n`;
               }
+              let reviews = 0;
+              for (const p of pulls.filter((p) => new Date(p.updated_at) >= since)) {
+                try {
+                  const { data: rv } = await github.rest.pulls.listReviews({
+                    owner, repo, pull_number: p.number, per_page: 100,
+                  });
+                  reviews += rv.filter(
+                    (r) => r.user && r.user.login === s.login && r.submitted_at && new Date(r.submitted_at) >= since
+                  ).length;
+                } catch {}
+              }
+              body += `- **Reviews hechos (equipo): ${reviews}** — revisar PRs de compañeros cuenta como trabajo en equipo\n`;
               body += `- **Issues asignados abiertos (${openIssues.length}):**\n`;
               for (const i of openIssues) body += `  - #${i.number} ${i.title}\n`;
               body += `\n`;

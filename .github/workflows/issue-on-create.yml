@@ -58,6 +58,8 @@ jobs:
           SEMANA=""
           if echo "$TITLE" | grep -qiE "\[S[0-9]+ D[0-9]+\]"; then
             SEMANA=$(echo "$TITLE" | sed -nE 's/.*\[S([0-9]+) D[0-9]+\].*/S\1/p')
+          elif echo "$TITLE" | grep -qE "\[S[0-9]+\]"; then
+            SEMANA=$(echo "$TITLE" | sed -nE 's/.*\[S([0-9]+)\].*/S\1/p')
           fi
           [ -n "$SEMANA" ] && set_field "$F_SEMANA" "text" "$SEMANA"
 

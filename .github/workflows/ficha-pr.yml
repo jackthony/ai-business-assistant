@@ -34,7 +34,7 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
           python3 - <<'PY'
-          import os, re, subprocess
+          import os, re, subprocess, json
 
           pr_num = os.environ["PR_NUM"]
           base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]
@@ -50,15 +50,21 @@ jobs:
           if m:
               num = m.group(2)
               ib = run("gh", "api", f"repos/{os.environ['GH_REPO']}/issues/{num}",
-                       "--jq", ".title + \"|\" + .body")
-              if "|" in ib:
-                  ttl, idd = ib.split("|", 1)
+                       "--jq", '{t:.title, b:(.body // ""), a:[.assignees[].login], l:[.labels[].name]}')
+              try:
+                  meta = json.loads(ib)
+                  ttl, idd = meta["t"], meta["b"]
                   issue_ref = f"#{num} {ttl}"
+                  owners = meta.get("a", [])
+                  if owners and os.environ["PR_AUTHOR"] not in owners and "disponible" not in meta.get("l", []):
+                      issue_ref += f" ⚠️ asignado a @{' @'.join(owners)} — política de equipo: verificar permiso/justificación"
                   for sec in ("criterios", "definición de hecho", "criterios de aceptación"):
                       mm = re.search(rf"(?is)##?\s*{re.escape(sec)}[^\n]*\n(.*?)(?=\n##?\s|\Z)", idd)
                       if mm:
                           criterios = mm.group(1).strip()
                           break
+              except Exception:
+                  pass
 
           # Qué toca
           files = run("git", "diff", "--name-only", base, head).splitlines()
@@ -112,6 +118,10 @@ jobs:
           else:
               tst_msg, tst_ok = "**Tests:** toca `src/` sin tocar `tests/` — justifica o agrega tests", False
           lines.append(chk(tst_msg, tst_ok))
+          deps = [f for f in files if f.endswith("pyproject.toml") or "requirements" in f]
+          if deps:
+              lines.append("📦 **Dependencias tocadas:** " + ", ".join(f"`{d}`" for d in deps[:5]) +
+                           " — ¿está en `stack-versiones.md`? Pieza nueva = requiere ADR (ADR-010).")
           lines.append("")
           lines.append("### Contra qué se evalúa (rúbrica)")
           lines.append("")

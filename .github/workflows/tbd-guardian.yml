@@ -24,6 +24,7 @@ jobs:
           HEAD: ${{ github.head_ref }}
           BODY: ${{ github.event.pull_request.body }}
           COMMITS: ${{ github.event.pull_request.commits }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
           python3 - <<'PY'
           import os, re, sys, json, subprocess, base64
@@ -51,7 +52,12 @@ jobs:
           for b in msgs.stdout.splitlines():
               b = b.strip()
               if b:
-                  first_lines.append(base64.b64decode(b).decode("utf-8", "replace").strip())
+                  try:
+                      first_lines.append(base64.b64decode(b).decode("utf-8", "replace").strip())
+                  except Exception:
+                      pass
+          if not first_lines and commits > 0:
+              errors.append("no pude leer los commits del PR vía API — re-lanza el check (re-run) o avisa al monitor.")
           PAT = re.compile(r"^(feat|fix|docs|test|refactor|ci|chore|perf|style)(\([a-z0-9/_-]+\))?: .{5,}$")
           for line in first_lines:
               if not line:
@@ -67,6 +73,26 @@ jobs:
                   errors.append(f"commit '{line}': debe ser 'tipo(alcance): verbo imperativo' (feat|fix|docs|test|refactor|ci|chore|perf|style) ≤72 chars.")
               if re.search(r"(?i)^(fix|update|cambios|wip|final)$", line):
                   errors.append(f"commit '{line}': mensaje prohibido (vacío/genérico).")
+
+          # Puerta de comprensión: la plantilla del PR es obligatoria (se responde, no se borra)
+          if "comprensi" not in body.lower():
+              errors.append("el PR no incluye la sección 'Preguntas de comprensión' — completa la plantilla y respóndelas con tus palabras.")
+          elif len(body.strip()) < 250:
+              errors.append("el cuerpo del PR es muy corto: completa la plantilla (qué/por qué, cómo se probó, checklist, preguntas).")
+
+          # Política de equipo: Issues de otro compañero (aviso; el monitor decide)
+          mref = re.search(r"(?i)(closes|fixes|resolves)\s+#(\d+)", body)
+          if mref:
+              info = subprocess.run(["gh", "api", f"repos/{os.environ['GH_REPO']}/issues/{mref.group(2)}",
+                                     "--jq", '{a: [.assignees[].login], l: [.labels[].name]}'],
+                                    capture_output=True, text=True)
+              try:
+                  meta = json.loads(info.stdout)
+                  author = os.environ.get("AUTHOR", "")
+                  if meta.get("a") and author and author not in meta["a"] and "disponible" not in meta.get("l", []):
+                      print(f"::warning:: El Issue #{mref.group(2)} pertenece a @{' @'.join(meta['a'])} — política de equipo: trabaja solo tus Issues; si fue con permiso del monitor o proactividad justificada, explícalo en el PR.")
+              except Exception:
+                  pass
           if errors:
               print("::error::" + " | ".join(errors))
               sys.exit(1)

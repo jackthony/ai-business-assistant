@@ -1,0 +1,42 @@
+name: guardian-tbd
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  reglas-tbd:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validar reglas TBD
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+          HEAD: ${{ github.head_ref }}
+          BODY: ${{ github.event.pull_request.body }}
+          COMMITS: ${{ github.event.pull_request.commits }}
+        run: |
+          python3 - <<'PY'
+          import os, re, sys
+          errors = []
+          base = os.environ["BASE"]
+          head = os.environ["HEAD"]
+          body = os.environ.get("BODY") or ""
+          commits = int(os.environ["COMMITS"])
+          if base != "main":
+              errors.append(f"el PR apunta a '{base}', no a 'main' (TBD: no existen ramas long-lived).")
+          if not re.fullmatch(r"(tbd|issue)-\d+(-[a-z0-9]+)*", head):
+              errors.append(f"la rama '{head}' no cumple TBD: crea 'issue-<numero>-<slug>' desde main.")
+          if not re.search(r"(?i)(closes|fixes|resolves)\s+#\d+", body):
+              errors.append("el PR no cierra ningún Issue: escribe 'Closes #<numero>' en la descripción.")
+          if commits > 6:
+              errors.append(f"{commits} commits: TBD es batch pequeño (<=6). Divide el PR o haz squash.")
+          if errors:
+              print("::error::" + " | ".join(errors))
+              sys.exit(1)
+          print("TBD OK: rama corta, apunta a main, cierra un Issue")
+          PY

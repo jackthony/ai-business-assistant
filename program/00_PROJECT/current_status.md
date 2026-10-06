@@ -28,7 +28,7 @@
 | Material de alumnos | ✅ guía PDF (Vasilyev, MIT); cursos verificados en `program/01_CURRICULUM/cursos_de_refuerzo.md` |
 | Decisiones | ✅ 10 ADRs (`program/03_ARCHITECTURE/decisions/`) + `program/02_REFERENCE/source_map.md` curado |
 | Código producto (`src/`) | ⏳ arranca con el Issue #2 |
-| Branch protection/rulesets | ⏳ requiere GitHub Pro o repo público (S16) |
+| Branch protection/rulesets nativos | ✅ suplidos por guardianes TBD por workflow (`tbd-guardian` + `tbd-enforcer`); rulesets quedan para Pro/público (S16) |
 
 ## Inventario de tareas (todas)
 

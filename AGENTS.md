@@ -30,7 +30,8 @@
 ## Reglas de código (S4+)
 
 - Python 3.11+, type hints, Pydantic v2 para contratos. Sin secretos en código (`.env` + `.env.example`).
-- 1 Issue = 1 branch `issue-NN-slug` = 1 PR. Commits pequeños en imperativo, referenciando `#NN`.
+- 1 Issue = 1 branch `issue-NN-slug` = 1 PR. Commits pequeños en imperativo, referenciando `#NN`. TBD sin excepción (ADR-006): no hay ramas long-lived, `main` siempre desplegable.
+- El guardián de GitHub lo hace cumplir: `tbd-guardian` (bloquea PR con base≠main, rama que no sea `issue-N-<slug>`, sin `Closes #N`, o >6 commits) y `tbd-enforcer` (revierte push directo a `main` de los alumnos, cierra PRs >48h y borra ramas muertas). Ramas de horas, no de días.
 - Antes del PR: `ruff check src tests` limpio + `mypy src --ignore-missing-imports` sin errores + `pytest tests -q` verde (mocks, sin tokens) + `bandit -r src -x tests -ll` sin hallazgos de alta/media. El CI estricto corre las 4 puertas.
 - FastAPI async; tools `@tool` con schemas Pydantic estrictos; nodos de grafo = funciones puras; efectos secundarios en services.
 - Java (S1–S3, exigencia SENATI): Java 17 + Maven + JUnit 5; mismos estándares de commits y PR.

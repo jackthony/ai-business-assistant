@@ -1,0 +1,113 @@
+name: enforcer-tbd
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 */6 * * *"
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  direct-push:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Revertir push directo a main (solo alumnos)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ACTOR: ${{ github.actor }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, sys
+          actor = os.environ["ACTOR"]
+          if actor not in {"WhoAllan", "adbon-dm1", "estefanyP-hub"}:
+              print(f"actor '{actor}' permitido (monitor/CI)")
+              sys.exit(0)
+          before, after = os.environ["BEFORE"], os.environ["AFTER"]
+          out = subprocess.run(["git", "log", "--format=%H", f"{before}..{after}"],
+                               capture_output=True, text=True).stdout.split()
+          linked, illegal = [], []
+          for sha in out:
+              p = subprocess.run(["gh", "api",
+                                  f"repos/jackthony/ai-business-assistant/commits/{sha}/pulls",
+                                  "-H", "Accept: application/vnd.github+json"],
+                                 capture_output=True, text=True)
+              prs = json.loads(p.stdout) if p.stdout.strip() else []
+              (linked if prs else illegal).append(sha)
+          if not illegal:
+              print("push válido (merge de PR)")
+              sys.exit(0)
+          if not linked:
+              subprocess.run(["git", "reset", "--hard", before], check=True)
+              subprocess.run(["git", "push", "--force", "origin", "main"], check=True)
+          else:
+              subprocess.run(["git", "revert", "--no-edit"] + illegal, check=True)
+              subprocess.run(["git", "push", "origin", "main"], check=True)
+          subprocess.run(["gh", "issue", "create",
+                          "--title", f"TBD: push directo de @{actor} revertido",
+                          "--body", "Commits sin PR asociado, revertidos: " + " ".join(illegal[:10])],
+                         check=True)
+          PY
+
+  limpieza:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Cerrar PR viejos y borrar ramas muertas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, time
+          now = time.time()
+          H = 3600
+          prs = json.loads(subprocess.run(
+              ["gh", "pr", "list", "--json", "number,title,createdAt,author,headRefName"],
+              capture_output=True, text=True).stdout)
+          for pr in prs:
+              age = (now - time.mktime(time.strptime(pr["createdAt"], "%Y-%m-%dT%H:%M:%SZ"))) / H
+              n = pr["number"]
+              if age > 48:
+                  subprocess.run(["gh", "pr", "close", str(n), "-c",
+                                  "TBD: >48h sin fusionar. Reabre con un batch más pequeño."], check=True)
+                  print(f"cerrado PR #{n} ({age:.0f}h)")
+              elif age > 24:
+                  subprocess.run(["gh", "pr", "comment", str(n), "-b",
+                                  "TBD: lleva >24h abierto. Fusiónalo hoy (squash) o ciérralo."])
+                  print(f"aviso PR #{n} ({age:.0f}h)")
+          open_heads = {pr["headRefName"] for pr in prs}
+          branches = subprocess.run(
+              ["gh", "api", "repos/jackthony/ai-business-assistant/branches?per_page=100",
+               "--jq", ".[].name"], capture_output=True, text=True).stdout.split()
+          dead = []
+          for b in branches:
+              if b == "main" or b in open_heads:
+                  continue
+              meta = json.loads(subprocess.run(
+                  ["gh", "api", f"repos/jackthony/ai-business-assistant/branches/{b}"],
+                  capture_output=True, text=True).stdout)
+              date = meta["commit"]["commit"]["committer"]["date"]
+              age = (now - time.mktime(time.strptime(date, "%Y-%m-%dT%H:%M:%SZ"))) / H
+              if age > 48:
+                  dead.append(b)
+          for b in dead:
+              subprocess.run(["gh", "api", "-X", "DELETE",
+                              f"repos/jackthony/ai-business-assistant/git/refs/heads/{b}"])
+              print(f"rama eliminada: {b}")
+          if dead:
+              subprocess.run(["gh", "issue", "create",
+                              "--title", "TBD: ramas muertas (>48h sin PR) eliminadas",
+                              "--body", "Eliminadas: " + ", ".join(dead)], check=True)
+          print("enforcer OK")
+          PY

@@ -43,6 +43,7 @@
 
 - AgensFlow (arXiv:2605.27466, Koenigstein, preprint sin peer review, resultados auto-reportados).
 - Benchmarks de evaluación de agentes (AgentVista, AHE, etc.) y papers de harness: solo lectura para el mes 3 si un practicante muestra interés. No se cargan en contexto de DeepSeek.
+- `KevinKantule/cofounder-agi` (revisado 2026-10-06, **sin licencia → no copiar código**): ideas aprovechables (loop coder→reviewer→ejecución→corrección; auditoría de modelos reales por proveedor) y **anti-ejemplo de RAG falso** (embeddings = ruido por hash inestable) usado como caso de estudio en S6.
 
 ## Nivel 5 — Cursos Udemy (opcional para practicantes, verificado 2026-10)
 

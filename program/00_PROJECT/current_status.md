@@ -48,7 +48,7 @@
 - **Domingo por la noche:** el workflow `crear-issues-semana` crea los Issues de la semana en el board desde el backlog (con lecturas + detalle); yo asigno el campo `Alumno`.
 
 - **Josue (lun–mar–mié):** practica conmigo; cierre de su semana el miércoles (revisar PRs con DeepSeek reviewer + nota preliminar en Excel).
-- **Pilar (mié–jue–vie):** cierre de su semana el viernes (revisar PRs + nota preliminar). **Allan: días por confirmar.**
+- **Pilar y Allan (mié–jue–vie):** cierre de su semana el viernes (revisar PRs + nota preliminar).
 - **Sábado:** escuchar la sustentación quincenal (el informe lo redacta el alumno).
 ## Decisiones recientes (resumen)
 

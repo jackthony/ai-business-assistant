@@ -83,7 +83,7 @@ Miden la salud del delivery del equipo, no a personas.
 
 ### Ciclo semanal
 
-- **Cierre de cada alumno en su último día de práctica (Josue: miércoles; Pilar: viernes; Allan: TBD):** 1) llenar sus 3 filas semanales en el Excel `EVALUACION` (30 min, criterios 1–5) · 2) revisar PRs (DeepSeek como reviewer, `AGENTS.md` §Review) · 3) anotar patrones en `program/05_EVALUATION/students/` · 4) actualizar `current_status.md`.
+- **Cierre de cada alumno en su último día de práctica (Josue: miércoles; Pilar y Allan: viernes):** 1) llenar sus 3 filas semanales en el Excel `EVALUACION` (30 min, criterios 1–5) · 2) revisar PRs (DeepSeek como reviewer, `AGENTS.md` §Review) · 3) anotar patrones en `program/05_EVALUATION/students/` · 4) actualizar `current_status.md`.
 - **Viernes:** leer el digest semanal (commits por día + DORA) y confirmar que los borradores FPE estén listos para la sustentación del sábado.
 
 ### Ciclo quincenal

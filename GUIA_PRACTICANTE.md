@@ -2,7 +2,7 @@
 
 > Léela entera una vez (10 min). Después, ante cualquier duda: **tu Issue es la ley** y las fuentes de tu semana están en la tabla "Materiales por semana" del plan.
 >
-> **Días de práctica:** Josue lun–mar–mié · Pilar mié–jue–vie (Allan: por confirmar). Tus Issues de la semana **aparecen solos el domingo por la noche**; D1/D2/D3 son tus 3 sesiones de la semana, no días fijos del calendario.
+> **Días de práctica:** Josue lun–mar–mié · Pilar y Allan mié–jue–vie. Tus Issues de la semana **aparecen solos el domingo por la noche**; D1/D2/D3 son tus 3 sesiones de la semana, no días fijos del calendario.
 
 ## 1. Tu panorama (dónde ves todo)
 

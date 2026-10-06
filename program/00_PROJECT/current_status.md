@@ -9,9 +9,9 @@
 
 ## Practicantes
 
-- Allan Zerpa ((privado)) — GitHub `WhoAllan`
-- Pilar Aguilar ((privado)) — GitHub `estefanyP-hub`; acceso confirmado al plan maestro e informe quincenal
-- Josue Marreros ((privado)) — GitHub `adbon-dm1`
+- Allan Zerpa — GitHub `WhoAllan`
+- Pilar Aguilar — GitHub `estefanyP-hub`; acceso confirmado al plan maestro e informe quincenal
+- Josue Marreros — GitHub `adbon-dm1`
 
 **Distribución de carga:** Josue = alta + mentor interno (primero le explica al monitor y luego apoya a Allan y Pilar); Allan y Pilar = media. La asignación se gestiona con los campos `Alumno` y `Complejidad` del board y los labels `complejidad:*`.
 

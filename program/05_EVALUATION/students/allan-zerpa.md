@@ -1,6 +1,6 @@
 # Expediente: Allan Zerpa
 
-- **Correo:** (privado) · **GitHub:** WhoAllan
+- **GitHub:** WhoAllan
 - **Inicio:** Semana 1 · **Fase actual:** S4 (producto — Issues #2–#4)
 - **Carga de trabajo:** media (tareas de complejidad media)
 - **Rol/fortalezas:** TODO (observar en S4)

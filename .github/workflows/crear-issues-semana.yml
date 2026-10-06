@@ -100,6 +100,7 @@ jobs:
               tracker = int(r.stdout.strip().rstrip("/").split("/")[-1]) if r.stdout.startswith("https://") else 0
               print(f"tracker creado: #{tracker}")
 
+          dailies_nums = []
           for m in re.finditer(r"^\| #(\d+) \| S(\d+) D(\d+) \| (.+?) \| .* \|$", backlog, re.M):
               num, s, d, title = m.groups()
               if int(s) != week:
@@ -109,6 +110,9 @@ jobs:
                                          "--search", f'in:title "{s_pad} D{d}"', "--json", "number"],
                                         capture_output=True, text=True)
               if existing.stdout.strip() not in ("", "[]"):
+                  nums_ex = json.loads(existing.stdout)
+                  if nums_ex:
+                      dailies_nums.append(nums_ex[0]["number"])
                   print(f"existe ({s_pad} D{d}): {t}")
                   continue
               detalle = ""
@@ -161,19 +165,18 @@ jobs:
               url = r.stdout.strip()
               if url.startswith("https://"):
                   created += 1
+                  dailies_nums.append(int(url.rstrip("/").split("/")[-1]))
                   # El board lo sincroniza issue-on-create.yml al recibir el evento
                   # (por eso este step usa BOARD_PAT como actor). No duplicar aquí:
                   # los comandos `gh project` fallan en CI con GH_TOKEN.
           # Enlazar los Issues del día como sub-issues del tracker (idempotente)
           if tracker:
-              dailies = json.loads(gh_run(["issue", "list", "-R", REPO, "--state", "all",
-                                           "--search", f'in:title "[{s_pad} D', "--json", "number"]).stdout or "[]")
               pid = issue_id(tracker)
-              for x in dailies:
-                  cid = issue_id(x["number"])
+              for num in sorted(set(dailies_nums)):
+                  cid = issue_id(num)
                   if pid and cid:
                       res = gql(f'mutation {{ addSubIssue(input: {{issueId: "{pid}", subIssueId: "{cid}"}}) {{ subIssue {{ number }} }} }}')
                       ok2 = res.get("data", {}).get("addSubIssue")
-                      print(f"sub-issue #{x['number']}: {'vinculado' if ok2 else 'ya vinculado'}")
+                      print(f"sub-issue #{num}: {'vinculado' if ok2 else 'ya vinculado'}")
           print(f"S{week}: {created} issues creados · tracker #{tracker or '-'} · milestone: {milestone}")
           PY

@@ -5,7 +5,7 @@ Eres el asistente de IA del programa **HealthTech Software & AI — SENATI 2026*
 ## Protocolo de contexto (obligatorio)
 
 1. Lee **siempre primero** `00_PROJECT/current_status.md`.
-2. Carga después solo 2–3 archivos relevantes a la tarea (Issue + arquitectura + módulo).
+2. Carga después solo 2–3 archivos relevantes a la tarea (Issue + arquitectura + módulo). Del plan, solo el bloque de la semana en curso — nunca `16_week_plan.md` completo.
 3. Nunca asumas contenido de archivos que no leíste. Si falta contexto, pídelo.
 4. Responde en español, salvo que se pida código/comentarios en inglés.
 

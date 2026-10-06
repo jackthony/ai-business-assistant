@@ -108,7 +108,10 @@ jobs:
               existing = jget(["issue", "list", "-R", REPO, "--state", "open",
                                "--search", f"Borrador de informe quincenal {name}", "--json", "number"])
               if existing:
-                  print(f"{name}: ya existe (#{existing[0]['number']})")
+                  num = existing[0]["number"]
+                  subprocess.run(["gh", "api", "-X", "PATCH", f"repos/{REPO}/issues/{num}",
+                                  "-f", f"body={body}"], capture_output=True, text=True)
+                  print(f"{name}: refrescado (#{num})")
                   continue
               r = gh(["issue", "create", "-R", REPO, "-t", title, "-b", body, "-l", "senati"])
               print(f"{name}: creado {r.stdout.strip()}")

@@ -26,3 +26,9 @@
 - Mover OCR de pagos (S8) y NeuraCode (S10) más tarde; consolidar agente único antes de multiagente.
 - Adelantar observabilidad/evaluación (S12 → antes) y seguridad.
 - Reemplazar dependencias cloud en el plan: Whisper API → faster-whisper; GPT-4o Vision → Qwen2.5-VL; fallback OpenAI/Anthropic → modelos locales.
+- **CI/CD desde S4 D1:** GitHub Actions (ruff + pytest con mocks; mypy/bandit recomendados) es el primer entregable del Issue #01 — es el corazón del TBD (ADR-006).
+- **Harness en S9:** permisos por nivel N1/N2/N3 + gating `draft→review→apply` con el interrupt (ADR-009).
+- **S10:** clase corta de panorama de frameworks (guion: comparativa Langfuse) usando los repos de referencia; sin migrar (ADR-010).
+- **S12:** heurística de fiabilidad compuesta (Lusser, CH05) + tests de inyección OWASP ASI01/ASI02.
+- **Métricas de ROI instrumentadas desde S4** (`00_PROJECT/roi_metrics.md`); cada HITO se demuestra con números.
+- Cursos Udemy: solo refuerzo opcional nivel 5 (ver `02_REFERENCE/source_map.md`); ninguno cubre Ollama/WhatsApp.

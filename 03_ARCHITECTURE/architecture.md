@@ -45,6 +45,15 @@ class AgentState(TypedDict):
 - **1 repo producto** `ai-business-assistant` (pendiente de crear): `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `configs/`.
 - Branches cortas por Issue (TBD). PRs = evidencia SENATI.
 
+## Harness (confiabilidad alrededor del agente — ADR-009)
+
+- **Permisos por nivel:** N1 automático (info/RAG/disponibilidad) · N2 con aprobación/HITL (agendar, validar comprobante, registrar lead) · N3 nunca expuesto (borrar, precios base).
+- **Efectos con gating:** `draft_effects → human_review (interrupt) → apply_effects` — evita dobles cobros/citas al reanudar un checkpoint.
+- **Validación determinista primero** (Pydantic/regex en tools); LLM-as-a-Judge solo offline.
+- **RAG íntegro:** provenance por documento; jamás re-ingerir salidas del bot (ASI06).
+- **Intent gate + action log:** validar esquema/rate-limit antes de cada tool; toda escritura con log y undo.
+- **Métricas de ROI** instrumentadas desde S4 (ver `00_PROJECT/roi_metrics.md`).
+
 ## Datos y límites
 
 - HealthTech: nada clínico; safety_agent deriva a humano (Jioysi).

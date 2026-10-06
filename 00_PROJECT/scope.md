@@ -5,9 +5,14 @@
 - 48 sesiones (16 semanas × 3 días) y Issues #01–#39 del backlog.
 - Backend propio: FastAPI + LangGraph + ChromaDB + memoria persistente.
 - Canal WhatsApp Cloud API (Meta) — única dependencia de nube obligatoria.
+- Conversación natural y humanizada (sin menús rígidos); regla explícita de **cuándo escalar a humano** (safety_agent + HITL).
 - Multitenant: Hola Mujer y NeuraCode sobre el mismo núcleo con configs separadas.
-- Multimodal local: transcripción de voz (faster-whisper) y visión para comprobantes (Qwen2.5-VL).
+- Multimodal por fases: voz (faster-whisper, S11) y comprobantes por imagen (Qwen2.5-VL, S8+); video se evalúa después.
+- Comprensión de campañas: capturar el origen del chat (click-to-WhatsApp/ads) para saber qué anuncio trae clientes.
+- Reutilizar plataformas existentes (Google Calendar, Sheets, ERP) e integrar donde aporten; construir solo el núcleo diferenciador.
+- **FinOps**: costo por conversación medido desde S4; LLM local y ventana de servicio 24 h de WhatsApp como palancas.
 - Evaluación semanal/quincenal + informes SENATI.
+- KB-A (negocio) vive en el Excel/Sheets operativo → se convierte a JSON/RAG; **nunca** se mezcla con KB-P (este repo).
 
 ## Fuera del alcance
 

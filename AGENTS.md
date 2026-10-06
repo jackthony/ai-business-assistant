@@ -39,7 +39,7 @@
 ## Ciclo de informes y progreso (automático — debes conocerlo)
 
 - `digest-semanal` (viernes 17:00 Lima): crea un Issue con los **commits por día**, PRs e Issues abiertos de cada alumno.
-- `informe-quincenal` (jueves noche + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
+- `informe-quincenal` (cada noche de trabajo mar–vie + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
 - Progreso visible: board público `projects/3` (solo lectura) + expedientes en `program/05_EVALUATION/students/`.
 - Si un practicante pregunta cómo empezar, cómo se trabaja con TBD o dónde ve su asignación: remitir a **`GUIA_PRACTICANTE.md`** (raíz).
 

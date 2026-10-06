@@ -10,7 +10,7 @@
 | **Tus asignaciones** | Board https://github.com/users/jackthony/projects/3 (solo lectura, campo `Alumno`) + pestaña Issues → **Assigned to me** |
 | Tu Issue del día | asignado a ti (#2/#3/#4 esta semana) — los **criterios de aceptación son lo que se evalúa** |
 | Tu expediente | `program/05_EVALUATION/students/<tu-nombre>.md` (lo llena el monitor) |
-| Tu progreso automático | Issue "Digest semanal — …" (viernes) + "📄 Borrador de informe quincenal — …" (#11–#13, jueves noche) |
+| Tu progreso automático | Issue "Digest semanal — …" (viernes) + "📄 Borrador de informe quincenal — …" (#11–#13, se refresca cada noche mar–vie) |
 
 ## 2. Primer día: descargar y preparar
 
@@ -46,7 +46,7 @@
 
 - **Diario:** registra tus horas/actividades en tu Word FPE (tu registro se llena con tus commits).
 - **Viernes 17:00:** el workflow `digest-semanal` crea un Issue con **tus commits por día**, tus PRs y tus Issues abiertos.
-- **Jueves noche:** el workflow `informe-quincenal` crea/refresca tu **borrador de informe FPE** (Issues #11 Allan, #12 Pilar, #13 Josue) con tu registro semanal real (desde commits/PRs/Issues), tu tarea más significativa sugerida y el checklist (horas, ATS, diagrama).
+- **Cada noche (mar–vie 21:00):** el workflow `informe-quincenal` crea/refresca tu **borrador de informe FPE** (Issues #11 Allan, #12 Pilar, #13 Josue) con tu registro semanal real (desde commits/PRs/Issues), tu tarea más significativa sugerida y el checklist (horas, ATS, diagrama). No lo edites: se regenera; completa en tu Word FPE.
 - **Tú:** completas horas, seguridad (ATS), resultados y la justificación de la tarea significativa; lo pasas al Word FPE (CNIU-108) y sustentas el sábado.
 - **Si no cumples la asignación:** no hay commits/PR → tu digest y tu borrador salen vacíos → no hay evidencia → los criterios del Issue se evalúan sin evidencia (afecta la nota) y tu PR se cierra a las 48 h.
 

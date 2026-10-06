@@ -33,7 +33,7 @@
 | `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, ≤6 commits |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |
-| `informe-quincenal.yml` | jueves noche + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados) |
+| `informe-quincenal.yml` | cada noche de trabajo (mar–vie 21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
 | `crear-issues-semana.yml` | martes + manual | crea los Issues de la semana desde el backlog y los agrega al board (✅ probado) |
 
 ## Seguimiento del avance (híbrido)

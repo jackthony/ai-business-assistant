@@ -3,7 +3,7 @@ name: informe-quincenal
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 2 * * 5" # viernes 02:00 UTC = jueves 21:00 Lima (víspera de la presentación SENATI)
+    - cron: "0 2 * * 3-6" # mar–vie 21:00 Lima (UTC-5): refresca los borradores FPE cada noche de trabajo
 
 permissions:
   issues: write
@@ -28,7 +28,7 @@ jobs:
               "Josue Marreros": "adbon-dm1",
           }
 
-          now = dt.datetime.now(dt.timezone.utc)
+          now = dt.datetime.now(dt.timezone.utc).astimezone(dt.timezone(dt.timedelta(hours=-5), "America/Lima"))
           since = now - dt.timedelta(days=14)
           # presentación = sábado siguiente (el informe se entrega el sábado de la quincena)
           days_to_sat = (5 - now.weekday()) % 7 or 7
@@ -67,7 +67,7 @@ jobs:
               lines.append(f"## Registro quincenal — {name} (borrador automático)\n")
               lines.append(f"- **Quincena:** {since.date()} → {now.date()} (S3–S4)")
               lines.append(f"- **Presentación:** sábado {presentacion}")
-              lines.append("> Generado por el workflow `informe-quincenal` con tu actividad real en GitHub (commits, PRs, Issues). Completa horas, seguridad (ATS), reflexiones y pásalo al Word FPE (CNIU-108). Tu expediente en `program/05_EVALUATION/students/` es el respaldo.\n")
+              lines.append("> ⚠️ Este borrador se **regenera cada noche (mar–vie)** con tu actividad real de GitHub: no lo edites aquí. Completa horas, seguridad (ATS), reflexiones en tu **Word FPE (CNIU-108)** y pégalo ahí. Tu expediente en `program/05_EVALUATION/students/` es el respaldo.\n")
 
               lines.append("### 1. Registro semanal de trabajos efectuados (borrador)")
               if by_day:

@@ -42,6 +42,7 @@
 - **#6** PEA SINFO: mapear códigos al recibirlos
 - **#7** Ley 29733: validar con abogado (no tocar datos reales aún)
 - **#8** ✅ cerrado: ruleset nativo `main protegido (TBD)` activo (repo público) + guardianes TBD por workflow como refuerzo
+- **#16** 🔄 Gestión: habilitar app Meta (webhook, templates, Billing). **Los chicos trabajan con fixtures hasta que #16 esté listo** (las pruebas reales de #3/#4 dependen de esto)
 
 ### Rutina semanal (no son Issues)
 - **Martes:** el workflow `crear-issues-semana` crea los Issues de la semana en el board desde el backlog; yo asigno el campo `Alumno`.

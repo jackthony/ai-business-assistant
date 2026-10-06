@@ -45,14 +45,14 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 | `tbd-guardian.yml` | cada PR | TBD: base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, ≤6 commits |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno |
-| `informe-quincenal.yml` | jueves noche + manual | borrador del informe FPE por alumno desde commits/PRs/Issues reales (Issues #11–#13 ya creados) |
+| `informe-quincenal.yml` | cada noche de trabajo (mar–vie 21:00 Lima) + manual | borrador del informe FPE por alumno desde commits/PRs/Issues reales (Issues #11–#13 ya creados; se refresca solo) |
 | `crear-issues-semana.yml` | martes + manual | crea los Issues de la semana desde el backlog y los agrega al board |
 
 `main` está protegido por el ruleset **`main protegido (TBD)`**: PR obligatorio, historial lineal (squash), sin force-push, check requerido `guardian-tbd / reglas-tbd` y push protection activo.
 
 ## Para el practicante (nuevo aquí)
 
-Lee **`GUIA_PRACTICANTE.md`** (raíz): descarga y preparación, TBD paso a paso, dónde ves tus asignaciones (board + Assigned to me), tus fuentes por semana y cómo se generan tus informes (digest viernes + borrador FPE jueves noche).
+Lee **`GUIA_PRACTICANTE.md`** (raíz): descarga y preparación, TBD paso a paso, dónde ves tus asignaciones (board + Assigned to me), tus fuentes por semana y cómo se generan tus informes (digest viernes + borrador FPE que se refresca cada noche).
 
 Resumen: `clone` → `pre-commit install` → tu Issue → rama `issue-N-<slug>` → commits chicos con tests → PR con `Closes #N` → CI verde (4 puertas) → merge squash.
 

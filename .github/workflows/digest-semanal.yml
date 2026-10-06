@@ -105,7 +105,7 @@ jobs:
               for (const i of openIssues) body += `  - #${i.number} ${i.title}\n`;
               body += `\n`;
             }
-            body += `> La automatización muestra dónde mirar; el monitor decide cómo va (ver program/00_PROJECT/operacion.md). El borrador del informe FPE se genera con el workflow informe-quincenal (jueves).`;
+            body += `> La automatización muestra dónde mirar; el monitor decide cómo va (ver program/00_PROJECT/operacion.md). El borrador del informe FPE se refresca cada noche con el workflow informe-quincenal.`;
             await github.rest.issues.create({
               owner, repo, title: `Digest semanal — ${week}`, body, labels: ["senati"],
             });

@@ -2,7 +2,7 @@
 
 - **Programa:** HealthTech Software & AI — SENATI 2026 (ciclo 3)
 - **Fase:** Semana 4 — Producto (Issues #2–#4) con **cierre S3 acelerado integrado** · Q1 entregado; Q2 en curso
-- **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del D3 (jue 8-oct) alimenta ese informe.
+- **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del D3 (vie 9-oct) alimenta ese informe.
 - **Investigación 6-oct completada:** precios Meta 1-oct-2026 verificados en estructura (service 1.000 gratis/número/mes, utility dentro de CSW siempre cobrado, FEP 7 días CTWA) — **falta solo confirmar las tarifas de Perú contra el panel Billing**; reglas de templates (aprobación <24 h, sin edición post-aprobación, opt-in) en `meta-pricing.md`; B/B/I Kapso vs n8n en `kapso-n8n.md` (decisión S10); OWASP GenAI 2026 (Top 10 LLM + Agent Control Standard) en source_map; Langfuse verificado (self-host gratis).
 - **Aviso de privacidad (#7):** ✅ aprobado por el dueño (2026-10-06, Hola Mujer es negocio del monitor) — solo falta publicar el `PRIVACY_NOTICE_URL`.
 - **TBD de aprendizaje (ADR-006 revisado 6-oct):** investigado GitHub Flow / TBD canónico / GitFlow — reglas duras mínimas (rama por Issue + `Closes #N` + commits convencionales + CI), cantidad de commits libre, PRs viven hasta 7 días; rigor creciente desde S7 (lead time <48 h).

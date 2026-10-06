@@ -1,6 +1,6 @@
 # Arquitectura objetivo — AI Business Assistant (multitenant)
 
-> Estado: borrador v1 (alineado al plan S4–S16). Se valida/actualiza en la re-secuencia v2.
+> Estado: v2 — alineada con `program/01_CURRICULUM/16_week_plan.md` (S4–S16).
 
 ## Visión general
 
@@ -42,8 +42,8 @@ class AgentState(TypedDict):
 
 ## Repo único
 
-- `jackthony/ai-business-assistant`: programa (carpetas `00_`–`09_`) + producto desde S4: `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `configs/`.
-- Branches cortas por Issue (TBD), `main` protegido. PRs = evidencia SENATI.
+- `jackthony/ai-business-assistant`: programa (`program/00_PROJECT`–`05_EVALUATION`) + producto desde S4: `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `configs/`.
+- Branches cortas por Issue (TBD) — guardianes `tbd-guardian`/`tbd-enforcer` en `.github/workflows/`. PRs = evidencia SENATI.
 
 ## Harness (confiabilidad alrededor del agente — ADR-009)
 

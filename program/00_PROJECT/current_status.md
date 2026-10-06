@@ -4,14 +4,14 @@
 - **Fase:** Semana 4 — Producto (Issues #2–#4) con **cierre S3 acelerado integrado** · Q1 entregado; Q2 en curso
 - **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del viernes alimenta ese informe.
 - **Repo único:** https://github.com/jackthony/ai-business-assistant
-- **Board:** https://github.com/jackthony/projects/3
-- **Issue actual:** #2 (setup FastAPI + CI)
+- **Board:** https://github.com/users/jackthony/projects/3
+- **Issue actual:** #2 (setup FastAPI + CI) — hoy lo arranca Josue por la mañana; Allan y Pilar se suman por la noche
 
 ## Practicantes
 
-- Allan Zerpa ((privado))
-- Pilar Aguilar ((privado)) — acceso confirmado al plan maestro e informe quincenal
-- Josue Marreros ((privado))
+- Allan Zerpa ((privado)) — GitHub `WhoAllan`
+- Pilar Aguilar ((privado)) — GitHub `estefanyP-hub`; acceso confirmado al plan maestro e informe quincenal
+- Josue Marreros ((privado)) — GitHub `adbon-dm1`
 
 **Distribución de carga:** Josue = alta + mentor interno (primero le explica al monitor y luego apoya a Allan y Pilar); Allan y Pilar = media. La asignación se gestiona con los campos `Alumno` y `Complejidad` del board y los labels `complejidad:*`.
 
@@ -38,10 +38,10 @@
 - **Hitos:** HITO 1 (S6) · HITO 2 (S9) · HITO 3 (S12) · Demo final (S16)
 
 ### Gestión (creadas 2026-10-06 en el board)
-- **#5** Colaboradores: agregar a Allan/Pilar/Josue el **2026-10-07**
+- **#5** ✅ Colaboradores invitados 2026-10-06 (falta que acepten)
 - **#6** PEA SINFO: mapear códigos al recibirlos
 - **#7** Ley 29733: validar con abogado (no tocar datos reales aún)
-- **#8** Branch protection: activar cuando el plan lo permita
+- **#8** ✅ sustituido por guardianes TBD por workflow; rulesets nativos solo con Pro/público
 
 ### Rutina semanal (no son Issues)
 - **Lunes:** crear en el board los Issues de la semana.
@@ -58,11 +58,11 @@
 
 - PEA SINFO pendiente (bloquea columnas del seguimiento quincenal).
 - Ley 29733 sin validar: prohibido tocar datos reales de clientes.
-- `main` sin protección hasta GitHub Pro o repo público (S16).
+- `main` sin rulesets nativos (GitHub Pro $4/mes o repo público): cubierto por los guardianes TBD por workflow.
 - Operación actual ManyChat + n8n no cumple el objetivo: el reemplazo arranca en S4.
 
 ## Próximo paso
 
-1. Mañana 2026-10-07: agregar colaboradores (#5).
-2. Cerrar Issues #2–#4 (S4) con demo E2E y cierre Q2.
-3. Reunión tarea por tarea: elegir la primera del inventario y detallarla.
+1. Hoy 2026-10-06 (S4 D1): Josue arranca #2 por la mañana; Allan y Pilar se suman por la noche (Josue les explica lo avanzado).
+2. Que los 3 acepten la invitación de GitHub.
+3. Cerrar Issues #2–#4 (S4) con demo E2E y cierre Q2 (informe FPE).

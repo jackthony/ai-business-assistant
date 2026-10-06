@@ -36,5 +36,5 @@
 
 ## Cómo lo enseñamos
 
-- Cada HITO (S6, S9, S11) se demuestra con **métricas**, no solo con demo.
+- Cada HITO (S6, S9, S12) se demuestra con **métricas**, no solo con demo.
 - S13 (analytics de conversión) produce el informe mensual que se entrega al cliente.

@@ -6,7 +6,7 @@
 
 | Zona | Contenido | Desde |
 |---|---|---|
-| `00_`–`09_` | Programa: currículo, ADRs, evaluación, expedientes, source map | hoy |
+| `program/00_PROJECT`–`05_EVALUATION` | Programa: currículo, ADRs, evaluación, expedientes, source map | hoy |
 | `src/`, `tests/`, `configs/`, `data/`, `docs/` | Producto: FastAPI + LangGraph, configs por tenant, datasets KB-A | S4 |
 | `.github/` | Plantillas de Issue/PR, CODEOWNERS, Dependabot, CI/CD | plantillas hoy · CI S4 · CD S14 |
 
@@ -21,7 +21,7 @@
 | Milestones: HITO 1 (S6), HITO 2 (S9), HITO 3 (S12), Demo final (S16) | ✅ aplicados |
 | Dependabot (pip + GitHub Actions) | ✅ aplicado (actúa con el código en S4) |
 | Project board (Todo / In Progress / Done) | ✅ [projects/3](https://github.com/users/jackthony/projects/3) — vinculado al repo, Issues #2–#4 dentro |
-| Branch protection / rulesets en `main` | pendiente: requiere GitHub Pro para repo privado (o pasar a público en S16) |
+| Branch protection / rulesets en `main` | ✅ suplidos por guardianes TBD por workflow (`tbd-guardian` + `tbd-enforcer`); rulesets nativos si se pasa a GitHub Pro o repo público |
 | CI estricto: `ruff` + `mypy` + `pytest` + `bandit` (4 puertas) | ✅ workflow montado (`.github/workflows/ci.yml`); se activa con el primer PR de código (los practicantes crean `src/` en el Issue #2) |
 | CD + environments con aprobación | S14 |
 | Secret scanning / push protection / CodeQL | al pasar a público (S16) o con Pro |
@@ -54,7 +54,7 @@ Regla: la automatización dice **dónde** mirar; el monitor decide **cómo va**.
 
 ## Acceso
 
-- Practicantes: colaboradores con push vía PR (branch corta por Issue; `main` protegido desde que el plan lo permita).
+- Practicantes: colaboradores con push vía PR (rama corta por Issue); los guardianes TBD por workflow hacen cumplir el flujo.
 - Todo visible para el equipo (transparencia deliberada).
 - **Nunca entra al repo:** tokens/secretos (GitHub Secrets), datos reales de clientes (fixtures anonimizados), ni notas numéricas (Ley 29733 — viven en el Excel de Drive).
 
@@ -68,10 +68,9 @@ Regla: la automatización dice **dónde** mirar; el monitor decide **cómo va**.
 
 Regla: si algo cambia en GitHub y tiene copia en Drive, la copia se regenera; nunca se edita la copia.
 
-## Acciones pendientes
+## Estado actual
 
-1. Project board: ✅ creado ([projects/3](https://github.com/users/jackthony/projects/3)) con campos Semana/Alumno/Área; agregar cada semana los Issues nuevos.
-2. Plan v2: ✅ las 48 sesiones publicadas en `16_week_plan.md`.
-3. S4: `src/` + `docs/CONTEXT.md`/`ARCHITECTURE.md` los crean los practicantes (Issue #2); CI estricto ya montado.
-4. Agregar a Allan, Pilar y Josue como colaboradores cuando se tengan sus usuarios de GitHub (Issue #5).
-5. Digest semanal: ✅ probado en vivo; corre solo cada viernes.
+- Board ✅ projects/3 con campos Semana/Alumno/Área/Complejidad; plan v2 ✅ en `16_week_plan.md`; digest semanal ✅ probado.
+- Colaboradores ✅ invitados (Allan, Pilar, Josue); CI estricto ✅ montado; guardianes TBD ✅ en operación.
+- S4 en curso: `src/` + `docs/CONTEXT.md`/`ARCHITECTURE.md` los crean los practicantes (Issue #2).
+- Estado siempre vigente: `program/00_PROJECT/current_status.md`.

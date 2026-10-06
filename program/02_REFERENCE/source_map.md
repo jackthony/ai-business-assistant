@@ -4,6 +4,16 @@
 >
 > **Orden de autoridad:** doc oficial/spec > código reproducible (repo real) > libro/curso > paper > afirmación de un LLM. Un LLM nunca es autoridad; toda afirmación técnica se verifica contra fuente primaria.
 
+## Nivel 0 — Materiales entregados por el monitor (referenciados, no copiados)
+
+| Material | Rol | Estado |
+|---|---|---|
+| `Hola Mujer · MVP WhatsApp ManyChat · Operativo (1).xlsx` (11 hojas) | KB-A: catálogo, reglas, config del negocio | ✅ verificada; resumida en `program/04_DOMAIN/hola-mujer.md`; bloqueantes en Issue #10 |
+| `Plan Maestro — HealthTech Software & AI — SENATI 2026 (EVALUABLE).xlsx` | Evaluación numérica (16 semanas × 3 alumnos) | vive en Drive (binario); fórmulas verificadas al migrar |
+| Informe FPE SENATI (CNIU-108, `.pages`) | Formato institucional quincenal: registro diario, PEA, tarea significativa | esquema documentado en `current_status.md`/`operating_rhythm.md`; el archivo vive en Descargas/Drive |
+| Docs originales del proyecto (README v1 y notas previas del monitor) | Material de arranque del programa | reemplazados por `program/` — fuera del repo, no se citan como fuente viva |
+| `material-langchain/` (carpeta local, fuera de git) | Ejercicios del curso 1 ordenados por tema | mapeo en `program/01_CURRICULUM/cursos_de_refuerzo.md` |
+
 ## Nivel 1 — Autoridad técnica (docs oficiales)
 
 | Fuente | Rol | Estado | Consultar cuando |

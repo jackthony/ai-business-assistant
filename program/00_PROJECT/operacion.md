@@ -53,8 +53,9 @@
 | `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit |
 | `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits convencionales (cantidad libre) |
 | `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) — la mesa de revisión del Día 3 lista sola |
-| `release.yml` | push de tag `v*` | publica el Release con notas generadas (S6 `hito-1`, S16 demo final: `git tag v0.1.0 && git push origin v0.1.0`) |
+| `release.yml` | push de tag (`v*`/`hito-*`/`q*`) | publica el Release con notas generadas — tags del plan: `hito-1` (S6), `q4` (S8), `hito-2` (S9), `q5` (S10), `hito-3` (S12), `q6` (S12), `v1.0` (S16) |
 | `issue-on-create.yml` | cada Issue nuevo | lo agrega al board con `Semana` (del título `[S## D#]`) y `Alumno` (del assignee) — soporta el flujo pull |
+| `issue-closed.yml` | cada Issue cerrado | los Issues no se cierran sin terminar (PR mergeado) ni justificar: si un practicante cierra sin eso, se **reabre solo** |
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, avisa PRs >4 días y cierra >7 días, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |

@@ -35,6 +35,7 @@ Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper >
 ## 4. Lo que tienes prohibido
 
 - Escribir el Issue completo y que el practicante lo suba como si fuera suyo (eso es engaño académico: el diganóstico lo detecta y la nota es 0 en ese criterio).
+- Cerrar Issues sin terminar la tarea ni justificar: el workflow `issue-closed` los **reabre solo** (válido: PR mergeado con `Closes #N` o argumento en comentario).
 - Inventar precios, APIs o configuraciones: si no está en las fuentes, se dice "no sé, consultemos la doc".
 - Saltarte la puerta de comprensión: si el practicante no puede explicar, se regresa a estudiar.
 

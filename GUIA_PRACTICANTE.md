@@ -64,6 +64,7 @@ tipo(alcance): verbo en imperativo, sin punto final, ≤72 caracteres
 - Push directo a `main` → **se revierte** y se te avisa.
 - PR sin `Closes #N` o rama mal nombrada → el guardián **lo bloquea**.
 - PR abierto **>7 días** sin actividad → **se cierra solo** (a los 4 días te llega un recordatorio; tu semana de práctica dura 3 días).
+- **Cerrar un Issue sin terminar la tarea ni justificarlo → se REABRE solo** (`issue-closed`): ciérralo con su PR mergeado (`Closes #N`) o escribe el argumento en un comentario antes de cerrar.
 
 ### ¿Terminaste antes? (pull, no solo push)
 

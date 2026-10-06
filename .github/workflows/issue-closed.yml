@@ -1,0 +1,40 @@
+name: issue-closed
+
+# Regla: los Issues no se cierran sin terminar la tarea (PR mergeado con Closes #N)
+# o sin justificarlo. Si un practicante cierra sin eso, se comenta y se REABRE solo.
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  issues: write
+  pull-requests: read
+
+jobs:
+  verificar-cierre:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Reabrir cierres inválidos (solo practicantes)
+        env:
+          NUM: ${{ github.event.issue.number }}
+          ACTOR: ${{ github.event.sender.login }}
+        run: |
+          case "$ACTOR" in
+            WhoAllan|adbon-dm1|estefanyP-hub) ;;
+            *) echo "actor $ACTOR (monitor/CI) — cierre válido"; exit 0 ;;
+          esac
+          if [ -n "$(gh pr list --state merged --search "$NUM" --limit 5)" ]; then
+            echo "cerrado por PR mergeado — válido"
+            exit 0
+          fi
+          JUSTIF=$(gh issue view "$NUM" --json comments --jq '.comments[-1].body // ""' | head -c 400)
+          if echo "$JUSTIF" | grep -qiE "justific|motivo|porque|raz[oó]n|argument|cierre|explic"; then
+            echo "cierre justificado — válido"
+            exit 0
+          fi
+          gh issue reopen "$NUM" -c "Regla del proyecto: los Issues no se cierran sin terminar la tarea o sin justificar el cierre. Tu PR no está mergeado y no veo justificación. Si ya está resuelto: abre su PR con \`Closes #$NUM\` y el merge lo cierra solo. Si lo cierras por otro motivo: escribe el argumento en un comentario y ciérralo de nuevo (el monitor puede cerrar directamente)."
+          echo "issue #$NUM reabierto"

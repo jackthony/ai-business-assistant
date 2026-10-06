@@ -1,10 +1,11 @@
 name: release
 
-# Al pushear un tag v* (hito o demo final) publica un Release con notas generadas.
-# Uso: git tag v0.1.0 && git push origin v0.1.0 — S6 (hito-1) y S16 (demo final).
+# Al pushear un tag (v*, hito-*, q*) publica un Release con notas generadas.
+# Uso: git tag v0.1.0 && git push origin v0.1.0 — los tags del plan: hito-1 (S6),
+# q4 (S8), hito-2 (S9), q5 (S10), hito-3 (S12), q6 (S12), v1.0 (S16).
 on:
   push:
-    tags: ["v*"]
+    tags: ["v*", "hito-*", "q*"]
 
 permissions:
   contents: write

@@ -12,13 +12,23 @@ Repositorio de **contexto, currículo y gestión** del programa de prácticas **
 
 Nada del plan se duplica fuera de este repo: si un artefacto contradice a otro, gana este repo.
 
+## Las tres bases de conocimiento (no confundir)
+
+| Base | Qué es | Dónde vive | Quién la usa |
+|---|---|---|---|
+| **1. KB-P · Proyecto** | Currículo, arquitectura, ADRs, rúbrica, expedientes. Curada a mano. Fuente canónica. | **Este repo** | Monitor + practicantes + DeepSeek (2–3 archivos por tarea) |
+| **2. KB-A · Agentes** | Datos de negocio para RAG: 47 servicios, promociones, cursos. Un namespace por tenant. | Repo de código: `data/` + ChromaDB (`configs/hola_mujer`, `configs/neuracode`) | El bot en runtime — **nunca** se usa para gestionar el programa |
+| **3. KB-T · Transitoria** | 2–3 archivos por tarea (current_status + Issue + módulo/documento). | Se arma al momento en DeepSeek/IDE | El monitor y los practicantes al programar o evaluar |
+
+Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios/listas reales de clientes** (eso va al Excel operativo o a KB-A); **KB-T nunca incluye el repo completo**. Mezclarlas rompe seguridad, calidad del RAG y la memoria de DeepSeek.
+
 ## Estructura
 
 | Carpeta | Contenido |
 |---|---|
 | `00_PROJECT/` | Visión, alcance, roadmap y **`current_status.md`** (leer siempre primero) |
 | `01_CURRICULUM/` | Syllabus, plan de 16 semanas y backlog de Issues #01–#39 |
-| `02_REFERENCE/` | Fuentes curadas: libro guía, LangGraph, Meta WhatsApp API, DeepSeek local |
+| `02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate) y guías por tema |
 | `03_ARCHITECTURE/` | Arquitectura objetivo + ADRs en `decisions/` |
 | `04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
 | `05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |

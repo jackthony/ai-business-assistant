@@ -11,6 +11,7 @@
 2. Branch corta `issue-NN-slug` desde `main`, vida de horas o pocos días.
 3. Commits pequeños y trazables; PR con tests y evidencia; review del monitor (DeepSeek ayuda como reviewer).
 4. Merge a `main` (siempre desplegable). Cerrar Issue con link a commits/PR.
+5. **CI obligatorio desde S4 (primer día de Python):** GitHub Actions corre `ruff` + `pytest` (mocks, sin tokens) en cada push/PR; `mypy` y `bandit` recomendados. Si el CI no está verde, no se fusiona. El pipeline es parte del Issue #01.
 
 ## Reportes SENATI
 

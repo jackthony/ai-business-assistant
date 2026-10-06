@@ -56,6 +56,9 @@ jobs:
           for line in first_lines:
               if not line:
                   continue
+              if line.startswith("Merge "):
+                  # sincronizar con main con merge es legítimo; el squash final aplana todo
+                  continue
               if line.endswith(".") or "..." in line:
                   errors.append(f"commit '{line}': sin punto final ni elipsis.")
               if len(line) > 72:

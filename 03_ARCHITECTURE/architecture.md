@@ -40,10 +40,10 @@ class AgentState(TypedDict):
 - `configs/hola_mujer/` y `configs/neuracode/`: system prompt, RAG namespace, reglas y tools permitidas.
 - El tenant se resuelve por el número receptor (phone_number_id) del webhook.
 
-## Repos
+## Repo único
 
-- **1 repo producto** `ai-business-assistant` (pendiente de crear): `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `configs/`.
-- Branches cortas por Issue (TBD). PRs = evidencia SENATI.
+- `jackthony/ai-business-assistant`: programa (carpetas `00_`–`09_`) + producto desde S4: `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `configs/`.
+- Branches cortas por Issue (TBD), `main` protegido. PRs = evidencia SENATI.
 
 ## Harness (confiabilidad alrededor del agente — ADR-009)
 

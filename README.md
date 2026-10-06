@@ -1,14 +1,14 @@
-# senati-ai-agents-context
+# ai-business-assistant — Programa SENATI 2026 + Producto
 
-Repositorio de **contexto, currículo y gestión** del programa de prácticas **HealthTech Software & AI — SENATI 2026** (ciclo 3 · practicantes: Allan, Pilar y Josue).
+Repositorio único: **programa de prácticas** (currículo, evaluación, gestión) **+ producto** (`src/` desde S4) — HealthTech Software & AI · SENATI 2026 · ciclo 3 (Allan, Pilar y Josue).
 
 ## Regla de oro
 
 | Artefacto | Rol |
 |---|---|
-| **Este repo** | Fuente canónica de currículo, arquitectura, decisiones (ADRs) y evaluación |
-| **Excel** `Plan Maestro — HealthTech Software & AI — SENATI 2026 (EVALUABLE).xlsx` | Registro de notas y seguimiento quincenal (lo llena el monitor) |
-| **Repo de código** `ai-business-assistant` (pendiente) | El software real que desarrollan los practicantes |
+| **Este repo** (`ai-business-assistant`) | Fuente canónica: programa (currículo, ADRs, evaluación) + producto (`src/` desde S4) |
+| **Excel EVALUABLE** | Notas numéricas y seguimiento quincenal (Drive; binario) |
+| **Google Drive** | Distribución: Excel, PDFs e informes SENATI |
 
 Nada del plan se duplica fuera de este repo: si un artefacto contradice a otro, gana este repo.
 

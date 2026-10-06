@@ -30,7 +30,7 @@
 - **Operación actual en producción: ManyChat + n8n.** Flujos rígidos de botones; clientes no completan el recorrido y no se logra el objetivo. El proyecto los reemplaza progresivamente con el agente conversacional.
 - PEA oficial de 4.º ciclo (SINFO) aún no llega: columnas PEA pendientes en el seguimiento quincenal.
 - S4 en ejecución: `src/`, CI, webhook y sender (Issues #2–#4); branch protection/rulesets pendientes (GitHub Pro o repo público en S16).
-- Project board: requiere `gh auth refresh -s project,read:project` del monitor.
+- Project board creado y vinculado al repo: https://github.com/users/jackthony/projects/3 (Issues #2–#4 dentro).
 - Usuarios de GitHub de Allan, Pilar y Josue: se solicitan el 2026-10-07; luego se agregan como colaboradores.
 - Validar Ley 29733 (protección de datos, Perú) con abogado antes de tocar datos reales de clientes.
 

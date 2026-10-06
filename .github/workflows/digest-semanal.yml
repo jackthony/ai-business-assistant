@@ -1,0 +1,56 @@
+name: Digest semanal de seguimiento
+
+on:
+  schedule:
+    - cron: "0 22 * * 5" # viernes 17:00 Perú (22:00 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Construir y publicar digest por alumno
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const students = [
+              { name: "Allan Zerpa", label: "alumno:allan" },
+              { name: "Pilar Aguilar", label: "alumno:pilar" },
+              { name: "Josue Marreros", label: "alumno:josue" },
+            ];
+            const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+            const { owner, repo } = context.repo;
+
+            const { data: pulls } = await github.rest.pulls.list({
+              owner, repo, state: "all", sort: "updated", direction: "desc", per_page: 100,
+            });
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner, repo, state: "open", per_page: 100,
+            });
+
+            const week = new Date().toISOString().slice(0, 10);
+            let body = `Digest automatico del ${week} (ultimos 7 dias).\n\n`;
+            for (const s of students) {
+              const mine = pulls.filter(
+                (p) => p.labels.some((l) => l.name === s.label) && p.updated_at >= since
+              );
+              const openIssues = issues.filter(
+                (i) => !i.pull_request && i.labels.some((l) => l.name === s.label)
+              );
+              body += `## ${s.name}\n`;
+              body += `- PRs movidos esta semana: ${mine.length}\n`;
+              for (const p of mine) {
+                const state = p.merged_at ? "mergeado" : p.state;
+                body += `  - #${p.number} ${p.title} — ${state}\n`;
+              }
+              body += `- Issues abiertos: ${openIssues.length}\n\n`;
+            }
+            body += `> La automatizacion muestra donde mirar; el monitor decide como va (ver 00_PROJECT/github_devops.md).`;
+            await github.rest.issues.create({
+              owner, repo, title: `Digest semanal — ${week}`, body, labels: ["senati"],
+            });

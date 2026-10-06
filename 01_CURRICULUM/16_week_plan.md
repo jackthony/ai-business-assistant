@@ -1,6 +1,6 @@
 # Plan 16 semanas — canónico (v2, en revisión)
 
-> **Estado:** v2 propuesta (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación. El detalle de sesiones se publica por bloques: **Bloques 1–2 (S1–S8) abajo**; S9–S16 en siguientes entregas. La tabla v1 se conserva solo como histórico.
+> **Estado:** v2 propuesta (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación. El detalle de sesiones se publica por bloques: **Bloques 1–3 (S1–S12) abajo**; S13–S16 en la siguiente entrega. La tabla v1 se conserva solo como histórico.
 
 ### Histórico v1 (referencia)
 
@@ -43,7 +43,7 @@ Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR d
 | 15 | E2E + fallbacks locales + FinOps/costos + refactor/docs | #34–#36 |
 | 16 | Capstone + defensa + demo final | #37–#39 |
 
-S1–S3 se mantienen (Java/Git/HTTP). Bloques publicados: **S1–S8** (abajo); siguientes entregas: S9–S12 y S13–S16.
+S1–S3 se mantienen (Java/Git/HTTP). Bloques publicados: **S1–S12** (abajo); siguiente entrega: S13–S16.
 
 ---
 
@@ -253,3 +253,99 @@ S1–S3 se mantienen (Java/Git/HTTP). Bloques publicados: **S1–S8** (abajo); s
 - Criterios: [ ] trazas por conversación visibles; [ ] dashboard con 3 métricas; [ ] error inducido detectado en trazas; [ ] informe subido.
 - Evidencia: captura del dashboard + informe.
 - Foco de evaluación: aprendizaje y mejora, evidencia. **Observabilidad temprana: es la base para el multiagente.**
+
+---
+
+## Detalle de sesiones — Bloque 3 (S9–S12)
+
+### Semana 9 — Safety + HITL/harness + HITO 2 (Issues #16–#18)
+
+**D1 — Issue #16: Agente 4 Safety & triage clínico**
+- Objetivo: el bot nunca improvisa en salud.
+- Actividades: clasificador de riesgo (médico complejo / foto clínica / reclamo / normal); nodo que congela el flujo (`status=handoff_requested`); respuestas puente definidas ("ya te contacta una especialista"); 15 casos (10 normales, 5 de riesgo).
+- Entregable: PR #16 + tabla de 15 casos.
+- Criterios: [ ] 5/5 casos de riesgo congelados; [ ] 0/10 falsos positivos en normales; [ ] respuesta puente sin diagnóstico; [ ] CI verde.
+- Evidencia: PR + tabla + transcripciones.
+- Foco de evaluación: criterio, seguridad, comprensión.
+
+**D2 — Issue #17: HITL con interrupt + permisos N1/N2/N3**
+- Objetivo: cuando el bot se congela, avisa a Jioysi y un humano reanuda.
+- Actividades: `interrupt()` de LangGraph; alerta a Jioysi (WhatsApp/Email); clasificar tools por nivel (N1 auto: RAG/precios/disponibilidad · N2 aprobación: agendar/registrar/validar pago · N3 nunca: borrar/precios base); patrón `draft → review → apply`; probar reanudación sin re-ejecutar efectos.
+- Entregable: PR #17.
+- Criterios: [ ] pausa y reanuda con `Command(resume=)`; [ ] alerta real recibida por Jioysi (prueba); [ ] tools clasificadas N1/N2/N3; [ ] efecto no se duplica al reanudar (test).
+- Evidencia: PR + captura de alerta + test de re-ejecución.
+- Foco de evaluación: calidad técnica, criterio.
+
+**D3 — Issue #18: HITO 2 — agente único completo + handoff**
+- Objetivo: demostrar el asistente completo y confiable (sin supervisor todavía).
+- Actividades: flujo E2E real (info → cita → datos → pago/handoff); batería de 12 escenarios (2 de handoff, 1 de re-ejecución); release `hito-2`; medir contención y latencia.
+- Criterios: [ ] 12/12 escenarios según lo esperado; [ ] handoff real a Jioysi; [ ] métricas del hito; [ ] release publicado.
+- Evidencia: video + release + tabla de escenarios.
+- **HITO 2 ✅**
+
+### Semana 10 — OCR + supervisor + multitenant (Issues #15, #19, #20)
+
+**D1 — Issue #15: OCR de pagos (Yape/Plin)**
+- Objetivo: leer comprobantes y validar el caso feliz sin humano.
+- Actividades: recibir imagen del webhook; visión local (Qwen2.5-VL en Ollama) → JSON (monto, fecha, destinatario, operación); tool `validar_comprobante()` con Pydantic + reglas (monto ≥ precio, fecha ≤24 h); dudas → N2; 8 casos (válido, borroso, monto insuficiente, captura dudosa...).
+- Criterios: [ ] extrae campos en ≥6/8 casos; [ ] reglas de negocio aplicadas; [ ] dudas → handoff; [ ] datos del comprobante no se persisten completos.
+- Evidencia: PR + matriz de 8 casos.
+- Foco de evaluación: calidad técnica, criterio.
+
+**D2 — Issue #19: Supervisor router + clase de frameworks**
+- Objetivo: orquestar agentes y comparar arquitecturas con criterio.
+- Actividades: clasificador rápido (reglas/intención) primero y supervisor LLM para ambiguos; deriva a info/citas/checkout/safety; trazas del ruteo; clase 30 min: panorama (OpenAI Agents SDK, MS Agent Framework, Strands — handoffs, hooks, workflows) con la comparativa de Langfuse y por qué seguimos en LangGraph (ADR-010).
+- Criterios: [ ] ≥13/15 mensajes ruteados bien; [ ] fallback a LLM en ambiguos; [ ] trazas muestran el ruteo; [ ] nota de la comparativa entregada.
+- Evidencia: PR + tabla de ruteo + nota.
+- Foco de evaluación: comprensión, criterio.
+
+**D3 — Issue #20: Multitenant base + cierre Q5**
+- Objetivo: NeuraCode vive en el mismo núcleo.
+- Actividades: resolver tenant por `phone_number_id`; `configs/{hola_mujer,neuracode}` con prompt, namespace RAG y tools permitidas; cargar tenant `neuracode` con prompt v0; demo quincenal + informe SENATI Q5; Excel S9–S10.
+- Criterios: [ ] mismo grafo atiende 2 números con prompts distintos; [ ] sin fugas de datos entre tenants; [ ] informe Q5 subido; [ ] release `q5`.
+- Evidencia: PR + demo + informe.
+- Foco de evaluación: calidad técnica, evidencia.
+
+### Semana 11 — NeuraCode + voz (Issues #21–#23)
+
+**D1 — Issue #21: Ingesta de cursos NeuraCode**
+- Objetivo: el tenant 2 responde con datos reales.
+- Actividades: ETL de cursos/temarios/precios → JSON → ChromaDB namespace `neuracode`; prompt de negocio NeuraCode (tono academia); 10 preguntas verificadas.
+- Criterios: [ ] colección cargada; [ ] 10/10 verificadas contra fuente; [ ] aislamiento por namespace.
+- Evidencia: PR + dataset + resultados.
+
+**D2 — Issue #22: Whisper local (notas de voz)**
+- Objetivo: entender audios de WhatsApp.
+- Actividades: descargar media de Meta (`type=audio`) y transcribir con faster-whisper (`language="es"`); inyectar la transcripción al grafo como mensaje; 5 audios de prueba (uno con ruido, uno largo).
+- Criterios: [ ] ≥4/5 transcripciones correctas; [ ] el audio entra por el mismo grafo; [ ] tiempo de transcripción registrado; [ ] sin conservar audios de prueba.
+- Evidencia: PR + tabla de transcripciones.
+- Foco de evaluación: calidad técnica, mejora.
+
+**D3 — Issue #23: Normalización de audio y contexto**
+- Objetivo: que la transcripción llegue limpia y contextualizada.
+- Actividades: limpiar muletillas, detectar intención principal, marcar dudas; fallback si la transcripción es ininteligible ("¿me lo escribes, por favor?"); pruebas A/B contra el texto equivalente.
+- Criterios: [ ] mismo resultado que el texto equivalente en ≥4/5 casos; [ ] fallback probado; [ ] tests; [ ] CI verde.
+- Evidencia: PR + comparativas.
+
+### Semana 12 — HITO 3 + seguridad + evals (Issues #24, #26, #27)
+
+**D1 — Issue #24: HITO 3 — NeuraCode + multimodal**
+- Objetivo: demostrar el segundo tenant con voz e imagen.
+- Actividades: demo NeuraCode (cursos) + nota de voz + comprobante; métricas del hito; release `hito-3`.
+- Criterios: [ ] NeuraCode responde con datos reales; [ ] audio y comprobante funcionan E2E; [ ] métricas registradas; [ ] release publicado.
+- Evidencia: video + release.
+- **HITO 3 ✅**
+
+**D2 — Issue #26: Seguridad OWASP + inyección**
+- Objetivo: blindar antes de crecer.
+- Actividades: sanitización + input guardrails (ASI01 goal hijacking, ASI02 tool misuse); suite de inyección (≥15 ataques: "ignora tus instrucciones...", payloads en RAG, enlaces); rate limit; verificar tiers N1/N2/N3; logs sin datos sensibles.
+- Criterios: [ ] ≥14/15 ataques bloqueados o contenidos; [ ] ninguna tool N3 expuesta; [ ] suite corre en CI; [ ] incidentes documentados.
+- Evidencia: PR + reporte de la suite.
+- Foco de evaluación: seguridad, criterio.
+
+**D3 — Issue #27: Evals offline + cierre Q6**
+- Objetivo: medir calidad con datos, no con opiniones.
+- Actividades: set de ≥20 casos (fidelidad RAG, relevancia, tono, handoff correcto); LLM-as-a-Judge local offline (`deepseek-r1:14b`) con rúbrica; aplicar la heurística de validadores (Lusser: `v·r/f > p/(1-p)`) para decidir qué jueces valen; demo quincenal + informe SENATI Q6; Excel S11–S12.
+- Criterios: [ ] ≥20 casos evaluados; [ ] puntuación antes/después de una mejora de prompt; [ ] juez descartado si no supera el umbral de Lusser; [ ] informe Q6 + release `q6`.
+- Evidencia: PR + reporte de evals.
+- Foco de evaluación: evaluación, aprendizaje y mejora.

@@ -44,6 +44,7 @@
 - `informe-quincenal` (cada noche dom–vie 21:00 Lima + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
 - Progreso visible: board público `projects/3` (solo lectura) + expedientes en `program/05_EVALUATION/students/`.
 - **Cierre de Issues:** solo con PR mergeado (`Closes #N`) o justificación escrita; si un practicante cierra sin eso, `issue-closed` lo reabre y comenta. El monitor cierra directo cuando corresponda.
+- **Material para practicantes y sus asistentes (OpenCode con modelos gratis):** contexto mínimo por fase en `program/01_CURRICULUM/pack_contexto.md` (incluye el protocolo de uso controlado de IA: ~10–15 interacciones por sesión, adjuntar solo lo puntual) y definiciones ya tomadas en `program/02_REFERENCE/stack-versiones.md` (Python 3.11, límites de las herramientas gratis). Carga solo lo que el pack indique — nunca el repo completo.
 - Si un practicante pregunta cómo empezar, cómo se trabaja con TBD o dónde ve su asignación: remitir a **`GUIA_PRACTICANTE.md`** (raíz). Si actúas como **asistente de un practicante**, carga además **`GUIA_AGENTE.md`** (raíz): qué enseñar y hacer cumplir, catálogo de literatura, puerta de comprensión y prohibiciones.
 
 ## Reglas de review (PRs)

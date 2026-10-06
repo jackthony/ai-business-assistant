@@ -75,12 +75,26 @@ jobs:
                   dm = re.search(rf"\*\*D{d}\s*[—–-].*?\*\*\s*(.*?)(?=\n\*\*D\d\s*[—–-]|\n## |\Z)",
                                  week_block, re.S)
                   detalle = dm.group(1).strip() if dm else ""
+              pack = ""
+              try:
+                  with open("program/01_CURRICULUM/pack_contexto.md", encoding="utf-8") as pf:
+                      pm = re.search(rf"(?ms)^## Semana {int(s)}\b(.*?)(?=^## |\Z)", pf.read())
+                  pack = pm.group(1).strip() if pm else ""
+              except FileNotFoundError:
+                  pass
               body = (f"> Creado automáticamente desde `program/01_CURRICULUM/issues_backlog.md` "
                       f"(S{s} D{d}).\n\n"
                       f"## Lecturas de la semana (antes de codear)\n\n"
                       f"{lecturas or 'Ver la tabla Materiales por semana en `program/01_CURRICULUM/16_week_plan.md`.'}\n\n"
                       f"## Detalle de la sesión (bloque {s_pad} del plan `16_week_plan.md`)\n\n"
                       f"{detalle}\n\n"
+                      f"## Pack de contexto de la semana (léelo ANTES de abrir tu IA)\n\n"
+                      f"{pack or 'Ver `program/01_CURRICULUM/pack_contexto.md`.'}\n\n"
+                      "## Uso de tu IA (controlado)\n\n"
+                      "Presupuesto ~10–15 interacciones útiles por sesión · un prompt = una tarea verificable · "
+                      "adjunta solo los archivos del pack (nunca todo el repo) · prohibido pedir el Issue entero, "
+                      "informes o que la IA commitee · tú ejecutas, verificas y firmas lo que subes "
+                      "(protocolo completo en `program/01_CURRICULUM/pack_contexto.md`).\n\n"
                       "## Reglas TBD y de calidad (las verifican los guardianes y el CI)\n\n"
                       "- Rama `issue-N-<slug>` desde `main`, `Closes #N` en el PR (cantidad de commits libre; el merge squash une todo).\n"
                       "- **Commits estrictos** (ver `GUIA_PRACTICANTE.md` §Commits): `tipo(alcance): verbo imperativo`, "

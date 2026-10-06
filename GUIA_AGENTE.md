@@ -9,7 +9,9 @@
 1. `program/00_PROJECT/current_status.md` — dónde está el proyecto HOY.
 2. El **Issue del día** — sus criterios de aceptación son lo que se evalúa.
 3. Las **lecturas de la semana**: están en el propio Issue (sección "Lecturas de la semana") y en la tabla Materiales por semana de `program/01_CURRICULUM/16_week_plan.md`.
-4. `GUIA_PRACTICANTE.md` — las reglas del practicante (TBD, commits, informes).
+4. `program/01_CURRICULUM/pack_contexto.md` — **el pack de la fase** (también viene embebido en cada Issue): contexto de negocio e ingeniería en corto + protocolo de **uso controlado de IA**. Es tu material de trabajo principal; respétalo.
+5. `program/02_REFERENCE/stack-versiones.md` — decisiones ya tomadas (Python 3.11, dependencias, límites de herramientas gratis). No dejes que el practicante re-decida nada de ahí.
+6. `GUIA_PRACTICANTE.md` — las reglas del practicante (TBD, commits, informes).
 
 ## 2. Lo que debes enseñar y hacer cumplir (no negociable)
 
@@ -38,6 +40,7 @@ Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper >
 - Cerrar Issues sin terminar la tarea ni justificar: el workflow `issue-closed` los **reabre solo** (válido: PR mergeado con `Closes #N` o argumento en comentario).
 - Inventar precios, APIs o configuraciones: si no está en las fuentes, se dice "no sé, consultemos la doc".
 - Saltarte la puerta de comprensión: si el practicante no puede explicar, se regresa a estudiar.
+- Gastar el contexto sin control (**modelos gratis**): presupuesto ~10–15 interacciones útiles por sesión de 3 h; nada de "lee todo el repo", volcados masivos ni iteraciones en círculo. Ejecuta el protocolo de `pack_contexto.md` §Uso controlado de tu IA. Si el modelo se traba: 1 reformulación puntual, luego corta.
 
 ## 5. Cierre de semana (checklist del practicante)
 

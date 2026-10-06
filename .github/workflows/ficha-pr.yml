@@ -68,35 +68,37 @@ jobs:
           otros = [f for f in files if f not in tests and f not in srcs]
 
           def li(x):
-              return (", ".join(f"`{i}`" for i in x[:12]) or "ninguno") + (" …" if len(x) > 12 else "")
+              return (", ".join("`" + i + "`" for i in x[:12]) or "ninguno") + (" …" if len(x) > 12 else "")
 
-          ficha = f"""## 📋 Ficha de revisión (automática — para el monitor)
+          lines = []
+          lines.append("## 📋 Ficha de revisión (automática — para el monitor)")
+          lines.append("")
+          lines.append(f"- **Autor:** {os.environ['PR_AUTHOR']} · **PR:** {os.environ['PR_TITLE']}")
+          lines.append(f"- **Cierra:** {issue_ref}")
+          lines.append("")
+          lines.append("### Qué toca")
+          lines.append("")
+          lines.append(f"- **Código (`src/`):** {li(srcs)}")
+          lines.append(f"- **Tests:** {li(tests)}")
+          lines.append(f"- **Otros:** {li(otros)}")
+          lines.append("")
+          lines.append("```")
+          lines.append(stat)
+          lines.append("```")
+          lines.append("")
+          lines.append("### Contra qué se evalúa (rúbrica)")
+          lines.append("")
+          lines.append("- **Criterios del Issue** (abajo) — lo que el PR debe cubrir")
+          lines.append("- **4 puertas del CI** (`ruff`, `mypy`, `pytest`, `bandit`) — obligatorias para mergear")
+          lines.append("- **Sin secretos ni datos reales** (fixtures anonimizados)")
+          lines.append("- **Preguntas de comprensión** de la plantilla del PR — demuestran que entiende lo que hizo")
+          lines.append("")
+          lines.append(criterios if criterios else "> Criterios: ver el cuerpo del Issue.")
+          lines.append("")
+          lines.append("---")
+          lines.append("_La nota final la decide el monitor (`program/05_EVALUATION/rubric.md`)._")
+          ficha = "\n".join(lines)
 
-- **Autor:** {os.environ["PR_AUTHOR"]} · **PR:** {os.environ["PR_TITLE"]}
-- **Cierra:** {issue_ref}
-
-### Qué toca
-
-- **Código (`src/`):** {li(srcs)}
-- **Tests:** {li(tests)}
-- **Otros:** {li(otros)}
-
-```
-{stat}
-```
-
-### Contra qué se evalúa (rúbrica)
-
-- **Criterios del Issue** (abajo) — lo que el PR debe cubrir
-- **4 puertas del CI** (`ruff`, `mypy`, `pytest`, `bandit`) — obligatorias para mergear
-- **Sin secretos ni datos reales** (fixtures anonimizados)
-- **Preguntas de comprensión** de la plantilla del PR — demuestran que entiende lo que hizo
-
-{criterios if criterios else "> Criterios: ver el cuerpo del Issue."}
-
----
-_La nota final la decide el monitor (`program/05_EVALUATION/rubric.md`)._
-"""
           with open("ficha.md", "w") as f:
               f.write(ficha)
           run("gh", "pr", "comment", pr_num, "--body-file", "ficha.md")

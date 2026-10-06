@@ -43,6 +43,14 @@
 - PR sin `Closes #N`, rama mal nombrada o >6 commits → el guardián **lo bloquea**.
 - PR abierto **>48 h** sin actividad → **se cierra solo** (trabaja en ramas de horas, no de días).
 
+### ¿Terminaste antes? (pull, no solo push)
+
+Tu Issue mergeado no significa "me quedo esperando". En orden:
+
+1. **Jala el siguiente Issue.** Los Issues de tu semana ya existen (los crea el flujo cada martes) y cualquiera del backlog `program/01_CURRICULUM/issues_backlog.md` sin dueño es justo tomarlo: créalo tú con la plantilla "Tarea de sesión" (título `[S## D#] ...`, label `week:S#`), asígnatelo, etiquétalo `disponible`→quítala al asignarte, y avisa al monitor. El board se actualiza solo.
+2. **Apoya a un compañero.** Mira los PRs abiertos: deja comentarios constructivos (rúbrica: `program/05_EVALUATION/rubric.md`), propón cambios si están atascados, o ofrécete con el label `apoyo`. Tu review cuenta como evidencia en tu expediente.
+3. **Propón algo nuevo.** Usa la plantilla "Propuesta" + label `propuesta`: qué problema ves, qué harías, qué necesitas. El líder **@jackthony** la revisa y decide (aceptada → backlog/semana; o cerrada con motivo). No tomes decisiones de arquitectura sin pasar por un ADR.
+
 ## 5. Tu progreso e informes (se generan solos desde GitHub)
 
 - **Diario:** registra tus horas/actividades en tu Word FPE (tu registro se llena con tus commits).

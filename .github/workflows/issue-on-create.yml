@@ -1,0 +1,44 @@
+name: issue-on-create
+
+# Cualquier Issue nuevo (tarea del backlog creada a mano por un practicante,
+# propuesta, o apoyo) entra solo al board con su Semana y Alumno si es parseable.
+# Así los que terminan antes pueden jalar el siguiente Issue sin esperar al martes.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: read
+
+jobs:
+  board-sync:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Agregar al board con campos
+        env:
+          TITLE: ${{ github.event.issue.title }}
+          BODY: ${{ github.event.issue.body }}
+          URL: ${{ github.event.issue.html_url }}
+          ASSIGNEE: ${{ github.event.issue.assignee.login }}
+        run: |
+          set +e
+          gh project item-add 3 --owner jackthony --url "$URL"
+          SEMANA=""
+          if echo "$TITLE" | grep -qiE "\[S[0-9]+ D[0-9]+\]"; then
+            SEMANA=$(echo "$TITLE" | sed -nE 's/.*\[S([0-9]+) D[0-9]+\].*/S\1/p')
+          fi
+          [ -n "$SEMANA" ] && gh project item-edit 3 --owner jackthony --url "$URL" --field "Semana" --value "$SEMANA"
+          case "$ASSIGNEE" in
+            adbon-dm1)     ALUMNO="Josue Marreros" ;;
+            WhoAllan)      ALUMNO="Allan Zerpa" ;;
+            estefanyP-hub) ALUMNO="Pilar Aguilar" ;;
+            *)             ALUMNO="" ;;
+          esac
+          [ -n "$ALUMNO" ] && gh project item-edit 3 --owner jackthony --url "$URL" --field "Alumno" --value "$ALUMNO"
+          case "$TITLE" in
+            Propuesta:*) gh project item-edit 3 --owner jackthony --url "$URL" --field "Area" --value "Gestión" ;;
+          esac
+          echo "board sync ok"

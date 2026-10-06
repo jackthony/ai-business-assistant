@@ -1,0 +1,36 @@
+name: Propuesta (fuera del plan)
+description: "¿Terminaste y quieres proponer algo que no está contemplado? El líder @jackthony lo revisa y decide."
+title: "Propuesta: "
+labels: ["propuesta", "tipo:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Usa esta plantilla cuando termines tus Issues del día/semana y quieras
+        **proponer algo nuevo** (mejora, idea, herramienta, automatización…).
+        El líder la revisa y decide: aceptada (entra al backlog/semana) o cerrada con motivo.
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qué problema u oportunidad ves
+      description: Concreto, con datos si puedes (qué te pasó, qué falló, qué tardó).
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Qué propones
+      description: Qué harías, en qué archivos/módulos tocaría, cuánto crees que tarda.
+    validations:
+      required: true
+  - type: textarea
+    id: necesita
+    attributes:
+      label: Qué necesitas
+      description: Nada / bloqueantes (datos del negocio, acceso, decisión del líder).
+  - type: input
+    id: backlog
+    attributes:
+      label: ID del backlog
+      description: Si es el famoso #15 (dudas) o algún número del backlog que evoluciona, ponlo.
+      placeholder: "p. ej. #15"

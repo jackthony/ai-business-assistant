@@ -1,0 +1,88 @@
+name: deepseek-review
+
+# Primer pase de review automático con DeepSeek API (opcional: solo si el secreto
+# DEEPSEEK_API_KEY está definido; sin él, avisa y no bloquea). El ADR-008 mantiene el
+# DeepSeek local como motor principal: este job corre en GitHub y es solo un borrador
+# de feedback para el monitor, que decide la nota final.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Revisar con DeepSeek (o avisar que falta el secreto)
+        env:
+          KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [ -z "$KEY" ]; then
+            gh pr comment "$PR_NUM" --body "> 🔎 **DeepSeek reviewer:** sin `DEEPSEEK_API_KEY` en los secrets del repo — este primer pase está desactivado. El monitor hará el review local (Ollama) como siempre."
+            echo "sin clave — skip"
+            exit 0
+          fi
+          python3 - <<'PY'
+          import json, os, subprocess
+
+          pr_num = os.environ["PR_NUM"]
+          base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]
+
+          def run(*args):
+              return subprocess.run(args, capture_output=True, text=True)
+
+          diff = run("git", "diff", "--unified=2", base, head).stdout[:8000]
+          files = run("git", "diff", "--name-only", base, head).stdout.strip().splitlines()
+          cuerpo_issue = run("gh", "api", f"repos/jackthony/ai-business-assistant/issues/{pr_num}", "--jq", ".body").stdout
+          import re
+          m = re.search(r"(?i)(closes|fixes|resolves)\s+#(\d+)", os.environ["PR_BODY"])
+          if m:
+              cuerpo_issue = run("gh", "api", f"repos/jackthony/ai-business-assistant/issues/{m.group(2)}", "--jq", ".body").stdout or cuerpo_issue
+
+          prompt = f"""Eres el reviewer técnico del programa SENATI. Revisa este PR y responde EN ESPAÑOL, breve y constructivo.
+          Reglas del programa: TBD (rama corta, Closes #N, <=6 commits), CI de 4 puertas (ruff/mypy/pytest/bandit), sin secretos ni datos reales de clientes, arquitectura canónica de program/03_ARCHITECTURE/architecture.md (src/channels, src/agents, contrato InboundEvent ADR-011), FastAPI + LangGraph + ChromaDB + Ollama.
+          Formato de respuesta (markdown):
+          1. **Resumen** (1 línea)
+          2. **Fortalezas** (2-3 viñetas)
+          3. **Problemas** (viñetas con archivo y línea si aplica; N/A si no hay)
+          4. **Preguntas de comprensión para el practicante** (2-3 preguntas que demuestren que entiende lo que hizo, no que lo hizo un agente)
+          5. **Nota preliminar sugerida** (1-5, referencia: program/05_EVALUATION/rubric.md)
+          PR: {os.environ['PR_TITLE']}
+          Archivos: {', '.join(files[:20])}
+          Diff:\n{diff}\n
+          Cuerpo del Issue:\n{cuerpo_issue[:2500]}"""
+
+          payload = {
+              "model": "deepseek-chat",
+              "messages": [{"role": "user", "content": prompt}],
+              "temperature": 0.2,
+          }
+          r = run("curl", "-sS", "https://api.deepseek.com/chat/completions",
+                  "-H", "Content-Type: application/json",
+                  "-H", f"Authorization: Bearer {os.environ['KEY']}",
+                  "-d", json.dumps(payload))
+          try:
+              texto = json.loads(r.stdout)["choices"][0]["message"]["content"]
+          except Exception:
+              texto = "La API no respondió bien; revisa el log del job."
+          with open("review.md", "w") as f:
+              f.write("> 🔎 **DeepSeek reviewer (primer pase automático):** la nota final la decide el monitor.\n\n" + texto)
+          run("gh", "pr", "comment", pr_num, "--body-file", "review.md")
+          PY

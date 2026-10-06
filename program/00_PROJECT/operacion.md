@@ -12,7 +12,7 @@
 | Milestones: HITO 1 (S6) · HITO 2 (S9) · HITO 3 (S12) · Demo final (S16) | ✅ aplicados |
 | Dependabot (pip + Actions) | ✅ aplicado |
 | Board [projects/3](https://github.com/users/jackthony/projects/3) con campos Status/Semana/Alumno/Area/Complejidad — **público** (practicantes solo lectura), enlazado al repo | ✅ activo |
-| Ruleset `main protegido (TBD)`: PR obligatorio, squash/lineal, sin force-push, check `guardian-tbd / reglas-tbd` + push protection | ✅ activo |
+| Ruleset `main protegido (TBD)`: PR obligatorio, squash/lineal, sin force-push, checks `guardian-tbd / reglas-tbd` **y** `CI estricto / calidad` + push protection | ✅ activo |
 | Guardianes TBD por workflow (`tbd-guardian` / `tbd-enforcer`) | ✅ en operación |
 | CI estricto: `ruff` + `mypy` + `pytest` + `bandit` (4 puertas, `.github/workflows/ci.yml`) | ✅ montado; entra con el Issue #2 |
 | Pre-commit local (`.pre-commit-config.yaml`: ruff + formateo + hooks base) | ✅ en raíz; cada practicante corre `pre-commit install` |
@@ -31,6 +31,7 @@
 |---|---|---|
 | `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit |
 | `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, ≤6 commits |
+| `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |
 | `informe-quincenal.yml` | cada noche de trabajo (mar–vie 21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |

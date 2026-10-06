@@ -1,12 +1,10 @@
 name: CI estricto
 
+# Corre en TODO PR (sin filtro de paths): el ruleset exige este check para mergear,
+# así que debe reportar siempre. Las puertas son tolerantes: si aún no existe src/ o
+# tests/ (docs-only), pasan sin hacer nada en vez de fallar.
 on:
   pull_request:
-    paths:
-      - "src/**"
-      - "tests/**"
-      - "pyproject.toml"
-      - "requirements*.txt"
   push:
     branches: [main]
     paths:
@@ -39,10 +37,25 @@ jobs:
           pip install -q ruff mypy pytest bandit
           if [ -f requirements.txt ]; then pip install -q -r requirements.txt; fi
       - name: 1. Lint — ruff (cero warnings)
-        run: ruff check src tests
+        run: |
+          if [ -d src ] || [ -d tests ]; then
+            ARGS=""
+            [ -d src ] && ARGS="$ARGS src"
+            [ -d tests ] && ARGS="$ARGS tests"
+            ruff check $ARGS
+          else
+            echo "sin código Python todavía (docs-only) — skip"
+          fi
       - name: 2. Tipado — mypy (cero errores)
-        run: mypy src --ignore-missing-imports
+        run: |
+          if [ -d src ]; then mypy src --ignore-missing-imports; else echo "sin src — skip"; fi
       - name: 3. Tests — pytest (mocks, sin tokens)
-        run: pytest tests -q --strict-markers
+        run: |
+          if [ -d tests ] && find tests -name 'test_*.py' -print -quit | grep -q .; then
+            pytest tests -q --strict-markers
+          else
+            echo "sin tests todavía — skip"
+          fi
       - name: 4. Seguridad — bandit (alta y media)
-        run: bandit -r src -x tests -ll
+        run: |
+          if [ -d src ]; then bandit -r src -x tests -ll; else echo "sin src — skip"; fi

@@ -28,7 +28,7 @@
 | Material de alumnos | ✅ guía PDF (Vasilyev, MIT); cursos verificados en `program/01_CURRICULUM/cursos_de_refuerzo.md` |
 | Decisiones | ✅ 11 ADRs (`program/03_ARCHITECTURE/decisions/`) + `program/02_REFERENCE/source_map.md` curado |
 | Código producto (`src/`) | ⏳ arranca con el Issue #2 |
-| Branch protection / rulesets | ✅ repo público (2026-10-06) → ruleset `main protegido (TBD)` activo + guardianes por workflow (`tbd-guardian`/`tbd-enforcer`) + push protection |
+| Branch protection / rulesets | ✅ repo público (2026-10-06) → ruleset `main protegido (TBD)` activo: PR obligatorio, squash/lineal, checks requeridos `guardian-tbd / reglas-tbd` **y** `CI estricto / calidad` + push protection |
 
 ## Inventario de tareas (todas)
 

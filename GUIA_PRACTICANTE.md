@@ -28,7 +28,9 @@
 1. `program/00_PROJECT/current_status.md` — dónde está el proyecto HOY.
 2. Tu Issue del día y sus criterios de aceptación.
 3. Tus fuentes: tabla **"Materiales por semana"** en `program/01_CURRICULUM/16_week_plan.md` + mapa `program/02_REFERENCE/source_map.md`. Lee, revisa, investiga; si contradicen algo, gana la doc oficial.
-4. Si usas IA (DeepSeek web, ChatGPT o un agente): pégale **solo** `AGENTS.md` + tu Issue + la guía de tu semana. Nunca el repo completo. En S4 (#2/#3/#4) la IA es para dudas y revisar tu código, no para que te haga el Issue entero: las preguntas de comprensión del Issue y del PR demuestran que lo entiendes tú.
+4. Si usas IA (DeepSeek web, ChatGPT o un agente): pégale **solo** `AGENTS.md` + `GUIA_AGENTE.md` + tu Issue + la guía de tu semana. Nunca el repo completo. En S4 (#2/#3/#4) la IA es para dudas y revisar tu código, no para que te haga el Issue entero: las preguntas de comprensión del Issue y del PR demuestran que lo entiendes tú.
+5. **Trabajo en equipo (orden de consulta):** 1) tu Issue + docs oficiales → 2) un compañero (mira sus PRs, comenta constructivo, usa `apoyo`) → 3) el grupo → 4) el monitor. Anota en el PR a quién consultaste o ayudaste.
+6. **La puerta de comprensión:** antes de subir o completar tu semana, responde las preguntas de comprensión **con tus palabras** y prepárate para explicarle al LT qué hiciste, por qué y qué probaste. Si no puedes explicarlo, no está listo: vuelve a leer.
 
 ## 4. Trabajar con TBD (correcto, sin excepciones)
 

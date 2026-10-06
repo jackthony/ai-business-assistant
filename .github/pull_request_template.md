@@ -4,8 +4,10 @@
 
 ## Cómo se probó
 
-- [ ] `ruff check .` limpio
-- [ ] `pytest` verde (mocks; sin llamadas reales a modelos)
+- [ ] `ruff check src tests` limpio
+- [ ] `mypy src` sin errores
+- [ ] `pytest tests -q` verde (mocks; sin llamadas reales a modelos)
+- [ ] `bandit -r src -x tests -ll` sin hallazgos de alta/media
 - [ ] Casos borde considerados (válido / inválido / límite)
 
 ## Checklist

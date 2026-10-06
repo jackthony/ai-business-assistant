@@ -1,12 +1,12 @@
 # Backlog de Issues #01–#39
 
-Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo). Nota: en GitHub los números varían (digest y tareas de gestión ocupan Issues); la referencia estable es el título `[S## D#]`.
+Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo). Nota: en GitHub los números varían — S4 = GitHub #2/#3/#4, gestión #5–#8, borradores de informe #11–#13; la referencia estable es el título `[S## D#]`. El workflow `crear-issues-semana` crea los Issues de cada semana desde esta tabla.
 
 | Issue | Semana | Título | Estado |
 |---|---|---|---|
-| #01 | S4 D1 | Setup FastAPI (Integration Hub) + CI Actions: entorno, TBD, /health, ngrok | todo |
-| #02 | S4 D2 | Webhook Meta API (GET verificación / POST payloads) | todo |
-| #03 | S4 D3 | Envío de respuestas salientes (whatsapp_sender.py) | todo |
+| #01 | S4 D1 | Setup FastAPI (Integration Hub) + CI Actions: entorno, TBD, /health, ngrok | en curso (GitHub #2) |
+| #02 | S4 D2 | Webhook Meta API (GET verificación / POST payloads) | creado (GitHub #3) |
+| #03 | S4 D3 | Envío de respuestas salientes (whatsapp_sender.py) | creado (GitHub #4) |
 | #04 | S5 D1 | LangGraph Core (StateGraph + AgentState) | todo |
 | #05 | S5 D2 | System Prompt inicial Hola Mujer | todo |
 | #06 | S5 D3 | Memoria persistente (SqliteSaver, thread_id = teléfono) | todo |
@@ -38,7 +38,7 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas segú
 | #32 | S14 D2 | Contenerización Docker | todo |
 | #33 | S14 D3 | Despliegue en la nube (webhook 24/7) | todo |
 | #34 | S15 D1 | Integración y reconciliación E2E | todo |
-| #35 | S15 D2 | Pruebas de estrés y model fallbacks (locales) | todo |
+| #35 | S15 D2 | Fallbacks de modelos + FinOps (costo por conversación) | todo |
 | #36 | S15 D3 | Refactorización SOLID + documentación OpenAPI + README | todo |
 | #37 | S16 D1 | Capstone: pruebas E2E completas | todo |
 | #38 | S16 D2 | Preparación de defensa técnica | todo |

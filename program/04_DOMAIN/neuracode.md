@@ -4,10 +4,10 @@
 
 ## Conocido (del plan)
 
-- **Academia de tecnología** (cursos, precios, temarios) — ingesta en S10 (#21).
+- **Academia de tecnología** (cursos, precios, temarios) — ingesta en S11 (#21).
 - Comparte arquitectura con Hola Mujer; cambian system prompt, RAG y reglas (ADR de multitenant en `architecture.md`).
 - Su línea receptora de WhatsApp define el tenant dinámicamente.
-- Debe atender también notas de voz (HITO 3, S11).
+- Debe atender también notas de voz (HITO 3, S12).
 
 ## Por completar
 

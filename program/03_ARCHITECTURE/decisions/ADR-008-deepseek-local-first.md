@@ -23,6 +23,6 @@ Opción 2. Motor principal: DeepSeek local en Ollama (ver `program/02_REFERENCE/
 
 ## Consecuencias
 
-- El plan v1 debe reemplazar en su texto Whisper API → faster-whisper y GPT-4o Vision → Qwen2.5-VL, y el fallback del S15 entre modelos locales.
+- El plan v2 ya reemplazó Whisper API → faster-whisper y GPT-4o Vision → Qwen2.5-VL (hecho 2026-10-06); el fallback de S15 será entre modelos locales.
 - Un modelo pesado a la vez; latencia a considerar en la UX del bot.
 - Conectividad: el pipeline completo debe poder probarse offline (salvo webhook Meta).

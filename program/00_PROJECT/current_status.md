@@ -41,10 +41,10 @@
 - **#5** ✅ Colaboradores invitados 2026-10-06 (falta que acepten)
 - **#6** PEA SINFO: mapear códigos al recibirlos
 - **#7** Ley 29733: validar con abogado (no tocar datos reales aún)
-- **#8** ✅ sustituido por guardianes TBD por workflow; rulesets nativos solo con Pro/público
+- **#8** ✅ cerrado: ruleset nativo `main protegido (TBD)` activo (repo público) + guardianes TBD por workflow como refuerzo
 
 ### Rutina semanal (no son Issues)
-- **Lunes:** crear en el board los Issues de la semana.
+- **Martes:** el workflow `crear-issues-semana` crea los Issues de la semana en el board desde el backlog; yo asigno el campo `Alumno`.
 - **Viernes (Día 3):** leer digest + revisar PRs (DeepSeek reviewer) + nota preliminar en Excel + escuchar la sustentación quincenal (el informe lo redacta el alumno).
 
 ## Decisiones recientes (resumen)
@@ -66,4 +66,4 @@
 1. Hoy 2026-10-06 (S4 D1): Josue arranca #2 por la mañana; Allan y Pilar se suman por la noche (Josue les explica lo avanzado).
 2. Que los 3 acepten la invitación de GitHub.
 3. Cerrar Issues #2–#4 (S4) con demo E2E y cierre Q2.
-4. **Informe quincenal S3–S4: presentación sábado 10-oct** — cada alumno presenta su Issue como tarea significativa; el borrador automático se genera con el workflow `informe-quincenal`.
+4. **Informe quincenal S3–S4: presentación sábado 10-oct** — cada alumno presenta su Issue como tarea significativa; los borradores automáticos ya existen (#11 Allan, #12 Pilar, #13 Josue) y se refrescan con cada corrida de `informe-quincenal`.

@@ -20,11 +20,12 @@
 | Labels: `tipo:*`, `alumno:*`, `blocked`, `hito`, `senati` | ✅ aplicadas |
 | Milestones: HITO 1 (S6), HITO 2 (S9), HITO 3 (S12), Demo final (S16) | ✅ aplicados |
 | Dependabot (pip + GitHub Actions) | ✅ aplicado (actúa con el código en S4) |
-| Project board (Todo / In Progress / Done) | ✅ [projects/3](https://github.com/users/jackthony/projects/3) — vinculado al repo, Issues #2–#4 dentro |
-| Branch protection / rulesets en `main` | ✅ suplidos por guardianes TBD por workflow (`tbd-guardian` + `tbd-enforcer`); rulesets nativos si se pasa a GitHub Pro o repo público |
+| Project board | ✅ [projects/3](https://github.com/users/jackthony/projects/3) — campos Status/Semana/Alumno/Area/Complejidad; Issues #2–#4 dentro |
+| Branch protection / rulesets en `main` | ✅ ruleset nativo `main protegido (TBD)` ACTIVO (repo público 2026-10-06): PR obligatorio, squash/lineal, sin force-push, check `guardian-tbd / reglas-tbd` + guardianes por workflow (`tbd-guardian`/`tbd-enforcer`) |
 | CI estricto: `ruff` + `mypy` + `pytest` + `bandit` (4 puertas) | ✅ workflow montado (`.github/workflows/ci.yml`); se activa con el primer PR de código (los practicantes crean `src/` en el Issue #2) |
+| Pre-commit local (ruff + formateo antes de cada commit) | ✅ `.pre-commit-config.yaml` en la raíz; cada practicante corre `pre-commit install` (Issue #2) |
 | CD + environments con aprobación | S14 |
-| Secret scanning / push protection / CodeQL | al pasar a público (S16) o con Pro |
+| Secret scanning / push protection / CodeQL | ✅ push protection activo (público); CodeQL en S16 (opcional) |
 
 ## Trazabilidad (evidencia SENATI y liderazgo)
 
@@ -37,9 +38,11 @@
 
 **Automático (GitHub lo hace solo):**
 - CI en cada PR: verde/rojo bloquea el merge (nadie avanza con tests rotos).
-- Project board: el estado cambia solo al abrir/cerrar Issues y PRs (Projects → AI Business Assistant — SDLC).
+- Project board: el estado cambia solo al abrir/cerrar Issues y PRs (board projects/3 con campos Status/Semana/Alumno/Area/Complejidad).
 - Milestones: barra de avance % por HITO.
-- **Digest semanal** (`.github/workflows/digest-semanal.yml`): cada viernes crea un Issue resumen por alumno (PRs movidos, Issues abiertos). Se prueba con *Actions → Digest semanal → Run workflow*.
+- **Digest semanal** (`.github/workflows/digest-semanal.yml`): ✅ probado (Issue #1); cada viernes crea un Issue resumen por alumno (PRs movidos, Issues abiertos).
+- **Borradores de informe FPE** (`.github/workflows/informe-quincenal.yml`): jueves por la noche crea/refresca 1 Issue-borrador por alumno (ya generados: #11 Allan, #12 Pilar, #13 Josue).
+- **Creación de Issues de la semana** (`.github/workflows/crear-issues-semana.yml`): el martes crea los 3 Issues de la semana desde `issues_backlog.md` y los agrega al board.
 - Dependabot y alertas de seguridad: solas.
 
 **Del monitor (seguimiento y rumbo, ~30 min el Día 3):**

@@ -1,29 +1,12 @@
-# Plan 16 semanas — canónico (v2, en revisión)
+# Plan 16 semanas — canónico (v2 vigente)
 
-> **Estado:** v2 completa (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación (nota preliminar que llena el monitor). **Los informes quincenales SENATI y el registro diario los elabora cada alumno**; el monitor da seguimiento (board, PRs, digest) y rumbo. Detalle de las 48 sesiones: Bloques 1–4 abajo.
+> **Estado:** v2 vigente (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación (nota preliminar que llena el monitor). **Los informes quincenales SENATI y el registro diario los elabora cada alumno**; el monitor da seguimiento (board, PRs, digest) y rumbo. Detalle de las 48 sesiones: Bloques 1–4 abajo.
 
 ### Histórico v1 (referencia)
 
-| Semana | Foco | Issues | Hito |
-|---|---|---|---|
-| 1 | Java + POO HealthTech (modelado → implementación → sustentación) | — | — |
-| 2 | Git/GitHub profesional + JUnit 5 + PR + cierre quincenal | — | — |
-| 3 | HTTP/JSON/REST, contratos de integración y mapa Build/Buy/Integrate | — | — |
-| 4 | FastAPI (Integration Hub): setup, webhook Meta GET/POST, envío saliente | #01–#03 | — |
-| 5 | LangGraph Core: StateGraph, system prompt Hola Mujer, memoria SqliteSaver | #04–#06 | — |
-| 6 | Reglas conversacionales/few-shot, ingesta Excel + RAG ChromaDB | #07–#09 | **HITO 1** (D3) |
-| 7 | Agente 1 Info+RAG, Pydantic tools, Agente 2 Citas | #10–#12 | — |
-| 8 | Agente 3 Cierre/lead, registro en Sheets/DB, OCR de pagos (Yape/Plin) | #13–#15 | — |
-| 9 | Agente 4 Safety/triage, Human-in-the-Loop (interrupt) | #16–#18 | **HITO 2** (D3) |
-| 10 | Supervisor router, multitenant base, ingesta cursos NeuraCode | #19–#21 | — |
-| 11 | Whisper local (voz), normalización de audio, Multimodal NeuraCode | #22–#24 | **HITO 3** (D3) |
-| 12 | Telemetría, seguridad OWASP/guardrails, evaluaciones LLM-as-a-Judge | #25–#27 | — |
-| 13 | Re-engagement proactivo + seguimiento personalizado + analytics | #28–#30 | — |
-| 14 | PostgresSaver, Docker, deploy (webhook 24/7) | #31–#33 | — |
-| 15 | Integración E2E, estrés/fallbacks, refactor + documentación | #34–#36 | — |
-| 16 | Capstone: pruebas E2E, defensa técnica, demo final y transferencia | #37–#39 | **Demo final** |
+> Plan original: Java S1–S3, CI/CD tarde, OCR en S8, HITO 3 en S11. Superado por v2 (abajo); el delta está en "Cambios clave vs v1". No citar del histórico.
 
-## Plan v2 (propuesta 2026-10-06 — en revisión)
+## Plan v2 (vigente desde 2026-10-06)
 
 Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR de pagos (#15 → S10) recién después del agente único; supervisor (#19) y multitenant (#20) en S10; NeuraCode (#21 → S11); HITO 3 (#24 → S12); seguridad + evals/Lusser en S12; FinOps en S15.
 
@@ -126,14 +109,14 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 - Evidencia: diagrama + doc.
 - Foco de evaluación: criterio, autonomía.
 
-### Semana 4 — Producto + cierre S3 acelerado (Issues #01–#03)
+### Semana 4 — Producto + cierre S3 acelerado (backlog #01–#03 = GitHub #2–#4)
 
-> Contexto real: la arquitectura empresarial ya está definida (Excel operativo + `program/04_DOMAIN/hola-mujer.md`); lo faltante de S3 (HTTP/webhook, contratos, Build/Buy/Integrate) se ve aquí en versión acelerada integrada a los 3 días, y se ahonda en S5–S10. El viernes: demo + informe Q2 (formato FPE: tarea significativa con proceso, herramientas, seguridad ATS y diagrama). Regla TBD: Issue → branch `issue-NN` → PR → CI verde → merge.
+> Contexto real: la arquitectura empresarial ya está definida (Excel operativo + `program/04_DOMAIN/hola-mujer.md`); lo faltante de S3 (HTTP/webhook, contratos, Build/Buy/Integrate) se ve aquí en versión acelerada integrada a los 3 días, y se ahonda en S5–S10. D3 (jue 8-oct): demo; viernes 9-oct: pulir el informe con el borrador automático; **presentación sábado 10-oct** (formato FPE: tarea significativa con proceso, herramientas, seguridad ATS y diagrama). Regla TBD (la hace cumplir `tbd-guardian`): Issue → branch `(tbd|issue)-N-<slug>` desde `main` → `Closes #N` → ≤6 commits → PR → CI verde → merge.
 >
-> **Meta de la quincena (informe SENATI 10-oct):** Josue lidera #2, Pilar #3 y Allan #4 — cada uno presenta su Issue como tarea más significativa. El workflow `informe-quincenal` genera el borrador automático del registro semanal desde GitHub (jueves por la noche); el alumno completa horas/ATS/reflexión y lo pasa al Word FPE.
+> **Meta de la quincena (informe SENATI 10-oct):** Josue lidera #2, Pilar #3 y Allan #4 — cada uno presenta su Issue como tarea más significativa. El workflow `informe-quincenal` genera/refresca el borrador automático del registro semanal desde GitHub (jueves por la noche; ya creados: #11 Allan, #12 Pilar, #13 Josue); el alumno completa horas/ATS/reflexión y lo pasa al Word FPE.
 
 **D1 — S3 acelerado + Issue #01 (setup + CI)**
-- Tareas: leer `program/02_REFERENCE/whatsapp-cloud-api.md` y los esquemas reales de 01_CONTACTOS/02_CITAS/03_EVENTOS (Excel); explicar webhook vs polling, status codes e idempotencia (`request_id`); crear `src/`, `pyproject.toml`, `.env.example`, FastAPI `/health`, ngrok, CI (`ruff`+`pytest`).
+- Tareas: leer `program/02_REFERENCE/whatsapp-cloud-api.md` y los esquemas reales de 01_CONTACTOS/02_CITAS/03_EVENTOS (Excel); explicar webhook vs polling, status codes e idempotencia (`request_id`); crear `src/`, `pyproject.toml`, `.env.example`, FastAPI `/health`, ngrok. El CI de 4 puertas (`ruff`+`mypy`+`pytest`+`bandit`) ya está montado: hoy es que el primer PR con `src/` quede verde.
 - Criterios: [ ] explican el webhook y el esquema de eventos del negocio; [ ] `/health` 200 local y por ngrok; [ ] CI verde en el PR; [ ] sin secretos.
 - Evidencia: PR + captura + explicación oral (alimenta el informe).
 
@@ -412,7 +395,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 **D3 — Issue #36: Refactor SOLID + documentación**
 - Objetivo: repo presentable y mantenible.
 - Actividades: limpieza SOLID, eliminar código muerto, docstrings, OpenAPI/Swagger completo, README final con arquitectura y cómo correr; actualizar `docs/ARCHITECTURE.md` con las decisiones reales.
-- Criterios: [ ] `ruff` + `mypy` verdes; [ ] Swagger cubre todos los endpoints; [ ] README final; [ ] sin TODOs huérfanos.
+- Criterios: [ ] las 4 puertas del CI verdes (`ruff`+`mypy`+`pytest`+`bandit`); [ ] Swagger cubre todos los endpoints; [ ] README final; [ ] sin TODOs huérfanos.
 - Evidencia: PR + docs.
 - Foco de evaluación: mejora, evidencia.
 

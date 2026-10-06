@@ -1,6 +1,9 @@
 # ai-business-assistant — Programa SENATI 2026 + Producto
 
-Repositorio único: **programa de prácticas** (currículo, evaluación, gestión) **+ producto** (`src/` desde S4) — HealthTech Software & AI · SENATI 2026 · ciclo 3 (Allan, Pilar y Josue).
+Repositorio único (**público** desde 2026-10-06): **programa de prácticas** (currículo, evaluación, gestión) **+ producto** (`src/` desde S4) — HealthTech Software & AI · SENATI 2026 · ciclo 3 (Allan, Pilar y Josue). Sin correos, secretos ni datos reales de clientes.
+
+- **Board de seguimiento:** https://github.com/users/jackthony/projects/3 (campos Status, Semana, Alumno, Area, Complejidad)
+- **Estado siempre vigente:** `program/00_PROJECT/current_status.md`
 
 ## Regla de oro
 
@@ -33,6 +36,26 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 | `program/04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
 | `program/05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |
 | `AGENTS.md` (raíz) | Instrucciones para cualquier agente de IA (protocolo, coding, review, evaluación) |
+
+## Flujo de trabajo automatizado
+
+| Workflow | Cuándo | Qué hace |
+|---|---|---|
+| `ci.yml` | cada PR | 4 puertas: `ruff` + `mypy` + `pytest` + `bandit` (job `calidad`) |
+| `tbd-guardian.yml` | cada PR | TBD: base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, ≤6 commits |
+| `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
+| `digest-semanal.yml` | viernes | Issue resumen semanal por alumno |
+| `informe-quincenal.yml` | jueves noche + manual | borrador del informe FPE por alumno desde commits/PRs/Issues reales (Issues #11–#13 ya creados) |
+| `crear-issues-semana.yml` | martes + manual | crea los Issues de la semana desde el backlog y los agrega al board |
+
+`main` está protegido por el ruleset **`main protegido (TBD)`**: PR obligatorio, historial lineal (squash), sin force-push, check requerido `guardian-tbd / reglas-tbd` y push protection activo.
+
+## Cómo arranca un practicante
+
+1. `git clone https://github.com/jackthony/ai-business-assistant && cd ai-business-assistant`
+2. Crear entorno + `pip install pre-commit && pre-commit install` → ruff y formateo corren antes de cada commit.
+3. Leer `AGENTS.md`, `program/00_PROJECT/current_status.md` y el Issue del día.
+4. Trabajar en rama `issue-N-<slug>` → commits pequeños → `Closes #N` en el PR → CI verde (4 puertas) → merge squash.
 
 ## Cómo usarlo con DeepSeek local
 

@@ -18,7 +18,7 @@
 
 - El **alumno** sustenta la tarea más significativa y presenta su **informe quincenal SENATI** en formato FPE (CNIU-108): por qué eligió la tarea, proceso, equipos/herramientas, seguridad/ATS y diagrama; el monitor escucha, da rumbo, firma y marca "Revisado por monitor".
 - Revisar `SEGUIMIENTO_QUINCENAL` del Excel y ajustar el plan si un tema no quedó sólido.
-- **Automatizado:** el workflow `informe-quincenal` (jueves por la noche o manual) crea 1 Issue-borrador por alumno con su registro semanal armado desde commits/PRs/Issues reales de GitHub. El alumno solo completa horas, ATS, resultados y la justificación, y lo pasa al Word FPE. Su expediente en `program/05_EVALUATION/students/` es el respaldo (la misma estructura les sirve a los 3).
+- **Automatizado:** el workflow `informe-quincenal` (jueves por la noche o manual) crea/refresca 1 Issue-borrador por alumno con su registro semanal armado desde commits/PRs/Issues reales de GitHub (ya creados: #11 Allan, #12 Pilar, #13 Josue). El alumno solo completa horas, ATS, resultados y la justificación, y lo pasa al Word FPE. Su expediente en `program/05_EVALUATION/students/` es el respaldo (la misma estructura les sirve a los 3).
 
 ## Reglas del líder
 

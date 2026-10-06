@@ -1,0 +1,69 @@
+name: crear-issues-semana
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 16 * * 2" # martes 11:30 Lima (UTC-5): crea los Issues de la semana
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  crear:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Crear Issues de la semana desde el backlog
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import datetime as dt, re, subprocess
+
+          REPO = "jackthony/ai-business-assistant"
+          START_S4_D1 = dt.date(2026, 10, 6)  # ajustar si cambia el calendario SENATI
+
+          today = dt.date.today()
+          week = 4 + (today - START_S4_D1).days // 7
+          if week < 4 or week > 16:
+              print(f"Fuera de rango del plan: S{week}")
+              raise SystemExit
+
+          with open("program/01_CURRICULUM/issues_backlog.md", encoding="utf-8") as f:
+              backlog = f.read()
+
+          created = 0
+          for m in re.finditer(r"^\| #(\d+) \| S(\d+) D(\d+) \| (.+?) \| .* \|$", backlog, re.M):
+              num, s, d, title = m.groups()
+              if int(s) != week:
+                  continue
+              s_pad = f"S{int(s):02d}"
+              t = f"[{s_pad} D{d}] {title.strip()}"
+              existing = subprocess.run(["gh", "issue", "list", "-R", REPO, "--state", "all",
+                                         "--search", f'in:title "{s_pad} D{d}"', "--json", "number"],
+                                        capture_output=True, text=True)
+              if existing.stdout.strip() not in ("", "[]"):
+                  print(f"existe ({s_pad} D{d}): {t}")
+                  continue
+              body = (f"> Creado automáticamente desde `program/01_CURRICULUM/issues_backlog.md` "
+                      f"(S{s} D{d}).\n\n"
+                      "Detalle, criterios de aceptación y evidencia: bloque de la semana en "
+                      "`program/01_CURRICULUM/16_week_plan.md`.\n\n"
+                      "**Asignar en el board** el campo `Alumno` y trabajar con rama "
+                      "`issue-N-<slug>` + `Closes #N` (reglas TBD, ver `tbd-guardian.yml`).")
+              subprocess.run(["gh", "label", "create", f"week:S{s}", "-R", REPO, "--force"],
+                             capture_output=True, text=True)
+              r = subprocess.run(["gh", "issue", "create", "-R", REPO, "-t", t, "-b", body,
+                                  "-l", f"week:S{s},senati"], capture_output=True, text=True)
+              url = r.stdout.strip()
+              if url.startswith("https://"):
+                  created += 1
+                  subprocess.run(["gh", "project", "item-add", "3", "--owner", "jackthony",
+                                  "--url", url], capture_output=True, text=True)
+                  subprocess.run(["gh", "project", "item-edit", "3", "--owner", "jackthony",
+                                  "--url", url, "--field", "Semana", "--value", f"S{s}"],
+                                 capture_output=True, text=True)
+          print(f"S{week}: {created} issues creados")
+          PY

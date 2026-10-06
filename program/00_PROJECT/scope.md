@@ -7,7 +7,7 @@
 - Canal WhatsApp Cloud API (Meta) — única dependencia de nube obligatoria.
 - Conversación natural y humanizada (sin menús rígidos); regla explícita de **cuándo escalar a humano** (safety_agent + HITL).
 - Multitenant: Hola Mujer y NeuraCode sobre el mismo núcleo con configs separadas.
-- Multimodal por fases: voz (faster-whisper, S11) y comprobantes por imagen (Qwen2.5-VL, S8+); video se evalúa después.
+- Multimodal por fases: voz (faster-whisper, S11) y comprobantes por imagen (Qwen2.5-VL, S10); video se evalúa después.
 - Comprensión de campañas: capturar el origen del chat (click-to-WhatsApp/ads) para saber qué anuncio trae clientes.
 - Reutilizar plataformas existentes (Google Calendar, Sheets, ERP) e integrar donde aporten; construir solo el núcleo diferenciador.
 - **FinOps**: costo por conversación medido desde S4; LLM local y ventana de servicio 24 h de WhatsApp como palancas.

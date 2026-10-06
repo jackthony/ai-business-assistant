@@ -8,7 +8,7 @@
 
 | Material | Rol | Estado |
 |---|---|---|
-| `Hola Mujer · MVP WhatsApp ManyChat · Operativo (1).xlsx` (11 hojas) | KB-A: catálogo, reglas, config del negocio | ✅ verificada; resumida en `program/04_DOMAIN/hola-mujer.md`; bloqueantes en Issue #10 |
+| `Hola Mujer · MVP WhatsApp ManyChat · Operativo (1).xlsx` (11 hojas) | KB-A: catálogo, reglas, config del negocio | ✅ verificada; resumida en `program/04_DOMAIN/hola-mujer.md`; bloqueantes en `hola-mujer.md` §Bloqueantes |
 | `Plan Maestro — HealthTech Software & AI — SENATI 2026 (EVALUABLE).xlsx` | Evaluación numérica (16 semanas × 3 alumnos) | vive en Drive (binario); fórmulas verificadas al migrar |
 | Informe FPE SENATI (CNIU-108, `.pages`) | Formato institucional quincenal: registro diario, PEA, tarea significativa | esquema documentado en `current_status.md`/`operating_rhythm.md`; el archivo vive en Descargas/Drive |
 | Docs originales del proyecto (README v1 y notas previas del monitor) | Material de arranque del programa | reemplazados por `program/` — fuera del repo, no se citan como fuente viva |
@@ -47,6 +47,7 @@
 |---|---|---|
 | `Nicolepcx/ai-agents-the-definitive-guide` (CH01–CH12) | Eje conceptual del programa (ver `definitive-guide.md`). Libro O'Reilly publicado el 6-oct-2026 (376 pp, aún sin reseñas que lo validen → lectura guiada, no verdad) | semana a semana según matriz |
 | «Comprehensive Guide to AI Agent Engineering» (Vasilyev, MIT, 138 pp) | Guía de apoyo de alumnos: loops, context rot, compaction, memoria, tools, HITL, seguridad, evals, costos (ver `agent-engineering-handbook.md`) | por partes, según matriz semanal |
+| `Nicolepcx/transformers-the-definitive-guide` (CH01–CH12, Apache-2.0, notebooks Colab) | Consulta **opcional** de alumnos: CH09 agentes y CH11 despliegue de modelos; el stack del proyecto usa Ollama/LangGraph, no transformers | cuando un alumno quiera ver qué hay debajo del modelo (S12 evals o curiosidad) |
 | Langfuse — comparativa de frameworks (actualizada 2026) | Guion de la clase de panorama S10 | una sola clase, 20–30 min |
 | Taller O'Reilly "Harness Engineering for Long-Running Agent Skills" (10-nov, Koenigstein) | Contenido avanzado (skills versionadas, repair loops). Intermedio-avanzado, requiere OpenRouter + Langfuse/LangSmith; sin precio suelto (solo suscripción O'Reilly USD 49/mes); repo "to come" | **No comprar para el monitor.** Si se asiste (trial): preparar Python 3.12 + OpenRouter + Langfuse self-host y lectura previa CH05/CH08/CH09/CH10 del libro. Autora verificada: Nicole Koenigstein (el "análisis forense" del doc de Agentes describe a Alake, no este evento) |
 
@@ -58,13 +59,20 @@
 
 ## Nivel 5 — Cursos Udemy (opcional para practicantes, verificado 2026-10)
 
-| Curso | Datos | Veredicto |
-|---|---|---|
-| 1. LangChain, LangGraph y Agentes IA (Santiago Hernández) | 9 secciones · 149 lecciones · 17h50m · 4.7★ (1.208) · español · actualizado sep-2026 | **Opción #1.** Único con LangGraph profundo (checkpointer, interrupt/HITL, supervisor) + Chroma/FAISS locales + proyecto FastAPI. Gap: sin Ollama ni WhatsApp |
-| 2. The AI Engineer Course 2026 (365 Careers) | 77 secciones · 445 lecciones · 29h46m · 4.5★ (25.9k) · inglés · actualizado ago-2026 | Complemento para nivelar: módulo LangGraph real (sin interrupt) + Chroma local/Pinecone. Reseñas negativas: desactualización y poca profundidad |
-| 3. Intro to AI Agents and Agentic AI (365 Careers) | 2h11m · 4.5★ (90k) · inglés | Contexto de negocio (2 h): conceptual, n8n, menciona frameworks sin código de grafo |
+3 cursos verificados (Hernández · 365 Careers ×2) con tabla completa y plan de refuerzo en `program/01_CURRICULUM/cursos_de_refuerzo.md` (no duplicar aquí).
 
 **Gap global:** ninguno cubre Ollama ni WhatsApp. Plan de refuerzo con compras opcionales (máx. 1–2, ~$20–30 en oferta) en `program/01_CURRICULUM/cursos_de_refuerzo.md`; alternativas gratis: docs Meta/Ollama/ChatOllama, video de Dani Fuyà (WhatsApp + LangGraph, stack casi idéntico) y plantillas FastAPI de GitHub. Nunca son fuente de verdad; si contradicen una doc oficial, gana la doc.
+
+## Materiales en cola de revisión (2026-10-06)
+
+Pendientes de revisión a fondo; no entran al mapa hasta validar licencia/utilidad real:
+
+| Material | Veredicto preliminar | Revisar en |
+|---|---|---|
+| Anthropic — «Building Effective AI Agents» (PDF, Schluntz/Zhang) | patrones canónicos (prompt chaining, routing, orquestador-workers, evaluator-optimizer, agentes autónomos) → alimentaría ADRs y las clases S5/S10 | S4–S5 |
+| «Microservices Patterns» (Richardson, PDF en GitHub) | utilidad media: base conceptual para el multitenant; el proyecto es monolito modular primero (ADR) | S10 |
+| `walkinglabs/learn-harness-engineering` lecture-01 (español) | alta para alumnos (está en español): por qué fallan los agentes → evals/observabilidad/control | S9/S12 |
+| GitHub topic `whatsapp-ai` | escaneo de implementaciones reales (Cloud API, baileys) como referencia para el Issue #3 | S4 |
 
 ## Kit de rescate (síntoma → fuente)
 

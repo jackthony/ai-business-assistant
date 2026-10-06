@@ -129,6 +129,8 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 ### Semana 4 — Producto + cierre S3 acelerado (Issues #01–#03)
 
 > Contexto real: la arquitectura empresarial ya está definida (Excel operativo + `program/04_DOMAIN/hola-mujer.md`); lo faltante de S3 (HTTP/webhook, contratos, Build/Buy/Integrate) se ve aquí en versión acelerada integrada a los 3 días, y se ahonda en S5–S10. El viernes: demo + informe Q2 (formato FPE: tarea significativa con proceso, herramientas, seguridad ATS y diagrama). Regla TBD: Issue → branch `issue-NN` → PR → CI verde → merge.
+>
+> **Meta de la quincena (informe SENATI 10-oct):** Josue lidera #2, Pilar #3 y Allan #4 — cada uno presenta su Issue como tarea más significativa. El workflow `informe-quincenal` genera el borrador automático del registro semanal desde GitHub (jueves por la noche); el alumno completa horas/ATS/reflexión y lo pasa al Word FPE.
 
 **D1 — S3 acelerado + Issue #01 (setup + CI)**
 - Tareas: leer `program/02_REFERENCE/whatsapp-cloud-api.md` y los esquemas reales de 01_CONTACTOS/02_CITAS/03_EVENTOS (Excel); explicar webhook vs polling, status codes e idempotencia (`request_id`); crear `src/`, `pyproject.toml`, `.env.example`, FastAPI `/health`, ngrok, CI (`ruff`+`pytest`).

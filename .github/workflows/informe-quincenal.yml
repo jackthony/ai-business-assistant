@@ -1,0 +1,115 @@
+name: informe-quincenal
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * 5" # viernes 02:00 UTC = jueves 21:00 Lima (víspera de la presentación SENATI)
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  generar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Generar borradores de informe FPE por alumno
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, datetime as dt, collections
+
+          REPO = "jackthony/ai-business-assistant"
+          STUDENTS = {
+              "Allan Zerpa": "WhoAllan",
+              "Pilar Aguilar": "estefanyP-hub",
+              "Josue Marreros": "adbon-dm1",
+          }
+
+          now = dt.datetime.now(dt.timezone.utc)
+          since = now - dt.timedelta(days=14)
+          # presentación = sábado siguiente (el informe se entrega el sábado de la quincena)
+          days_to_sat = (5 - now.weekday()) % 7 or 7
+          presentacion = (now + dt.timedelta(days=days_to_sat)).date()
+
+          def gh(args):
+              return subprocess.run(["gh"] + args, capture_output=True, text=True)
+
+          def jget(args):
+              r = gh(args)
+              return json.loads(r.stdout) if r.stdout.strip() else []
+
+          def in_range(iso, since):
+              d = dt.datetime.fromisoformat(iso.replace("Z", "+00:00"))
+              return d >= since
+
+          for name, login in STUDENTS.items():
+              commits = jget(["api", f"repos/{REPO}/commits?author={login}&since={since.isoformat()}&per_page=100"])
+              prs = jget(["pr", "list", "-R", REPO, "--author", login, "--state", "all",
+                          "--json", "number,title,state,mergedAt,additions,deletions", "--limit", "100"])
+              issues = jget(["issue", "list", "-R", REPO, "--author", login, "--state", "closed",
+                             "--json", "number,title,closedAt", "--limit", "100"])
+
+              by_day = collections.defaultdict(list)
+              for c in commits:
+                  d = c["commit"]["author"]["date"]
+                  if in_range(d, since):
+                      msg = c["commit"]["message"].split("\n")[0][:90]
+                      by_day[d[:10]].append(f"`{c['sha'][:7]}` {msg}")
+
+              merged = [p for p in prs if p.get("mergedAt") and in_range(p["mergedAt"], since)]
+              open_prs = [p for p in prs if p["state"] != "MERGED" and p["state"] != "CLOSED"]
+              closed_issues = [i for i in issues if i.get("closedAt") and in_range(i["closedAt"], since)]
+
+              lines = []
+              lines.append(f"## Registro quincenal — {name} (borrador automático)\n")
+              lines.append(f"- **Quincena:** {since.date()} → {now.date()} (S3–S4)")
+              lines.append(f"- **Presentación:** sábado {presentacion}")
+              lines.append("> Generado por el workflow `informe-quincenal` con tu actividad real en GitHub (commits, PRs, Issues). Completa horas, seguridad (ATS), reflexiones y pásalo al Word FPE (CNIU-108). Tu expediente en `program/05_EVALUATION/students/` es el respaldo.\n")
+
+              lines.append("### 1. Registro semanal de trabajos efectuados (borrador)")
+              if by_day:
+                  lines.append("| Día | Actividades (desde tus commits) | Horas (complétalas) |")
+                  lines.append("|---|---|---|")
+                  for d in sorted(by_day):
+                      acts = " · ".join(by_day[d])
+                      lines.append(f"| {d} | {acts} | |")
+              else:
+                  lines.append("_(aún no hay commits en el rango — llena la tabla del Word con tu registro manual)_")
+
+              lines.append("\n### 2. Aportes de la quincena")
+              lines.append(f"- **PRs fusionados ({len(merged)}):** " + ("; ".join(f"#{p['number']} {p['title']}" for p in merged) or "ninguno"))
+              lines.append(f"- **PRs abiertos ({len(open_prs)}):** " + ("; ".join(f"#{p['number']} {p['title']}" for p in open_prs) or "ninguno"))
+              lines.append(f"- **Issues cerrados ({len(closed_issues)}):** " + ("; ".join(f"#{i['number']} {i['title']}" for i in closed_issues) or "ninguno"))
+
+              best = max(merged, key=lambda p: (p["additions"] or 0) + (p["deletions"] or 0), default=None)
+              lines.append("\n### 3. Tarea más significativa (sugerida)")
+              if best:
+                  lines.append(f"- **Candidata:** PR #{best['number']} — {best['title']}")
+              else:
+                  lines.append("- **Candidata:** el Issue que lideraste esta quincena (#2 Josue · #3 Pilar · #4 Allan).")
+              lines.append("- **Por qué la elegiste:** _(complétalo: qué reto resolvía y qué aprendiste)_")
+              lines.append("- **Proceso (secuencia lógica):** 1) leer el Issue y sus criterios de aceptación → 2) rama `issue-N-<slug>` desde `main` → 3) commits pequeños con tests → 4) PR con CI verde → 5) merge a `main`. _(ajusta a lo que hiciste)_")
+              lines.append("- **Equipos/herramientas:** laptop, Python 3.11, FastAPI, Git/GitHub, GitHub Actions (CI), ngrok")
+              lines.append("- **Seguridad e higiene (ATS / charla 5 min):** _(complétalo: riesgos del trabajo con computadora — postura, pausas activas, iluminación — y cómo los controlaste)_")
+              lines.append("- **Resultados / recomendaciones:** _(complétalo: qué funcionó, qué mejorarías)_")
+              lines.append("- **Esquema/diagrama:** adjunta el flujo (mensaje WhatsApp → webhook → FastAPI → respuesta)")
+
+              lines.append("\n### 4. Checklist antes de la sustentación")
+              lines.append("- [ ] Horas diarias completadas (LUN–SÁB, con total semanal)")
+              lines.append("- [ ] PEA: operaciones ejecutadas marcadas (códigos SINFO pendientes — Issue #6)")
+              lines.append("- [ ] Evidencia: links a commits/PRs incluidos en el informe")
+              lines.append("- [ ] Copiado al Word FPE y subido a Drive para entregar en SENATI")
+
+              body = "\n".join(lines)
+              title = f"📄 Borrador de informe quincenal — {name} (presentación {presentacion})"
+              existing = jget(["issue", "list", "-R", REPO, "--state", "open",
+                               "--search", f"Borrador de informe quincenal {name}", "--json", "number"])
+              if existing:
+                  print(f"{name}: ya existe (#{existing[0]['number']})")
+                  continue
+              r = gh(["issue", "create", "-R", REPO, "-t", title, "-b", body, "-l", "senati"])
+              print(f"{name}: creado {r.stdout.strip()}")
+          PY

@@ -28,7 +28,7 @@
 | Material de alumnos | ✅ guía PDF (Vasilyev, MIT); cursos verificados en `program/01_CURRICULUM/cursos_de_refuerzo.md` |
 | Decisiones | ✅ 10 ADRs (`program/03_ARCHITECTURE/decisions/`) + `program/02_REFERENCE/source_map.md` curado |
 | Código producto (`src/`) | ⏳ arranca con el Issue #2 |
-| Branch protection/rulesets nativos | ✅ suplidos por guardianes TBD por workflow (`tbd-guardian` + `tbd-enforcer`); rulesets quedan para Pro/público (S16) |
+| Branch protection / rulesets | ✅ repo público (2026-10-06) → ruleset `main protegido (TBD)` activo + guardianes por workflow (`tbd-guardian`/`tbd-enforcer`) + push protection |
 
 ## Inventario de tareas (todas)
 
@@ -58,11 +58,12 @@
 
 - PEA SINFO pendiente (bloquea columnas del seguimiento quincenal).
 - Ley 29733 sin validar: prohibido tocar datos reales de clientes.
-- `main` sin rulesets nativos (GitHub Pro $4/mes o repo público): cubierto por los guardianes TBD por workflow.
+- `main` con rulesets nativos activos (repo público desde 2026-10-06; sin correos, secretos ni datos reales).
 - Operación actual ManyChat + n8n no cumple el objetivo: el reemplazo arranca en S4.
 
 ## Próximo paso
 
 1. Hoy 2026-10-06 (S4 D1): Josue arranca #2 por la mañana; Allan y Pilar se suman por la noche (Josue les explica lo avanzado).
 2. Que los 3 acepten la invitación de GitHub.
-3. Cerrar Issues #2–#4 (S4) con demo E2E y cierre Q2 (informe FPE).
+3. Cerrar Issues #2–#4 (S4) con demo E2E y cierre Q2.
+4. **Informe quincenal S3–S4: presentación sábado 10-oct** — cada alumno presenta su Issue como tarea significativa; el borrador automático se genera con el workflow `informe-quincenal`.

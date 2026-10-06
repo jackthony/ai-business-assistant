@@ -23,4 +23,4 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Publicar release
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME"
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME" --latest

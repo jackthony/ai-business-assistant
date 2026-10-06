@@ -20,7 +20,7 @@
 | Labels: `tipo:*`, `alumno:*`, `blocked`, `hito`, `senati` | ✅ aplicadas |
 | Milestones: HITO 1 (S6), HITO 2 (S9), HITO 3 (S12), Demo final (S16) | ✅ aplicados |
 | Dependabot (pip + GitHub Actions) | ✅ aplicado (actúa con el código en S4) |
-| Project kanban (Todo / In Progress / Review / Done) | pendiente: `gh auth refresh -s project` (o crearlo en la web) |
+| Project board (Todo / In Progress / Done) | ✅ [projects/3](https://github.com/users/jackthony/projects/3) — vinculado al repo, Issues #2–#4 dentro |
 | Branch protection / rulesets en `main` | pendiente: requiere GitHub Pro para repo privado (o pasar a público en S16) |
 | CI: `ruff` + `pytest` (mocks) + `mypy`/`bandit` recomendados | S4 D1 (Issue #01) |
 | CD + environments con aprobación | S14 |
@@ -37,7 +37,7 @@
 
 **Automático (GitHub lo hace solo):**
 - CI en cada PR: verde/rojo bloquea el merge (nadie avanza con tests rotos).
-- Project board (cuando esté creado): el estado cambia solo al abrir/cerrar Issues y PRs.
+- Project board: el estado cambia solo al abrir/cerrar Issues y PRs (Projects → AI Business Assistant — SDLC).
 - Milestones: barra de avance % por HITO.
 - **Digest semanal** (`.github/workflows/digest-semanal.yml`): cada viernes crea un Issue resumen por alumno (PRs movidos, Issues abiertos). Se prueba con *Actions → Digest semanal → Run workflow*.
 - Dependabot y alertas de seguridad: solas.
@@ -70,8 +70,8 @@ Regla: si algo cambia en GitHub y tiene copia en Drive, la copia se regenera; nu
 
 ## Acciones pendientes
 
-1. Project board: ejecutar `gh auth refresh -s project` y crear el Project único (o crearlo en la web de GitHub).
+1. Project board: ✅ creado ([projects/3](https://github.com/users/jackthony/projects/3)); agregar cada semana los Issues nuevos.
 2. Publicar el bloque final de sesiones S13–S16 (`16_week_plan.md`).
-3. S4: `src/`, CI, `docs/CONTEXT.md` y `docs/ARCHITECTURE.md` dentro de este mismo repo (Issue #01).
+3. S4: `src/`, CI, `docs/CONTEXT.md` y `docs/ARCHITECTURE.md` dentro de este mismo repo (Issue #2).
 4. Agregar a Allan, Pilar y Josue como colaboradores cuando se tengan sus usuarios de GitHub.
-5. Probar el digest semanal (Actions → "Digest semanal" → Run workflow) y crear el Project board.
+5. Digest semanal: ✅ probado en vivo (Issue #1); corre solo cada viernes.

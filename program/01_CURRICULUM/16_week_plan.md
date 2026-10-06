@@ -50,9 +50,9 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 | S10 | ADR-010 + comparativa Langfuse + microservices.io (multitenant) + Anthropic (routing/orchestrator) |
 | S11 | docs Ollama/faster-whisper + `deepseek-local.md` |
 | S12 | harness-engineering lectures 10–12 (es) + Anthropic (evaluator-optimizer) + ADR-009 |
-| S13 | `agent-engineering-handbook.md` (proactivo/contexto) |
+| S13 | `agent-engineering-handbook.md` (proactivo/contexto) + `meta-pricing.md` (costo de templates proactivos) |
 | S14 | docs Docker + harness lecture-11/12 + ADR-008 |
-| S15 | `roi_metrics.md` (FinOps) + CI/pre-commit |
+| S15 | `roi_metrics.md` (FinOps) + `meta-pricing.md` (tarifas reales por categoría) + CI/pre-commit |
 | S16 | `rubric.md` + defensa (ADRs) |
 
 ---

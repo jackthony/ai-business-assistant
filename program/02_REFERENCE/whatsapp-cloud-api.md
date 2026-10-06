@@ -16,3 +16,8 @@
 - Responder siempre `200` rápido y procesar async (Meta reintenta si no).
 - Nunca loggear teléfonos completos ni contenido de clientes reales: usar datos de prueba.
 - Los tokens van en `.env` (jamás en git); secretos con nombres `META_*`.
+
+## Precios/cobros
+
+- Modelo actual (por mensaje entregado) y tarifas Perú: ver **`meta-pricing.md`** (archivo de referencia, captura 2026-10-06). Afecta FinOps (S15) y los mensajes proactivos (S13).
+- Diseño canal-agnóstico: los agentes no tocan Meta; ver ADR-011.

@@ -5,10 +5,10 @@
 ## Visión general
 
 ```
-WhatsApp Cloud API (nube, único obligatorio)
+WhatsApp Cloud API (nube, único obligatorio)  ──  adapter en src/channels/whatsapp
         │ webhook GET/POST
         ▼
-FastAPI (Integration Hub)  ──  canales/whatsapp/  (extrae texto, audio, imagen)
+FastAPI (Integration Hub)  ──  contrato interno InboundEvent (ADR-011, canal-agnóstico)
         │
         ▼
 LangGraph StateGraph  ──  memoria (SqliteSaver dev → PostgresSaver prod)
@@ -40,6 +40,11 @@ class AgentState(TypedDict):
 - `configs/hola_mujer/` y `configs/neuracode/`: system prompt, RAG namespace, reglas y tools permitidas.
 - El tenant se resuelve por el número receptor (phone_number_id) del webhook.
 
+## Canal-agnóstico (ADR-011)
+
+- La capa de agentes habla solo el **contrato interno** (`InboundEvent` / `OutboundReply`); los adapters de canal traducen. Hoy: WhatsApp (Cloud API). Futuro: TikTok u otro = adapter nuevo, sin tocar `agents/`.
+- Costos por canal: FinOps mide costo por conversación **por canal** (Meta: `program/02_REFERENCE/meta-pricing.md`).
+
 ## Repo único
 
 - `jackthony/ai-business-assistant`: programa (`program/00_PROJECT`–`05_EVALUATION`) + producto desde S4 (`src/`, `tests/`, `configs/`, `data/`, `docs/`).
@@ -50,7 +55,7 @@ class AgentState(TypedDict):
 ```
 src/
   api/            # app FastAPI: routers, /health, /webhook (Issue #2/#3)
-  channels/       # WhatsApp Cloud API: verificación (GET) y parseo (POST) (Issue #3)
+  channels/       # adapters de canal: hoy whatsapp (verificación GET, parseo POST, envío); mañana tiktok (ADR-011)
   agents/         # grafos LangGraph: agente único primero; supervisor recién S10 (ADR-007)
   tools/          # tools @tool con schemas Pydantic estrictos (S7)
   rag/            # ChromaDB: ingesta, retriever, un namespace por tenant (S6)

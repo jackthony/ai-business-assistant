@@ -2,7 +2,7 @@
 
 ## Visión (por qué)
 
-Construir un **asistente de IA empresarial multitenant para WhatsApp** (Hola Mujer + NeuraCode), con software y contexto corriendo en local (DeepSeek), como producto real que además sirve de vehículo de formación para 3 practicantes SENATI durante 16 semanas.
+Construir un **asistente de IA empresarial multitenant para WhatsApp** (Hola Mujer + NeuraCode), **canal-agnóstico** (ADR-011): hoy Meta/WhatsApp, mañana TikTok u otra plataforma — la capa de agentes es el producto, el canal es un adapter. Software y contexto corriendo en local (DeepSeek), como producto real que además sirve de vehículo de formación para 3 practicantes SENATI durante 16 semanas (salen como AI engineers; el monitor lidera un proyecto en producción completo).
 
 ## Objetivos
 

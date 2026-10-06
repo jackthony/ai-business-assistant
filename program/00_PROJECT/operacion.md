@@ -42,7 +42,7 @@
 
 **Del monitor (~30 min el Día 3):** revisar digest + PRs (DeepSeek primero) → nota preliminar en Excel → feedback y desbloqueo → 1–2 líneas por alumno en su expediente. Quincenal: escuchar la sustentación y marcar "Revisado por monitor".
 
-**Del alumno:** registro diario, informe quincenal SENATI, sustentación y evidencia en PRs.
+**Del alumno:** registro diario, informe quincenal SENATI, sustentación y evidencia en PRs (guía completa: `GUIA_PRACTICANTE.md` en la raíz).
 
 Regla: la automatización dice **dónde** mirar; el monitor decide **cómo va**.
 

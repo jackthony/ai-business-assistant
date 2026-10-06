@@ -36,6 +36,13 @@
 - FastAPI async; tools `@tool` con schemas Pydantic estrictos; nodos de grafo = funciones puras; efectos secundarios en services.
 - Java (S1–S3, exigencia SENATI): Java 17 + Maven + JUnit 5; mismos estándares de commits y PR.
 
+## Ciclo de informes y progreso (automático — debes conocerlo)
+
+- `digest-semanal` (viernes 17:00 Lima): crea un Issue con los **commits por día**, PRs e Issues abiertos de cada alumno.
+- `informe-quincenal` (jueves noche + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
+- Progreso visible: board público `projects/3` (solo lectura) + expedientes en `program/05_EVALUATION/students/`.
+- Si un practicante pregunta cómo empezar, cómo se trabaja con TBD o dónde ve su asignación: remitir a **`GUIA_PRACTICANTE.md`** (raíz).
+
 ## Reglas de review (PRs)
 
 Orden: 1) ¿resuelve el Issue y sus criterios de aceptación? 2) ¿respeta arquitectura y ADRs? 3) código (nombres, manejo de errores, duplicación) 4) tests (¿cubren casos borde?) 5) seguridad (sin secretos, validación de entradas) 6) calidad de agente (prompts versionados, sin alucinación estructural).

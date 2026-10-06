@@ -19,11 +19,12 @@ jobs:
         with:
           script: |
             const students = [
-              { name: "Allan Zerpa", label: "alumno:allan" },
-              { name: "Pilar Aguilar", label: "alumno:pilar" },
-              { name: "Josue Marreros", label: "alumno:josue" },
+              { name: "Allan Zerpa", login: "WhoAllan" },
+              { name: "Pilar Aguilar", login: "estefanyP-hub" },
+              { name: "Josue Marreros", login: "adbon-dm1" },
             ];
-            const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+            const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const sinceIso = since.toISOString();
             const { owner, repo } = context.repo;
 
             const { data: pulls } = await github.rest.pulls.list({
@@ -34,23 +35,46 @@ jobs:
             });
 
             const week = new Date().toISOString().slice(0, 10);
-            let body = `Digest automatico del ${week} (ultimos 7 dias).\n\n`;
+            let body = `Digest automático del ${week} (últimos 7 días).\n\n`;
             for (const s of students) {
+              let commits;
+              try {
+                ({ data: commits } = await github.rest.repos.listCommits({
+                  owner, repo, author: s.login, since: sinceIso, per_page: 100,
+                }));
+              } catch {
+                commits = [];
+              }
+              const byDay = {};
+              for (const c of commits) {
+                const d = c.commit.author.date.slice(0, 10);
+                byDay[d] = (byDay[d] || 0) + 1;
+              }
               const mine = pulls.filter(
-                (p) => p.labels.some((l) => l.name === s.label) && p.updated_at >= since
+                (p) => p.user.login === s.login && new Date(p.updated_at) >= since
               );
               const openIssues = issues.filter(
-                (i) => !i.pull_request && i.labels.some((l) => l.name === s.label)
+                (i) => !i.pull_request && i.assignees.some((a) => a.login === s.login)
               );
+
               body += `## ${s.name}\n`;
-              body += `- PRs movidos esta semana: ${mine.length}\n`;
+              body += `- **Commits esta semana (${commits.length}):**\n`;
+              const days = Object.keys(byDay).sort();
+              if (days.length) {
+                for (const d of days) body += `  - ${d}: ${byDay[d]} commit(s)\n`;
+              } else {
+                body += `  - _(sin commits — el registro diario del FPE quedará vacío)_\n`;
+              }
+              body += `- **PRs movidos esta semana (${mine.length}):**\n`;
               for (const p of mine) {
-                const state = p.merged_at ? "mergeado" : p.state;
+                const state = p.merged_at ? "✅ mergeado" : p.state === "closed" ? "❌ cerrado" : "🔄 abierto";
                 body += `  - #${p.number} ${p.title} — ${state}\n`;
               }
-              body += `- Issues abiertos: ${openIssues.length}\n\n`;
+              body += `- **Issues asignados abiertos (${openIssues.length}):**\n`;
+              for (const i of openIssues) body += `  - #${i.number} ${i.title}\n`;
+              body += `\n`;
             }
-            body += `> La automatizacion muestra donde mirar; el monitor decide como va (ver program/00_PROJECT/operacion.md).`;
+            body += `> La automatización muestra dónde mirar; el monitor decide cómo va (ver program/00_PROJECT/operacion.md). El borrador del informe FPE se genera con el workflow informe-quincenal (jueves).`;
             await github.rest.issues.create({
               owner, repo, title: `Digest semanal — ${week}`, body, labels: ["senati"],
             });

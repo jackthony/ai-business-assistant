@@ -50,12 +50,11 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 
 `main` está protegido por el ruleset **`main protegido (TBD)`**: PR obligatorio, historial lineal (squash), sin force-push, check requerido `guardian-tbd / reglas-tbd` y push protection activo.
 
-## Cómo arranca un practicante
+## Para el practicante (nuevo aquí)
 
-1. `git clone https://github.com/jackthony/ai-business-assistant && cd ai-business-assistant`
-2. Crear entorno + `pip install pre-commit && pre-commit install` → ruff y formateo corren antes de cada commit.
-3. Leer `AGENTS.md`, `program/00_PROJECT/current_status.md` y el Issue del día.
-4. Trabajar en rama `issue-N-<slug>` → commits pequeños → `Closes #N` en el PR → CI verde (4 puertas) → merge squash.
+Lee **`GUIA_PRACTICANTE.md`** (raíz): descarga y preparación, TBD paso a paso, dónde ves tus asignaciones (board + Assigned to me), tus fuentes por semana y cómo se generan tus informes (digest viernes + borrador FPE jueves noche).
+
+Resumen: `clone` → `pre-commit install` → tu Issue → rama `issue-N-<slug>` → commits chicos con tests → PR con `Closes #N` → CI verde (4 puertas) → merge squash.
 
 ## Cómo usarlo con DeepSeek local
 

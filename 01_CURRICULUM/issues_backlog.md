@@ -1,10 +1,10 @@
 # Backlog de Issues #01–#39
 
-Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Fuente: plan v1 (Excel `PLAN_16_SEMANAS`). El estado se actualiza en GitHub del repo de código; aquí queda el mapeo semanal.
+Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo).
 
 | Issue | Semana | Título | Estado |
 |---|---|---|---|
-| #01 | S4 D1 | Setup FastAPI (Integration Hub): entorno, TBD, /health, ngrok | todo |
+| #01 | S4 D1 | Setup FastAPI (Integration Hub) + CI Actions: entorno, TBD, /health, ngrok | todo |
 | #02 | S4 D2 | Webhook Meta API (GET verificación / POST payloads) | todo |
 | #03 | S4 D3 | Envío de respuestas salientes (whatsapp_sender.py) | todo |
 | #04 | S5 D1 | LangGraph Core (StateGraph + AgentState) | todo |
@@ -18,19 +18,19 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Fuente: plan 
 | #12 | S7 D3 | Agente 2: citas y disponibilidad (02_CITAS / Calendar) | todo |
 | #13 | S8 D1 | Agente 3: cierre y registro de lead | todo |
 | #14 | S8 D2 | Herramienta de registro (Sheets/DB) | todo |
-| #15 | S8 D3 | OCR multimodal de pagos (Yape/Plin) | todo |
+| #15 | S10 D1 | OCR multimodal de pagos (Yape/Plin) | todo |
 | #16 | S9 D1 | Agente 4: Safety & triage clínico | todo |
-| #17 | S9 D2 | Human-in-the-Loop (interrupt) + alerta a Jioysi | todo |
-| #18 | S9 D3 | HITO 2: demostración multiagente | todo |
-| #19 | S10 D1 | Supervisor router (orquestador) | todo |
-| #20 | S10 D2 | Arquitectura multitenant base | todo |
-| #21 | S10 D3 | Ingesta de cursos NeuraCode (tenant 2) | todo |
-| #22 | S11 D1 | Pre-procesador multimodal: Whisper (local) | todo |
-| #23 | S11 D2 | Normalización de audio y contexto | todo |
-| #24 | S11 D3 | HITO 3: bot NeuraCode + multimodal | todo |
-| #25 | S12 D1 | Telemetría (LangSmith o Langfuse) | todo |
-| #26 | S12 D2 | Seguridad OWASP (guardrails ASI01) | todo |
-| #27 | S12 D3 | Evaluaciones offline (LLM-as-a-Judge) | todo |
+| #17 | S9 D2 | Human-in-the-Loop (interrupt) + permisos N1/N2/N3 + alerta a Jioysi | todo |
+| #18 | S9 D3 | HITO 2: agente único completo (+ handoff) | todo |
+| #19 | S10 D2 | Supervisor router (orquestador) + clase de frameworks | todo |
+| #20 | S10 D3 | Arquitectura multitenant base | todo |
+| #21 | S11 D1 | Ingesta de cursos NeuraCode (tenant 2) | todo |
+| #22 | S11 D2 | Pre-procesador multimodal: Whisper (local) | todo |
+| #23 | S11 D3 | Normalización de audio y contexto | todo |
+| #24 | S12 D1 | HITO 3: bot NeuraCode + multimodal | todo |
+| #25 | S8 D3 | Telemetría temprana (LangSmith o Langfuse) | todo |
+| #26 | S12 D2 | Seguridad OWASP (guardrails ASI01/ASI02) | todo |
+| #27 | S12 D3 | Evaluaciones offline (LLM-as-a-Judge + heurística de Lusser) | todo |
 | #28 | S13 D1 | Módulo proactivo de reactivación (>2 h inactivo) | todo |
 | #29 | S13 D2 | Mensajes de seguimiento personalizados | todo |
 | #30 | S13 D3 | Analytics de conversión | todo |

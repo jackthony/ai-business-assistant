@@ -19,7 +19,7 @@
 - ADR-009 Harness de seguridad: permisos N1/N2/N3, gating `draft→review→apply`, validación determinista primero.
 - ADR-010 Frameworks: LangGraph se queda; OpenAI SDK / MS Agent Framework / Strands solo como referencias de patrones.
 - Guía «Comprehensive Guide to AI Agent Engineering» (Vasilyev, MIT) adoptada como apoyo de alumnos; mapa semanal en `02_REFERENCE/agent-engineering-handbook.md` y PDF en Drive → `02_ALUMNOS/`.
-- Modelo DevOps en GitHub documentado en `00_PROJECT/github_devops.md` (Issues, Projects, CI, protecciones, releases); Drive solo para Excel de notas, PDFs e informes SENATI.
+- **Repo único `ai-business-assistant`** (antes `senati-ai-agents-context`): programa + producto por decisión de transparencia; prácticas GitHub aplicadas (plantilla de Issue/PR, CODEOWNERS, labels, milestones, Dependabot) — ver `00_PROJECT/github_devops.md`.
 - Cursos de refuerzo verificados y planificados en `01_CURRICULUM/cursos_de_refuerzo.md` (3 comprados; gaps WhatsApp/Ollama con opciones gratis u opcionales ~$10–15).
 - Curaduría de fuentes 2026 completada (`02_REFERENCE/source_map.md`): Koenigstein verificada (taller avanzado, no comprar), 3 cursos Udemy clasificados como opcionales, OWASP ASI 2026 integrado.
 - Se archivó la malla Java/Spring como plan de evaluación; el plan vigente es IA/WhatsApp S1–S16.
@@ -30,10 +30,10 @@
 - **Operación actual en producción: ManyChat + n8n.** Flujos rígidos de botones; clientes no completan el recorrido y no se logra el objetivo. El proyecto los reemplaza progresivamente con el agente conversacional.
 - PEA oficial de 4.º ciclo (SINFO) aún no llega: columnas PEA pendientes en el seguimiento quincenal.
 - Re-secuencia v2 de las 48 sesiones pendiente (mover OCR/Whisper/NeuraCode, adelantar evaluación; motor DeepSeek local).
-- Repo de código `ai-business-assistant` aún no creado (template + CONTEXT.md/ARCHITECTURE.md).
+- Estructura de producto (`src/`, CI, `docs/CONTEXT.md`/`ARCHITECTURE.md`) se crea en S4; branch protection/rulesets pendientes (requieren GitHub Pro para repo privado, o pasar a público en S16).
 - Validar Ley 29733 (protección de datos, Perú) con abogado antes de tocar datos reales de clientes.
 
 ## Próximo paso
 
-1. Re-secuenciar las 48 sesiones (v2) y aprobarlas como canónicas en `01_CURRICULUM/16_week_plan.md`.
-2. Crear repo de código template con `CONTEXT.md` + `ARCHITECTURE.md` y arrancar Semana 1.
+1. Aprobar el mapa v2 (`01_CURRICULUM/16_week_plan.md`) y publicar el detalle de sesiones por bloques (S1–S4 primero).
+2. S4: crear `src/` + CI + `docs/CONTEXT.md`/`ARCHITECTURE.md` dentro de este repo (Issue #01).

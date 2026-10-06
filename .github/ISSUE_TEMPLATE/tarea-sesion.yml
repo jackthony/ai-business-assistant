@@ -1,0 +1,49 @@
+name: Tarea de sesión (TBD)
+description: Un Issue = una jornada de práctica con criterios de aceptación
+title: "[S## D#] "
+labels: ["tipo:feature"]
+body:
+  - type: input
+    id: semana
+    attributes:
+      label: Semana / día
+      placeholder: "S05 D2"
+    validations:
+      required: true
+  - type: input
+    id: backlog
+    attributes:
+      label: ID del backlog
+      placeholder: "#11"
+  - type: dropdown
+    id: responsable
+    attributes:
+      label: Responsable
+      options:
+        - Allan Zerpa
+        - Pilar Aguilar
+        - Josue Marreros
+        - Equipo
+    validations:
+      required: true
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: Qué debe existir al terminar la jornada
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      value: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidencia esperada
+      description: PR, tests, captura, demo, link
+    validations:
+      required: true

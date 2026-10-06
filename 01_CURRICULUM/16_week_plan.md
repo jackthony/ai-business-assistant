@@ -21,14 +21,24 @@
 | 15 | Integración E2E, estrés/fallbacks, refactor + documentación | #34–#36 | — |
 | 16 | Capstone: pruebas E2E, defensa técnica, demo final y transferencia | #37–#39 | **Demo final** |
 
-## Temas de la re-secuencia v2 (propuesta pendiente de aprobación)
+## Plan v2 (propuesta 2026-10-06 — en revisión)
 
-- Mover OCR de pagos (S8) y NeuraCode (S10) más tarde; consolidar agente único antes de multiagente.
-- Adelantar observabilidad/evaluación (S12 → antes) y seguridad.
-- Reemplazar dependencias cloud en el plan: Whisper API → faster-whisper; GPT-4o Vision → Qwen2.5-VL; fallback OpenAI/Anthropic → modelos locales.
-- **CI/CD desde S4 D1:** GitHub Actions (ruff + pytest con mocks; mypy/bandit recomendados) es el primer entregable del Issue #01 — es el corazón del TBD (ADR-006).
-- **Harness en S9:** permisos por nivel N1/N2/N3 + gating `draft→review→apply` con el interrupt (ADR-009).
-- **S10:** clase corta de panorama de frameworks (guion: comparativa Langfuse) usando los repos de referencia; sin migrar (ADR-010).
-- **S12:** heurística de fiabilidad compuesta (Lusser, CH05) + tests de inyección OWASP ASI01/ASI02.
-- **Métricas de ROI instrumentadas desde S4** (`00_PROJECT/roi_metrics.md`); cada HITO se demuestra con números.
-- Cursos Udemy: solo refuerzo opcional nivel 5 (ver `02_REFERENCE/source_map.md`); ninguno cubre Ollama/WhatsApp.
+Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR de pagos (#15 → S10) recién después del agente único; supervisor (#19) y multitenant (#20) en S10; NeuraCode (#21 → S11); HITO 3 (#24 → S12); seguridad + evals/Lusser en S12; FinOps en S15.
+
+| Semana | Foco | Issues |
+|---|---|---|
+| 4 | Repo único + FastAPI + CI + webhook + sender + métricas base | #01–#03 |
+| 5 | LangGraph core + system prompt + SqliteSaver | #04–#06 |
+| 6 | Reglas/few-shot + RAG + **HITO 1** | #07–#09 |
+| 7 | Pydantic tools + citas | #10–#12 |
+| 8 | Cierre/lead + registro + telemetría temprana | #13, #14, #25 |
+| 9 | Safety + HITL/harness + **HITO 2: agente único completo** | #16–#18 |
+| 10 | OCR pagos + supervisor router + multitenant (clase de frameworks) | #15, #19, #20 |
+| 11 | Ingesta NeuraCode + Whisper local + normalización de audio | #21–#23 |
+| 12 | **HITO 3** + OWASP/inyección + evals (LLM-as-a-Judge + Lusser) | #24, #26, #27 |
+| 13 | Proactivo + follow-ups + analytics | #28–#30 |
+| 14 | PostgresSaver + Docker + deploy | #31–#33 |
+| 15 | E2E + fallbacks locales + FinOps/costos + refactor/docs | #34–#36 |
+| 16 | Capstone + defensa + demo final | #37–#39 |
+
+S1–S3 se mantienen (Java/Git/HTTP). El detalle sesión por sesión se publica por bloques: **S1–S4 primero**, luego S5–S8, S9–S12 y S13–S16.

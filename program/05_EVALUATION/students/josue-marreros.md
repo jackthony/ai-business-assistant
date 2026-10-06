@@ -1,8 +1,9 @@
 # Expediente: Josue Marreros
 
-- **Correo:** (privado)
-- **Inicio:** Semana 1 · **Fase actual:** S1 (Fundamentos Java/POO)
-- **Rol/fortalezas:** TODO (observar en S1)
+- **Correo:** (privado) · **GitHub:** pendiente de confirmar
+- **Inicio:** Semana 1 · **Fase actual:** S4 (nace el producto)
+- **Carga de trabajo:** alta (tareas de mayor complejidad) · **Rol de mentor interno:** primero le explica al monitor y luego apoya a Allan y Pilar
+- **Rol/fortalezas:** TODO (observar en S4)
 - **Riesgos:** TODO
 - **Compromisos:** TODO
 

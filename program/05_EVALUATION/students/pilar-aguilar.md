@@ -1,9 +1,10 @@
 # Expediente: Pilar Aguilar
 
-- **Correo:** (privado)
-- **Inicio:** Semana 1 · **Fase actual:** S1 (Fundamentos Java/POO)
+- **Correo:** (privado) · **GitHub:** pendiente (solicitar)
+- **Inicio:** Semana 1 · **Fase actual:** S4 (nace el producto)
+- **Carga de trabajo:** media (tareas de complejidad media)
 - **Nota de contexto:** acceso confirmado al plan maestro e informe quincenal individual.
-- **Rol/fortalezas:** TODO (observar en S1)
+- **Rol/fortalezas:** TODO (observar en S4)
 - **Riesgos:** TODO
 - **Compromisos:** TODO
 

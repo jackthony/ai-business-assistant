@@ -26,6 +26,17 @@ body:
         - Equipo
     validations:
       required: true
+  - type: dropdown
+    id: complejidad
+    attributes:
+      label: Complejidad
+      description: Alta para Josue; media/baja para Allan y Pilar (política de carga del equipo)
+      options:
+        - Media
+        - Alta
+        - Baja
+    validations:
+      required: true
   - type: textarea
     id: objetivo
     attributes:

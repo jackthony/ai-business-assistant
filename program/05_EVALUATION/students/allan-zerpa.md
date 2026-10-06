@@ -1,8 +1,9 @@
 # Expediente: Allan Zerpa
 
-- **Correo:** (privado)
-- **Inicio:** Semana 1 · **Fase actual:** S1 (Fundamentos Java/POO)
-- **Rol/fortalezas:** TODO (observar en S1)
+- **Correo:** (privado) · **GitHub:** WhoAllan
+- **Inicio:** Semana 1 · **Fase actual:** S4 (nace el producto)
+- **Carga de trabajo:** media (tareas de complejidad media)
+- **Rol/fortalezas:** TODO (observar en S4)
 - **Riesgos:** TODO
 - **Compromisos:** TODO
 

@@ -12,6 +12,8 @@
 - Pilar Aguilar ((privado)) — acceso confirmado al plan maestro e informe quincenal
 - Josue Marreros ((privado))
 
+**Distribución de carga:** Josue = alta + mentor interno (primero le explica al monitor y luego apoya a Allan y Pilar); Allan y Pilar = media. La asignación se gestiona con los campos `Alumno` y `Complejidad` del board y los labels `complejidad:*`.
+
 ## Estado por área
 
 | Área | Estado |

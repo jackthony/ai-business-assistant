@@ -1,0 +1,14 @@
+{
+  "name": "ai-business-assistant",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "postCreateCommand": "pip install ruff mypy pytest bandit pre-commit && (pip install -r requirements.txt || true) && (pre-commit install || true)",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "charliermarsh.ruff", "eamodio.gitlens"]
+    }
+  }
+}

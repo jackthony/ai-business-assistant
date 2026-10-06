@@ -70,6 +70,7 @@ tipo(alcance): verbo en imperativo, sin punto final, ≤72 caracteres
 Tu Issue mergeado no significa "me quedo esperando". En orden:
 
 1. **Jala el siguiente Issue.** Los Issues de tu semana **aparecen solos el domingo por la noche** (los crea el flujo) y cualquiera del backlog `program/01_CURRICULUM/issues_backlog.md` sin dueño es justo tomarlo: créalo tú con la plantilla "Tarea de sesión" (título `[S## D#] ...`, label `week:S#`), asígnatelo, y avisa al monitor. El board se actualiza solo (o el monitor lo sincroniza en su revisión).
+   - **Los Issues asignados a otro compañero NO se tocan.** Solo dos excepciones: 1) pides permiso al monitor y te lo da; 2) proactividad justificada — la tarea tiene un impacto que no se midió bien (alguien quedó bloqueado, el Issue es más grande de lo previsto) y es **necesario** — en ese caso lo comentas en el Issue/PR explicando por qué lo tomaste.
 2. **Apoya a un compañero.** Mira los PRs abiertos: deja comentarios constructivos (rúbrica: `program/05_EVALUATION/rubric.md`), propón cambios si están atascados, o ofrécete con el label `apoyo`. Tu review cuenta como evidencia en tu expediente.
 3. **Propón algo nuevo.** Usa la plantilla "Propuesta" + label `propuesta`: qué problema ves, qué harías, qué necesitas. El líder **@jackthony** la revisa y decide (aceptada → backlog/semana; o cerrada con motivo). No tomes decisiones de arquitectura sin pasar por un ADR.
 

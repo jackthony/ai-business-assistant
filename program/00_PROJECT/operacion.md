@@ -28,6 +28,8 @@
 
 ### Secretos, tokens y acceso (política)
 
+- **Environments (activados 2026-10-06):** `staging` (deploy desde ramas custom, libre) y `produccion` (solo `main`, **exige aprobación del monitor**) — los secrets `META_*` de producción van al environment `produccion` en S14.
+
 - **Secrets del repo** (Settings → Secrets → Actions): `DEEPSEEK_API_KEY` (opcional, review en CI), `BOARD_PAT` (opcional, sync del board), `META_*` (desde que #16 esté listo). Nunca en código ni en docs: solo `.env.example` con los nombres.
 - **GITHUB_TOKEN**: permisos mínimos declarados por workflow (`contents: read`, `pull-requests: write`, `issues: write` según necesita); nada más.
 - **Acceso humano**: monitor = Admin; practicantes = Write pero `main` protegido (todo entra por PR con checks). Dependabot/CodeQL = apps autorizadas.
@@ -51,6 +53,7 @@
 | `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit |
 | `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits convencionales (cantidad libre) |
 | `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) — la mesa de revisión del Día 3 lista sola |
+| `release.yml` | push de tag `v*` | publica el Release con notas generadas (S6 `hito-1`, S16 demo final: `git tag v0.1.0 && git push origin v0.1.0`) |
 | `issue-on-create.yml` | cada Issue nuevo | lo agrega al board con `Semana` (del título `[S## D#]`) y `Alumno` (del assignee) — soporta el flujo pull |
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, avisa PRs >4 días y cierra >7 días, borra ramas muertas |

@@ -1,5 +1,7 @@
 # Precios Meta WhatsApp Cloud API — archivo de referencia
 
+> ⚠️ **PENDIENTE DE VALIDAR contra el panel Billing de Meta (WhatsApp Manager).** El monitor indica que desde el **1-oct-2026** rigen **otros precios y otras condiciones** distintos de los de abajo. Al confirmarlos, reemplazar las tablas de este archivo.
+>
 > Captura: **2026-10-06**. Fuentes: [pricing oficial Meta](https://developers.facebook.com/docs/whatsapp/pricing) (act. 30-sep-2026), [platform pricing](https://business.whatsapp.com/products/platform-pricing), [authentication-international](https://developers.facebook.com/docs/whatsapp/pricing/authentication-international-rates) y rate cards USD "effective October 1, 2026".
 > Si algo cambia: Meta solo ajusta tarifas el 1er día del trimestre con preaviso. Revisar cada quincena en S13+ (FinOps).
 

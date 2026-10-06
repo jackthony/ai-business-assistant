@@ -4,7 +4,7 @@
 - **Fase:** Semana 4 — Producto (Issues #2–#4) con **cierre S3 acelerado integrado** · Q1 entregado; Q2 en curso
 - **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del viernes alimenta ese informe.
 - **Repo único:** https://github.com/jackthony/ai-business-assistant
-- **Board:** https://github.com/users/jackthony/projects/3
+- **Board:** https://github.com/users/jackthony/projects/3 — público desde 2026-10-06 (practicantes solo lectura; lo ven en la pestaña Projects del repo). Asignaciones: campo `Alumno` + assignee en cada Issue (#2 Josue · #3 Pilar · #4 Allan · #11–#13 informes)
 - **Issue actual:** #2 (setup FastAPI + CI) — hoy lo arranca Josue por la mañana; Allan y Pilar se suman por la noche
 
 ## Practicantes
@@ -51,8 +51,10 @@
 
 - 11 ADRs vigentes: FastAPI · LangGraph · WhatsApp Cloud API · ChromaDB · memoria Sqlite→Postgres · TBD · agente único primero · DeepSeek local first · harness/seguridad N1/N2/N3 · gobernanza de frameworks · **canal-agnóstico (ADR-011)**.
 - Repo único `ai-business-assistant` con transparencia total (ver `program/00_PROJECT/operacion.md`).
-- Nota semanal = **preliminar/formativa**; la oficial se consolida por quincena.
+- Canal y Build/Buy/Integrate: se evaluará usar herramientas SaaS listas (**Kapso, n8n**) para capas no diferenciadoras según alcance; el núcleo (capa de agentes) sigue siendo propio (ADR-011). Decisión en el cierre B/B/I (S4 D3) y revisión en S10.
 - Guía MIT (Vasilyev) adoptada como apoyo; cursos Udemy verificados; malla Java archivada; Excel migrado a `(EVALUABLE).xlsx`.
+- Precios Meta archivados en `program/02_REFERENCE/meta-pricing.md` — **pendiente de validar** contra el panel Billing (el monitor indica precios y condiciones distintas desde el 1-oct-2026).
+- Nota semanal = **preliminar/formativa**; la oficial se consolida por quincena.
 
 ## Riesgos abiertos
 

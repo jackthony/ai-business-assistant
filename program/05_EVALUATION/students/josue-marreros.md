@@ -1,6 +1,6 @@
 # Expediente: Josue Marreros
 
-- **Correo:** (privado) · **GitHub:** pendiente de confirmar
+- **Correo:** (privado) · **GitHub:** adbon-dm1
 - **Inicio:** Semana 1 · **Fase actual:** S4 (nace el producto)
 - **Carga de trabajo:** alta (tareas de mayor complejidad) · **Rol de mentor interno:** primero le explica al monitor y luego apoya a Allan y Pilar
 - **Rol/fortalezas:** TODO (observar en S4)

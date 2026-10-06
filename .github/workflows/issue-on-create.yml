@@ -16,6 +16,7 @@ jobs:
     timeout-minutes: 5
     env:
       GH_TOKEN: ${{ secrets.BOARD_PAT != '' && secrets.BOARD_PAT || github.token }}
+      GH_REPO: ${{ github.repository }}
     steps:
       - name: Agregar al board con campos (o avisar si falta BOARD_PAT)
         env:

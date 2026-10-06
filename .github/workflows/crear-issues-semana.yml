@@ -34,6 +34,15 @@ jobs:
           with open("program/01_CURRICULUM/issues_backlog.md", encoding="utf-8") as f:
               backlog = f.read()
 
+          # bloques de semana del plan (### Semana N ... hasta la siguiente) para incrustar el detalle
+          plan_text = open("program/01_CURRICULUM/16_week_plan.md", encoding="utf-8").read()
+          parts = re.split(r"(?m)^### Semana (\d+)\b", plan_text)
+          week_block = None
+          for i in range(1, len(parts), 2):
+              if int(parts[i]) == week:
+                  week_block = parts[i + 1]
+                  break
+
           created = 0
           for m in re.finditer(r"^\| #(\d+) \| S(\d+) D(\d+) \| (.+?) \| .* \|$", backlog, re.M):
               num, s, d, title = m.groups()
@@ -47,12 +56,24 @@ jobs:
               if existing.stdout.strip() not in ("", "[]"):
                   print(f"existe ({s_pad} D{d}): {t}")
                   continue
+              detalle = ""
+              if week_block:
+                  dm = re.search(rf"\*\*D{d}\s*[—–-].*?\*\*\s*(.*?)(?=\n\*\*D\d\s*[—–-]|\n## |\Z)",
+                                 week_block, re.S)
+                  detalle = dm.group(1).strip() if dm else ""
               body = (f"> Creado automáticamente desde `program/01_CURRICULUM/issues_backlog.md` "
                       f"(S{s} D{d}).\n\n"
-                      "Detalle, criterios de aceptación y evidencia: bloque de la semana en "
-                      "`program/01_CURRICULUM/16_week_plan.md`.\n\n"
-                      "**Asignar en el board** el campo `Alumno` y trabajar con rama "
-                      "`issue-N-<slug>` + `Closes #N` (reglas TBD, ver `tbd-guardian.yml`).")
+                      f"## Detalle de la sesión (bloque {s_pad} del plan `16_week_plan.md`)\n\n"
+                      f"{detalle}\n\n"
+                      "## Reglas TBD y de calidad (las verifican los guardianes y el CI)\n\n"
+                      "- Rama `issue-N-<slug>` desde `main`, `Closes #N` en el PR, ≤6 commits.\n"
+                      "- Tests que cubran los **criterios de aceptación de arriba** (casos borde incluidos).\n"
+                      "- Las 4 puertas verdes antes de mergear (obligatorias): `ruff` + `mypy` + `pytest` + `bandit`.\n"
+                      "- Sin secretos ni datos reales de clientes (fixtures anonimizados).\n"
+                      "- Asignar el campo `Alumno` en el board (se asigna cuando aceptes la invitación de GitHub).\n\n"
+                      "## Para tu informe FPE\n\n"
+                      "Responde las **preguntas de comprensión** del PR (plantilla): explica con tus "
+                      "palabras qué hiciste, qué probaste y qué decidiste — no 'lo hizo un agente'.")
               subprocess.run(["gh", "label", "create", f"week:S{s}", "-R", REPO, "--force"],
                              capture_output=True, text=True)
               r = subprocess.run(["gh", "issue", "create", "-R", REPO, "-t", t, "-b", body,

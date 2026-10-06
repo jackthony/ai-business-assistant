@@ -1,6 +1,6 @@
 # Plan 16 semanas — canónico (v2, en revisión)
 
-> **Estado:** v2 propuesta (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación. El detalle de sesiones se publica por bloques: **Bloque 1 (S1–S4) abajo**; S5–S16 en siguientes entregas. La tabla v1 se conserva solo como histórico.
+> **Estado:** v2 propuesta (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación. El detalle de sesiones se publica por bloques: **Bloques 1–2 (S1–S8) abajo**; S9–S16 en siguientes entregas. La tabla v1 se conserva solo como histórico.
 
 ### Histórico v1 (referencia)
 
@@ -43,7 +43,7 @@ Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR d
 | 15 | E2E + fallbacks locales + FinOps/costos + refactor/docs | #34–#36 |
 | 16 | Capstone + defensa + demo final | #37–#39 |
 
-S1–S3 se mantienen (Java/Git/HTTP). El detalle sesión por sesión se publica por bloques: **S1–S4 primero**, luego S5–S8, S9–S12 y S13–S16.
+S1–S3 se mantienen (Java/Git/HTTP). Bloques publicados: **S1–S8** (abajo); siguientes entregas: S9–S12 y S13–S16.
 
 ---
 
@@ -153,3 +153,103 @@ S1–S3 se mantienen (Java/Git/HTTP). El detalle sesión por sesión se publica 
 - Criterios: [ ] respuesta real por Meta a número de prueba; [ ] test con mock (CI sin tokens); [ ] latencia logueada; [ ] Issues #01–#03 cerrados.
 - Evidencia: video + PRs + informe.
 - Foco de evaluación: comunicación, mejora, evidencia.
+
+---
+
+## Detalle de sesiones — Bloque 2 (S5–S8)
+
+### Semana 5 — LangGraph core (Issues #04–#06)
+
+**D1 — Issue #04: StateGraph + AgentState**
+- Objetivo: pasar de scripts a un grafo con estado explícito.
+- Actividades: definir `AgentState` (`messages` con `Annotated[list, add_messages]`, `phone`, `tenant`, `intent`, `status`); instanciar el grafo mínimo (nodo eco) y probar conversación por CLI antes de tocar WhatsApp; leer handbook Parte II (loop).
+- Entregable: PR #04 con grafo mínimo + test.
+- Criterios: [ ] AgentState tipado; [ ] grafo compila y responde en CLI; [ ] test del flujo básico; [ ] CI verde.
+- Evidencia: PR + test + captura de ejecución.
+- Foco de evaluación: comprensión, calidad técnica.
+
+**D2 — Issue #05: System Prompt Hola Mujer v1**
+- Objetivo: que el bot hable como el negocio.
+- Actividades: construir el prompt por componentes (identidad, tono, límites, tools, memoria) — nunca monolito; reglas: mensajes ≤3 líneas, máx 1 pregunta por turno, español peruano empático; conectar **ChatOllama (DeepSeek local)** al grafo; 10 conversaciones de prueba; handbook Parte III.
+- Entregable: PR #05 + prompt versionado en `configs/hola_mujer/prompt_v1.md`.
+- Criterios: [ ] prompt por componentes y versionado; [ ] respuestas ≤3 líneas; [ ] no inventa precios (deriva al RAG); [ ] 10 pruebas registradas con ajustes.
+- Evidencia: PR + transcripciones + diff del prompt.
+- Foco de evaluación: calidad técnica, mejora.
+
+**D3 — Issue #06: Memoria con SqliteSaver**
+- Objetivo: el bot recuerda la conversación entre mensajes y reinicios.
+- Actividades: `SqliteSaver` con `thread_id` = teléfono; probar continuidad en el 2.º mensaje; reiniciar el server y verificar persistencia; anotar el riesgo de context rot en chats largos (handbook Parte IV-B) como insumo para S13.
+- Entregable: PR #06.
+- Criterios: [ ] recuerda tras reinicio; [ ] hilos separados por teléfono; [ ] test de continuidad; [ ] CI verde.
+- Evidencia: PR + demo corta.
+- Foco de evaluación: calidad técnica, evidencia.
+
+### Semana 6 — RAG + HITO 1 (Issues #07–#09)
+
+**D1 — Issue #07: Reglas conversacionales + few-shot**
+- Objetivo: manejo de objeciones con el formato correcto.
+- Actividades: few-shot con objeciones reales ("está caro", "lo consulto", "¿hay descuento?"); regla de formato; comparar prompt v1 vs v2 con las mismas 10 conversaciones; handbook Parte III (anti-patrones).
+- Entregable: PR #07 + prompt v2.
+- Criterios: [ ] ≥5 ejemplos few-shot; [ ] objeciones resueltas sin inventar; [ ] formato cumplido en 10/10.
+- Evidencia: PR + tabla antes/después.
+
+**D2 — Issue #08: Ingesta Excel → JSON → ChromaDB**
+- Objetivo: el bot conoce los 47 servicios reales.
+- Actividades: `etl_servicios.py` (05_SERVICIOS → JSON limpio: nombre, precio, duración, categoría); embeddings locales (nomic-embed-text o bge-m3) → ChromaDB namespace `hola_mujer`; tool de búsqueda; verificar 10 preguntas contra la fuente.
+- Criterios: [ ] ETL reproducible y versionado; [ ] colección con los 47 servicios; [ ] 10/10 respuestas verificadas contra el JSON; [ ] sin datos personales.
+- Evidencia: PR + dataset JSON + resultados.
+
+**D3 — Issue #09: HITO 1 + cierre Q3**
+- Objetivo: bot real respondiendo en WhatsApp + demostración quincenal.
+- Actividades: conectar webhook → grafo → RAG; demo en vivo (precios, duraciones, promos); medir latencia de primera respuesta y respuestas correctas (meta ≥8/10); demo quincenal + informe SENATI Q3; el monitor llena Excel S5–S6.
+- Entregable: release `hito-1` + video demo + informe Q3.
+- Criterios: [ ] flujo WhatsApp → RAG → respuesta real; [ ] métricas del hito registradas; [ ] informe Q3 subido; [ ] release publicado.
+- Evidencia: video + release + informe.
+- **HITO 1 ✅**
+
+### Semana 7 — Tools + Agentes 1 y 2 (Issues #10–#12)
+
+**D1 — Issue #10: Agente 1 Info & RAG + guardrail Chimbote**
+- Objetivo: respuestas comerciales confiables y con fuente.
+- Actividades: nodo especialista de información con contrato de salida (respuesta breve + precio + ubicación Chimbote + CTA); guardrail de ubicación (fuera de Chimbote → respuesta definida); búsqueda híbrida keyword+vector; 10 casos de evaluación.
+- Criterios: [ ] 10/10 respuestas con respaldo del RAG; [ ] cero precios inventados; [ ] guardrail de ubicación probado; [ ] CI verde.
+- Evidencia: PR + tabla de 10 casos.
+- Foco de evaluación: calidad técnica, criterio.
+
+**D2 — Issue #11: Pydantic tools estrictas**
+- Objetivo: tools que no aceptan basura.
+- Actividades: `@tool consultar_servicio()` con schemas Pydantic V2 (entrada/salida), errores tipados; tests válido/inválido/borde; verificar tool-calling con el modelo local (si falla, cambiar a `qwen2.5-coder`); handbook Parte VI (diseñar la ACI, no solo el prompt).
+- Criterios: [ ] 100% de args validados; [ ] tests de los 3 tipos; [ ] tool-calling funcionando con el modelo local; [ ] CI verde.
+- Evidencia: PR + tests.
+- Foco de evaluación: calidad técnica, autonomía.
+
+**D3 — Issue #12: Agente 2 Citas y disponibilidad**
+- Objetivo: proponer horarios reales y evitar colisiones.
+- Actividades: leer disponibilidad (`02_CITAS` / Google Calendar mock); nodo que propone 2–3 opciones reales; confirmación básica; idempotencia con `request_id`; pruebas de colisión.
+- Criterios: [ ] propone solo horarios libres (0 colisiones en 10 pruebas); [ ] mismo `request_id` no duplica cita; [ ] conversación completa probada.
+- Evidencia: PR + escenarios.
+- Foco de evaluación: comprensión, calidad técnica.
+
+### Semana 8 — Cierre de venta + telemetría (Issues #13, #14, #25)
+
+**D1 — Issue #13: Agente 3 Cierre y registro de lead**
+- Objetivo: pedir datos y formalizar la intención de compra.
+- Actividades: nodo que solicita nombre, DNI y teléfono con validación (DNI 8 dígitos, celular PE); estados del cierre (`waiting_data`, `ready_to_book`); tests de datos inválidos; nunca pedir datos clínicos.
+- Criterios: [ ] valida DNI/teléfono; [ ] flujo info → cita → datos completo; [ ] sin datos clínicos; [ ] CI verde.
+- Evidencia: PR + transcripción.
+- Foco de evaluación: comprensión, comunicación.
+
+**D2 — Issue #14: registrar_lead_sheet()**
+- Objetivo: persistir el lead real sin duplicados.
+- Actividades: tool que escribe en Google Sheets/DB (mock en CI); idempotencia + log de auditoría; prueba real con fila de prueba; **gate N2**: la escritura requiere confirmación (harness, ADR-009).
+- Criterios: [ ] una fila por lead (sin duplicados); [ ] mock en CI (sin credenciales); [ ] log sin datos sensibles; [ ] gate de confirmación activo.
+- Evidencia: PR + captura de la hoja.
+- Foco de evaluación: evidencia, calidad técnica.
+
+**D3 — Issue #25: Telemetría temprana + cierre Q4**
+- Objetivo: ver el sistema por dentro antes de crecer.
+- Actividades: Langfuse (self-host/local) o LangSmith: trazas por nodo, latencia, tokens; dashboard mínimo (primera respuesta, contención, errores por nodo); demo quincenal + informe SENATI Q4; Excel S7–S8.
+- Entregable: release `q4` + informe Q4.
+- Criterios: [ ] trazas por conversación visibles; [ ] dashboard con 3 métricas; [ ] error inducido detectado en trazas; [ ] informe subido.
+- Evidencia: captura del dashboard + informe.
+- Foco de evaluación: aprendizaje y mejora, evidencia. **Observabilidad temprana: es la base para el multiagente.**

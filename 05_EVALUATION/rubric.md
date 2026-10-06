@@ -21,9 +21,10 @@
 ## Flujo operativo
 
 1. Al cierre de cada semana, el monitor llena las 3 filas (Allan/Pilar/Josue) en la hoja `EVALUACION` del Excel `(EVALUABLE)`.
-2. La hoja `SEGUIMIENTO_QUINCENAL` calcula promedio, semanas evaluadas y estado por alumno.
-3. Cada dos semanas: el alumno sustenta la tarea más significativa y el monitor marca "Revisado por monitor".
-4. Los expedientes en `students/` recogen lo cualitativo (patrones de error, feedback, compromisos).
+2. La nota semanal es **preliminar y formativa**: el alumno la usa para redactar su registro semanal y preparar su sustentación; la nota oficial se consolida por quincena.
+3. La hoja `SEGUIMIENTO_QUINCENAL` calcula promedio, semanas evaluadas y estado por alumno.
+4. Cada dos semanas: el alumno sustenta la tarea más significativa y el monitor marca "Revisado por monitor".
+5. Los expedientes en `students/` recogen lo cualitativo (patrones de error, feedback, compromisos).
 
 ## Regla para la IA
 

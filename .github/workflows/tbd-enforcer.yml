@@ -78,14 +78,14 @@ jobs:
           for pr in prs:
               age = (now - time.mktime(time.strptime(pr["createdAt"], "%Y-%m-%dT%H:%M:%SZ"))) / H
               n = pr["number"]
-              if age > 48:
+              if age > 168:
                   subprocess.run(["gh", "pr", "close", str(n), "-c",
-                                  "TBD: >48h sin fusionar. Reabre con un batch más pequeño."], check=True)
-                  print(f"cerrado PR #{n} ({age:.0f}h)")
-              elif age > 24:
+                                  "TBD: >7 días sin fusionar (tu semana de práctica dura 3 días). Reabre con el batch actualizado."], check=True)
+                  print(f"cerrado PR #{n} ({age/24:.0f}d)")
+              elif age > 96:
                   subprocess.run(["gh", "pr", "comment", str(n), "-b",
-                                  "TBD: lleva >24h abierto. Fusiónalo hoy (squash) o ciérralo."])
-                  print(f"aviso PR #{n} ({age:.0f}h)")
+                                  "TBD: lleva >4 días abierto. Fusiónalo esta semana (squash) o pide ayuda (label `apoyo`)."])
+                  print(f"aviso PR #{n} ({age/24:.0f}d)")
           open_heads = {pr["headRefName"] for pr in prs}
           branches = subprocess.run(
               ["gh", "api", "repos/jackthony/ai-business-assistant/branches?per_page=100",
@@ -99,7 +99,7 @@ jobs:
                   capture_output=True, text=True).stdout)
               date = meta["commit"]["commit"]["committer"]["date"]
               age = (now - time.mktime(time.strptime(date, "%Y-%m-%dT%H:%M:%SZ"))) / H
-              if age > 48:
+              if age > 168:
                   dead.append(b)
           for b in dead:
               subprocess.run(["gh", "api", "-X", "DELETE",
@@ -107,7 +107,7 @@ jobs:
               print(f"rama eliminada: {b}")
           if dead:
               subprocess.run(["gh", "issue", "create",
-                              "--title", "TBD: ramas muertas (>48h sin PR) eliminadas",
+                              "--title", "TBD: ramas muertas (>7 días sin PR) eliminadas",
                               "--body", "Eliminadas: " + ", ".join(dead)], check=True)
           print("enforcer OK")
           PY

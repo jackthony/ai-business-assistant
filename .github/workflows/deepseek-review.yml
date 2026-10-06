@@ -57,7 +57,7 @@ jobs:
               cuerpo_issue = run("gh", "api", f"repos/jackthony/ai-business-assistant/issues/{m.group(2)}", "--jq", ".body").stdout or cuerpo_issue
 
           prompt = f"""Eres el reviewer técnico del programa SENATI. Revisa este PR y responde EN ESPAÑOL, breve y constructivo.
-          Reglas del programa: TBD (rama corta, Closes #N, <=6 commits), CI de 4 puertas (ruff/mypy/pytest/bandit), sin secretos ni datos reales de clientes, arquitectura canónica de program/03_ARCHITECTURE/architecture.md (src/channels, src/agents, contrato InboundEvent ADR-011), FastAPI + LangGraph + ChromaDB + Ollama.
+          Reglas del programa: TBD de aprendizaje (rama corta `issue-N-slug`, Closes #N, commits convencionales, cantidad libre), CI de 4 puertas (ruff/mypy/pytest/bandit), sin secretos ni datos reales de clientes, arquitectura canónica de program/03_ARCHITECTURE/architecture.md (src/channels, src/agents, contrato InboundEvent ADR-011), FastAPI + LangGraph + ChromaDB + Ollama.
           Formato de respuesta (markdown):
           1. **Resumen** (1 línea)
           2. **Fortalezas** (2-3 viñetas)

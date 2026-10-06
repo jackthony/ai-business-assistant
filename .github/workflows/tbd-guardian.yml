@@ -39,7 +39,7 @@ jobs:
           if not re.search(r"(?i)(closes|fixes|resolves)\s+#\d+", body):
               errors.append("el PR no cierra ningún Issue: escribe 'Closes #<numero>' en la descripción.")
           if commits > 6:
-              errors.append(f"{commits} commits: TBD es batch pequeño (<=6). Divide el PR o haz squash.")
+              print(f"::warning:: {commits} commits: no bloquea, pero TBD prefiere batches pequeños (el merge squash une todo igual).")
 
           # Mensajes de commit estrictos (convención en GUIA_PRACTICANTE.md §Commits)
           msgs = subprocess.run(

@@ -79,7 +79,7 @@ jobs:
                       f"## Detalle de la sesión (bloque {s_pad} del plan `16_week_plan.md`)\n\n"
                       f"{detalle}\n\n"
                       "## Reglas TBD y de calidad (las verifican los guardianes y el CI)\n\n"
-                      "- Rama `issue-N-<slug>` desde `main`, `Closes #N` en el PR, ≤6 commits.\n"
+                      "- Rama `issue-N-<slug>` desde `main`, `Closes #N` en el PR (cantidad de commits libre; el merge squash une todo).\n"
                       "- **Commits estrictos** (ver `GUIA_PRACTICANTE.md` §Commits): `tipo(alcance): verbo imperativo`, "
                       "sin punto final, ≤72 caracteres, 1 cambio por commit.\n"
                       "- Tests que cubran los **criterios de aceptación de arriba** (casos borde incluidos).\n"

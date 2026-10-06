@@ -15,7 +15,7 @@ Automatizar ubicación, servicios, agenda, recordatorios y derivación a **Jioys
 | HANDOFF_SLA_MINUTES | 10 | PROPOSED |
 | REMINDER_24H / REMINDER_2H | activos | PROPOSED (sujeto a plantillas aprobadas) |
 | ADDRESS · MAP_URL · OPENING_HOURS | POR_CONFIRMAR | ⛔ PENDIENTE (Jioysi) |
-| CALENDAR_ID · WA_TEMPLATE_* · PRIVACY_NOTICE_URL | POR_CONFIRMAR | ⛔ PENDIENTE |
+| CALENDAR_ID · WA_TEMPLATE_* · PRIVACY_NOTICE_URL | POR_CONFIRMAR | ⛔ PENDIENTE (aviso de privacidad #7 ya aprobado por el dueño; falta publicar el URL) |
 | EMERGENCY_PROTOCOL | pendiente de aprobación | ⛔ PENDIENTE (Jioysi) |
 
 **Bloqueantes del negocio** (los resuelve el negocio, no el equipo): dirección/mapa/horario (guardrail de ubicación y S3), `CALENDAR_ID` (Agente 2, #12), plantillas WA aprobadas (recordatorios S13), aviso de privacidad (Issue #7) y protocolo de emergencia (seguridad clínica).

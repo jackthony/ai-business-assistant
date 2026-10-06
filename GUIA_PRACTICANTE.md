@@ -34,7 +34,7 @@
 
 1. Actualizar: `git pull origin main`.
 2. Rama: `git switch -c issue-N-<slug>` (ej. `issue-2-setup-fastapi`). Patrón válido: `(tbd|issue)-N-<slug>`.
-3. Commits **chicos**, en imperativo, referenciando el Issue (ej. `feat: endpoint /health (#2)`). **Máximo 6 commits por PR.**
+3. Commits en **convención estricta** (sección de abajo). **Sin límite de cantidad**: pushea cuantas veces necesites — cada push respalda tu trabajo y dispara el CI. El merge squash une todo en `main`.
 
 ### Commits (convención estricta — la valida `tbd-guardian`)
 
@@ -55,13 +55,13 @@ tipo(alcance): verbo en imperativo, sin punto final, ≤72 caracteres
 - Tu agente (DeepSeek/ChatGPT) también debe seguir esta convención: revísale cada mensaje antes de pushear.
 4. Tests que cubran los **criterios del Issue** (casos borde incluidos). Antes de pushear corre las 4 puertas:
    `ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && bandit -r src -x tests -ll`
-5. `git push -u origin issue-N-<slug>` y abre el PR con la plantilla: sección "Cómo se probó", checklist, evidencia (captura/video) y **`Closes #N` en el cuerpo**.
+5. `git push -u origin issue-N-<slug>` **cuantas veces quieras** (cada push corre el CI y queda respaldado) y abre el PR con la plantilla: sección "Cómo se probó", checklist, evidencia (captura/video) y **`Closes #N` en el cuerpo**. ¿Aún no está listo? Ábrelo como **Draft** y conviértelo cuando termines.
 6. Espera CI verde (4 puertas) y el review del monitor. **Ambos checks son obligatorios para mergear**: `guardian-tbd / reglas-tbd` y `CI estricto / calidad`. Si el repo tiene `DEEPSEEK_API_KEY`, DeepSeek deja un primer pase de review automático en tu PR; la nota final la pone el monitor. El merge es **squash** a `main`; la rama muere y el Issue se cierra solo.
 
 **Qué NO hacer (lo vigila `tbd-enforcer` automáticamente):**
 - Push directo a `main` → **se revierte** y se te avisa.
-- PR sin `Closes #N`, rama mal nombrada o >6 commits → el guardián **lo bloquea**.
-- PR abierto **>48 h** sin actividad → **se cierra solo** (trabaja en ramas de horas, no de días).
+- PR sin `Closes #N` o rama mal nombrada → el guardián **lo bloquea**.
+- PR abierto **>7 días** sin actividad → **se cierra solo** (a los 4 días te llega un recordatorio; tu semana de práctica dura 3 días).
 
 ### ¿Terminaste antes? (pull, no solo push)
 
@@ -77,7 +77,7 @@ Tu Issue mergeado no significa "me quedo esperando". En orden:
 - **Viernes 17:00:** el workflow `digest-semanal` crea un Issue con **tus commits por día**, tus PRs y tus Issues abiertos.
 - **Cada noche (dom–vie 21:00):** el workflow `informe-quincenal` crea/refresca tu **borrador de informe FPE** (Issues #11 Allan, #12 Pilar, #13 Josue) con tu registro semanal real (desde commits/PRs/Issues), tu tarea más significativa sugerida y el checklist (horas, ATS, diagrama). No lo edites: se regenera; completa en tu Word FPE.
 - **Tú:** completas horas, seguridad (ATS), resultados y la justificación de la tarea significativa; lo pasas al Word FPE (CNIU-108) y sustentas el sábado.
-- **Si no cumples la asignación:** no hay commits/PR → tu digest y tu borrador salen vacíos → no hay evidencia → los criterios del Issue se evalúan sin evidencia (afecta la nota) y tu PR se cierra a las 48 h.
+- **Si no cumples la asignación:** no hay commits/PR → tu digest y tu borrador salen vacíos → no hay evidencia → los criterios del Issue se evalúan sin evidencia (afecta la nota) y tu PR se cierra solo a los 7 días.
 
 ## 6. Reglas duras (siempre)
 

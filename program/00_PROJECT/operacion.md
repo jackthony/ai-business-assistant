@@ -19,7 +19,7 @@
 | Capa | Qué está activo | Dónde se ve |
 |---|---|---|
 | Calidad | 4 puertas en CI (ruff, mypy, pytest, bandit) — check obligatorio para mergear | Actions → `CI estricto` |
-| Reglas TBD | `tbd-guardian` (rama/`Closes #N`/≤6 commits/**commits convencionales**) + `tbd-enforcer` (revierte push directo, cierra PRs >48 h) | Actions |
+| Reglas TBD | `tbd-guardian` (rama/`Closes #N`/**commits convencionales**; cantidad de commits libre) + `tbd-enforcer` (revierte push directo, cierra PRs >7 días) | Actions |
 | SAST | CodeQL (default setup, python + actions) — corre en PRs y en `main` | Security → Code scanning |
 | Secretos | Secret scanning + **push protection** (bloquea el push si detecta un token) | Security → Secret scanning |
 | Dependencias | Dependabot alerts + Dependabot updates (pip semanal, github-actions semanal) | Security → Dependabot |
@@ -49,11 +49,11 @@
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
 | `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit |
-| `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, ≤6 commits |
+| `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits convencionales (cantidad libre) |
 | `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) — la mesa de revisión del Día 3 lista sola |
 | `issue-on-create.yml` | cada Issue nuevo | lo agrega al board con `Semana` (del título `[S## D#]`) y `Alumno` (del assignee) — soporta el flujo pull |
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
-| `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
+| `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, avisa PRs >4 días y cierra >7 días, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |
 | `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
 | `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea los Issues de la semana (título `[S## D#]`) con lecturas + detalle de la sesión y los agrega al board (✅ probado) |
@@ -75,7 +75,7 @@ Miden la salud del delivery del equipo, no a personas.
 | Métrica | Definición | En este repo | Meta | Activa |
 |---|---|---|---|---|
 | Deployment Frequency | despliegues a producción por periodo | releases publicadas | ≥1 por quincena | S14 (con CD) |
-| Lead Time for Changes | primer commit → producción | proxy: PR abierto → merge | **<48 h** (regla TBD) | desde S4 |
+| Lead Time for Changes | primer commit → producción | proxy: PR abierto → merge | **S4–S6: <3 días · S7+: <48 h** (rigor creciente, ADR-006) | desde S4 |
 | Change Failure Rate | % de cambios que degradan el servicio | proxy: reverts + PRs abandonados sin merge | <15% | desde S4 |
 | Time to Restore Service | caída → recuperación | incidentes en producción | <1 h | S14+ |
 

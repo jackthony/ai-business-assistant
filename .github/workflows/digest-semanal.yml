@@ -63,7 +63,7 @@ jobs:
 
             let body = `Digest automático del ${week} (últimos 7 días).\n\n`;
             body += `## DORA (proxies de pre-producción)\n`;
-            body += `- Lead time PR→merge: ${avgLead === null ? "—" : `${avgLead} h`} (meta <48 h)\n`;
+            body += `- Lead time PR→merge: ${avgLead === null ? "—" : `${avgLead} h`} (meta: <3 días S4–S6, <48 h S7+)\n`;
             body += `- PRs mergeados: ${mergedThisWeek.length} · abandonados sin merge: ${abandoned.length} · reverts: ${reverts}\n`;
             body += `- Releases publicadas: ${releases} (deployment frequency relevante desde S14)\n`;
             body += `- MTTR: no aplica hasta producción (S14)\n\n`;

@@ -126,33 +126,24 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 - Evidencia: diagrama + doc.
 - Foco de evaluación: criterio, autonomía.
 
-### Semana 4 — Nace el producto (Issues #01–#03) · repo: `ai-business-assistant`
+### Semana 4 — Producto + cierre S3 acelerado (Issues #01–#03)
 
-**Reglas de la semana:** todo por Issue → branch corta `issue-NN-slug` → PR con plantilla → CI verde → merge. `main` siempre desplegable.
+> Contexto real: la arquitectura empresarial ya está definida (Excel operativo + `program/04_DOMAIN/hola-mujer.md`); lo faltante de S3 (HTTP/webhook, contratos, Build/Buy/Integrate) se ve aquí en versión acelerada integrada a los 3 días, y se ahonda en S5–S10. El viernes: demo + informe Q2 (formato FPE: tarea significativa con proceso, herramientas, seguridad ATS y diagrama). Regla TBD: Issue → branch `issue-NN` → PR → CI verde → merge.
 
-**D1 — Issue #01: Setup + CI**
-- Objetivo: el repo compila, sirve `/health` y tiene CI.
-- Actividades: crear `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `pyproject.toml`/`requirements.txt`, `.env.example`; FastAPI `/health`; ngrok; `docs/CONTEXT.md` + `docs/ARCHITECTURE.md`; workflow CI (`ruff` + `pytest`).
-- Entregable: PR #01 mergeado con CI verde.
-- Criterios: [ ] `/health` responde 200 local y por ngrok; [ ] CI corre y pasa en el PR; [ ] sin secretos (`.env` ignorado); [ ] docs creados.
-- Evidencia: PR + run de CI + captura ngrok.
-- Foco de evaluación: calidad técnica, evidencia.
+**D1 — S3 acelerado + Issue #01 (setup + CI)**
+- Tareas: leer `program/02_REFERENCE/whatsapp-cloud-api.md` y los esquemas reales de 01_CONTACTOS/02_CITAS/03_EVENTOS (Excel); explicar webhook vs polling, status codes e idempotencia (`request_id`); crear `src/`, `pyproject.toml`, `.env.example`, FastAPI `/health`, ngrok, CI (`ruff`+`pytest`).
+- Criterios: [ ] explican el webhook y el esquema de eventos del negocio; [ ] `/health` 200 local y por ngrok; [ ] CI verde en el PR; [ ] sin secretos.
+- Evidencia: PR + captura + explicación oral (alimenta el informe).
 
-**D2 — Issue #02: Webhook Meta**
-- Objetivo: recibir mensajes reales de WhatsApp.
-- Actividades: GET verificación (`hub.verify_token`/`challenge`); POST parse del payload (`entry[0].changes[0].value.messages`), extraer `wa_id` y texto; responder 200 rápido; test con fixture realista.
-- Entregable: PR #02 con tests.
-- Criterios: [ ] GET devuelve el challenge; [ ] POST extrae teléfono y texto del fixture; [ ] responde 200 en <1 s; [ ] logs sin datos sensibles.
-- Evidencia: PR + tests + curl/Postman.
-- Foco de evaluación: comprensión, calidad técnica.
+**D2 — Issue #02 (webhook Meta)**
+- Tareas: GET verificación (`hub.verify_token`/`challenge`); POST parse de `entry[0].changes[0].value.messages` mapeando a los campos reales (contact_id, teléfono, texto); responder 200 <1 s; test con fixture realista.
+- Criterios: [ ] challenge correcto; [ ] fixture parseado a los campos del negocio; [ ] 200 rápido; [ ] logs sin datos sensibles.
+- Evidencia: PR + tests + curl.
 
-**D3 — Issue #03: Respuesta saliente + demo E2E + cierre Q2**
-- Objetivo: cerrar el ciclo mensaje → respuesta.
-- Actividades: `whatsapp_sender.py` async (httpx) + test con mock; demo E2E (mensaje real → eco del bot); métrica base de tiempo de primera respuesta; cerrar #01–#03; demo quincenal + informe SENATI Q2; Excel S3–S4.
-- Entregable: PR #03 + video demo + informe Q2.
-- Criterios: [ ] respuesta real por Meta a número de prueba; [ ] test con mock (CI sin tokens); [ ] latencia logueada; [ ] Issues #01–#03 cerrados.
-- Evidencia: video + PRs + informe.
-- Foco de evaluación: comunicación, mejora, evidencia.
+**D3 — Issue #03 (sender + demo) + Build/Buy/Integrate + cierre Q2**
+- Tareas: `whatsapp_sender.py` async + test mock; demo E2E real (mensaje → eco); explicar el mapa B/B/I ya definido (ManyChat/n8n se reemplazan; Calendar/Sheets se reutilizan); métrica de primera respuesta.
+- Criterios: [ ] respuesta real a número de prueba; [ ] mock en CI; [ ] latencia logueada; [ ] Issues #01–#03 cerrados; [ ] informe Q2: tarea significativa + proceso + herramientas + seguridad (ATS) + diagrama.
+- Evidencia: video + PRs + informe FPE.
 
 ---
 

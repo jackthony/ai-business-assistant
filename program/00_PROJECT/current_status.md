@@ -1,7 +1,8 @@
 # Estatus del proyecto — 2026-10-06
 
 - **Programa:** HealthTech Software & AI — SENATI 2026 (ciclo 3)
-- **Fase:** Semana 4 — Nace el producto (Issues #2–#4) · Q1 entregado por los alumnos; Q2 en curso
+- **Fase:** Semana 4 — Producto (Issues #2–#4) con **cierre S3 acelerado integrado** · Q1 entregado; Q2 en curso
+- **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del viernes alimenta ese informe.
 - **Repo único:** https://github.com/jackthony/ai-business-assistant
 - **Board:** https://github.com/jackthony/projects/3
 - **Issue actual:** #2 (setup FastAPI + CI)

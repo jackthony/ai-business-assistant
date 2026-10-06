@@ -16,7 +16,7 @@
 
 ## Ciclo quincenal
 
-- El **alumno** sustenta la tarea más significativa y presenta su **informe quincenal SENATI**; el monitor escucha, da rumbo y marca "Revisado por monitor".
+- El **alumno** sustenta la tarea más significativa y presenta su **informe quincenal SENATI** en formato FPE (CNIU-108): por qué eligió la tarea, proceso, equipos/herramientas, seguridad/ATS y diagrama; el monitor escucha, da rumbo, firma y marca "Revisado por monitor".
 - Revisar `SEGUIMIENTO_QUINCENAL` del Excel y ajustar el plan si un tema no quedó sólido.
 
 ## Reglas del líder

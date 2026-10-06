@@ -1,6 +1,8 @@
 # Cursos de refuerzo (opcional para practicantes)
 
 > Nunca son fuente de verdad; si contradicen una doc oficial, gana la doc. Comprar solo en oferta.
+>
+> **¿Falta el fondo de NLP, LLMs, transformers, ML o deep learning?** Ruta completa con fuentes top (oficiales y autores reconocidos, gratis) en `ruta_fundamentos.md`.
 
 ## Cursos ya comprados — veredicto 2026-10
 

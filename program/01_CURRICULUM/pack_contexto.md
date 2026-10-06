@@ -32,6 +32,8 @@
 
 **Cómo construimos (estándares):** `program/03_ARCHITECTURE/estandares.md` — stack con su porqué, puertos y adaptadores (el núcleo no conoce canales ni servicios), código limpio adaptado (inglés en código, español peruano al usuario), seguridad por diseño y de quién nos guiamos. Léelo tu primera semana y consúltalo **antes de diseñar cualquier cosa nueva**. Incluye al final un resumen listo para pegar en el primer prompt de diseño a tu IA.
 
+**¿Necesitas el porqué profundo (NLP, LLMs, transformers, ML, deep learning)?** `program/01_CURRICULUM/ruta_fundamentos.md` — 5 niveles solo con fuentes **top** (oficiales y autores reconocidos: Karpathy, Jurafsky, Huyen, Raschka, Stanford, MIT, d2l, 3Blue1Brown…) y mapa semana→tema. Ahí apunta tu estudio; nada de blogs random. La profundidad no tiene límite: **se puede**.
+
 ## Uso controlado de tu IA (protocolo — aplícalo en toda la fase)
 
 1. **Antes de abrir la IA:** lee este pack y tu Issue (~30 min). Sin eso, tu prompt va a ser vago y el modelo va a gastar contexto adivinando.
@@ -56,6 +58,7 @@
 - **Con tu IA, ejemplo bueno:** "Implementa `parse_message(payload)` en `src/channels/whatsapp/webhook.py` según el contrato `InboundEvent` de ADR-011: devuelve wa_id, texto y tipo; ignora `statuses`. Genera también su test con `tests/fixtures/webhook_text.json`. Sin llamadas reales a Meta."
 - **Mal pedido:** "ármame el webhook de WhatsApp" (sin contrato, sin archivos, sin tests).
 - **Listo cuando:** criterios de tu Issue + CI verde + las preguntas de comprensión respondidas en tu PR.
+- **Fundamentos si te trabas:** HTTP/webhooks = docs FastAPI (`source_map.md` N1); aún sin fondo profundo (ver `ruta_fundamentos.md` §mapa).
 
 ## Semana 5 — LangGraph core: grafo, prompt, memoria
 
@@ -65,6 +68,7 @@
 - **No cargues:** ETL/Chroma (S6) ni agentes (S7): no los necesitas aún.
 - **Con tu IA:** pide el grafo mínimo con su test de CLI por partes; para el prompt, pide componentes separados (identidad, tono, límites) — nunca un monolito.
 - **Listo cuando:** grafo compilando y respondiendo por CLI, prompt versionado en `configs/hola_mujer/prompt_v1.md`, memoria por teléfono sobrevive reinicio.
+- **Fundamentos si te trabas:** Nivel 0 (3B1B + Alammar + charla Karpathy) y prompt oficial (Nivel 4) — `ruta_fundamentos.md`.
 
 ## Semana 6 — RAG + HITO 1: el bot conoce el negocio
 
@@ -74,6 +78,7 @@
 - **No cargues:** features fuera del hito; el Excel completo (el ETL lee la hoja, no la pegues en chats).
 - **Con tu IA:** pide que te explique el anti-caso `cofounder-agi` (vectores aleatorios por `hash()`) y cómo se delata un retrieval sin relevancia.
 - **Listo cuando:** 10/10 respuestas verificadas contra la fuente + demo en vivo (hito 1) + release `hito-1`.
+- **Fundamentos si te trabas:** Nivel 4 Huyen (RAG) + Nivel 2 HF Course (embeddings) + Nivel 1 d2l (vectores).
 
 ## Semana 7 — Tools + Agentes 1 y 2
 
@@ -82,6 +87,7 @@
 - **No cargues:** pagos (S10), recordatorios (S13): fuera de fase.
 - **Con tu IA:** schemas Pydantic estrictos con tests de argumentos inválidos; revisión de colisiones caso por caso.
 - **Listo cuando:** 0 precios inventados, guardrail probado, tool-calling local funcionando, 0 colisiones en 10 pruebas.
+- **Fundamentos si te trabas:** Nivel 4 Anthropic (tool-use) + 12-Factor Agents; Nivel 2 HF (agents).
 
 ## Semana 8 — Cierre de venta, lead y telemetría
 
@@ -90,6 +96,7 @@
 - **Fuentes externas:** docs de Langfuse self-host (Docker) solo para levantarlo en la M5.
 - **Con tu IA:** mock de Sheets para los tests; pruebas de idempotencia (mismo `request_id` no duplica).
 - **Listo cuando:** flujo info→cita→datos completo, dashboard con 3 métricas, release `q4`.
+- **Fundamentos si te trabas:** Nivel 4 «LLM Engineer's Handbook» (observabilidad) + Langfuse (`source_map.md`).
 
 ---
 

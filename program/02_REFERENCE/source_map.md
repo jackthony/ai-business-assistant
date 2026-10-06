@@ -33,6 +33,7 @@
 | 12-Factor Agents (`github.com/humanlayer/12-factor-agents`, Dex Horthy) | Agentes que duran: prompts propios y versionados, contexto explícito, tools como salidas estructuradas, agentes chicos, control de flujo propio | activo — verificar licencia antes de copiar | S5+ (nodos y tools) · S10 (supervisor) · S12 (evals) |
 | «Architecture Patterns with Python» — Cosmic Python (Percival & Gregory, `cosmicpython.com`) | Puertos y adaptadores en Python: cómo mantener el núcleo (agentes) limpio de canales y servicios — base de `estandares.md` | activo — verificar licencia antes de copiar código | S4+ (estructura) · S7 (tools como puertos) · S14 |
 | `zhanymkanov/fastapi-best-practices` (guía comunitaria) | Convenciones FastAPI para proyectos medianos: estructura, dependencias, testing | activo — leer, no copiar texto | S4–S5 (estructura de `api/`) |
+| **Ruta de fundamentos curada** (`program/01_CURRICULUM/ruta_fundamentos.md`) | Índice de fuentes top para NLP, LLMs, transformers, ML y DL (oficiales/reconocidos), con nivel, autor y mapa semana→tema | activo — solo estas fuentes para fondo teórico | cuando un Issue pida el porqué (S5+) |
 
 ## Nivel 2 — Repos de ingeniería (leer código real, no copiar sin licencia)
 

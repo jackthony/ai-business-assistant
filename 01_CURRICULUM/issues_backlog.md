@@ -1,6 +1,6 @@
 # Backlog de Issues #01–#39
 
-Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo). Nota: en GitHub los números van +1 (el Issue #1 es el digest automático): backlog #01 → GitHub #2, #02 → #3, etc.
+Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo). Nota: en GitHub los números varían (digest y tareas de gestión ocupan Issues); la referencia estable es el título `[S## D#]`.
 
 | Issue | Semana | Título | Estado |
 |---|---|---|---|

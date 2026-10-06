@@ -195,8 +195,8 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D2 — Issue #08: Ingesta Excel → JSON → ChromaDB**
 - Objetivo: el bot conoce los 47 servicios reales.
-- Actividades: `etl_servicios.py` (05_SERVICIOS → JSON limpio: nombre, precio, duración, categoría); embeddings locales (nomic-embed-text o bge-m3) → ChromaDB namespace `hola_mujer`; tool de búsqueda; verificar 10 preguntas contra la fuente.
-- Criterios: [ ] ETL reproducible y versionado; [ ] colección con los 47 servicios; [ ] 10/10 respuestas verificadas contra el JSON; [ ] sin datos personales.
+- Actividades: `etl_servicios.py` (05_SERVICIOS → JSON limpio: nombre, precio, duración, categoría); embeddings locales (nomic-embed-text o bge-m3) → ChromaDB namespace `hola_mujer`; tool de búsqueda; verificar 10 preguntas contra la fuente. **Caso de estudio (anti-ejemplo):** `cofounder-agi` — su "memoria RAG" usa vectores aleatorios sembrados con `hash()` (inestable entre procesos): parece memoria semántica pero recupera ruido. Discutir cómo se delata.
+- Criterios: [ ] ETL reproducible y versionado; [ ] colección con los 47 servicios; [ ] 10/10 respuestas verificadas contra el JSON; [ ] sin datos personales; [ ] explican el anti-caso y cómo se detecta (retrieval sin relevancia).
 - Evidencia: PR + dataset JSON + resultados.
 
 **D3 — Issue #09: HITO 1 + cierre Q3**

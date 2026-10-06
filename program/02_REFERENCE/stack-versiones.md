@@ -16,6 +16,8 @@
 | RAG (S6+) | `chromadb` local + embeddings `nomic-embed-text` (o `bge-m3`) | ADR-004. |
 | ETL (S6) | `openpyxl` para leer el Excel | Solo lectura; datos del negocio jamás al repo. |
 | Formato/lint | Config por defecto de `ruff`; `mypy --ignore-missing-imports` | No inventar configuraciones propias todavía. |
+| Contrato HTTP | **OpenAPI autogenerado** por FastAPI (`/docs`, `/openapi.json`) — fuente de verdad y pruebas manuales con `/docs` + `curl` | Postman/Insomnia/Bruno opcionales: sus colecciones no se versionan como contrato (pueden divergir). |
+| Método de trabajo | **Contract-first en fronteras** (Pydantic primero) + **TDD pragmático** (test del criterio antes/junto a la implementación) — ver `estandares.md` §3 | No escribir specs a mano ni tests "de relleno" después. |
 
 **Rangos de dependencias aceptados** (cuando los necesites, en `pyproject.toml`):
 `fastapi>=0.115,<1` · `uvicorn[standard]>=0.30,<1` · `httpx>=0.27,<1` · `python-dotenv>=1,<2` · `langgraph>=0.2,<1` · `langchain-core>=0.3,<1` · `langchain-ollama>=0.2,<1` · `chromadb>=0.5,<1` · `openpyxl>=3.1,<4`

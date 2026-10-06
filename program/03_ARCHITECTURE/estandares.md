@@ -42,6 +42,12 @@ Regla: nada nuevo al stack sin responder *"¿por qué no alcanza lo que ya tenem
 - Abstracción recién con **2–3 usos reales** (YAGNI). Primero funciona → luego limpio → siempre probado.
 - Un PR se lee como una carta: commits convencionales, diff mínimo, evidencia (captura/log), preguntas respondidas.
 
+**Cómo trabajamos el código (contratos y tests):**
+
+- **Contract-first en las fronteras:** primero el contrato (schema Pydantic: `InboundEvent`, schemas de tools) y su test; después el parseo/implementación. La frontera se congela y cada lado puede cambiar sin romper al otro.
+- **TDD pragmático en el núcleo:** el test del criterio de aceptación se escribe **antes** (o junto) a la implementación: rojo → verde → limpio. No es dogma de cobertura: el test *define* lo que se pidió.
+- **HTTP: OpenAPI generado** por FastAPI (`/docs`, `/openapi.json`) es el contrato y la documentación **vivos**. Pruebas manuales con `/docs` + `curl`; Postman/Insomnia/Bruno son opcionales y sus colecciones **no** son fuente de verdad (pueden divergir). Prohibido mantener specs escritas a mano que nadie actualiza.
+
 ## 4. Seguridad por diseño (la razón del harness)
 
 **Guías: OWASP GenAI (Top 10 LLM + Agentic Security Initiative) + ADR-009** — ver `source_map.md`.

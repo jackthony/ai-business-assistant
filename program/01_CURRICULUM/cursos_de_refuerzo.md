@@ -37,3 +37,4 @@
 - `app (2).py` (chatbot multi-usuario con memoria por categorías: personal/profesional/preferencias/tareas/hechos) → S5 D3 y S13 (memoria del usuario).
 - `peticion_powershell.txt` → ejemplo real de pruebas de webhook (GET /health, POST payload) útil para S4 D2–D3.
 - Nota: los ejemplos del curso usan `gpt-4o`/OpenAI → adaptar a `ChatOllama` (DeepSeek local) al seguirlos.
+- **Material local ordenado (fuera de git):** `ciclo-3-pilar-alan-josue/material-langchain/` — 4 carpetas (gmail, herramientas, SOC, memoria) con `LEEME.md` que mapea cada archivo a la sesión del plan.

@@ -38,7 +38,7 @@
 | `Nicolepcx/ai-agents-the-definitive-guide` (CH01–CH12) | Eje conceptual del programa (ver `definitive-guide.md`). Libro O'Reilly publicado el 6-oct-2026 (376 pp, aún sin reseñas que lo validen → lectura guiada, no verdad) | semana a semana según matriz |
 | «Comprehensive Guide to AI Agent Engineering» (Vasilyev, MIT, 138 pp) | Guía de apoyo de alumnos: loops, context rot, compaction, memoria, tools, HITL, seguridad, evals, costos (ver `agent-engineering-handbook.md`) | por partes, según matriz semanal |
 | Langfuse — comparativa de frameworks (actualizada 2026) | Guion de la clase de panorama S10 | una sola clase, 20–30 min |
-| Taller O'Reilly "Harness Engineering for Long-Running Agent Skills" (10-nov, Koenigstein) | Contenido avanzado (skills versionadas, repair loops). Intermedio-avanzado, requiere OpenRouter + Langfuse/LangSmith; sin precio suelto (solo suscripción O'Reilly USD 49/mes); repo "to come" | **No comprar para el monitor.** Si hay curiosidad: trial gratuito y ver 2 h |
+| Taller O'Reilly "Harness Engineering for Long-Running Agent Skills" (10-nov, Koenigstein) | Contenido avanzado (skills versionadas, repair loops). Intermedio-avanzado, requiere OpenRouter + Langfuse/LangSmith; sin precio suelto (solo suscripción O'Reilly USD 49/mes); repo "to come" | **No comprar para el monitor.** Si se asiste (trial): preparar Python 3.12 + OpenRouter + Langfuse self-host y lectura previa CH05/CH08/CH09/CH10 del libro. Autora verificada: Nicole Koenigstein (el "análisis forense" del doc de Agentes describe a Alake, no este evento) |
 
 ## Nivel 4 — Investigación (anexos opcionales S12+, jamás currículo)
 

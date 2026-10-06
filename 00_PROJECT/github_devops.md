@@ -42,11 +42,13 @@
 - **Digest semanal** (`.github/workflows/digest-semanal.yml`): cada viernes crea un Issue resumen por alumno (PRs movidos, Issues abiertos). Se prueba con *Actions → Digest semanal → Run workflow*.
 - Dependabot y alertas de seguridad: solas.
 
-**Manual (monitor, ~45 min el Día 3):**
-- Review de PRs de la semana (checklist + DeepSeek como revisor): comprensión, calidad, criterios del Issue.
-- Llenar `EVALUACION` del Excel (nota preliminar).
-- Anotar patrones en expedientes (`05_EVALUATION/students/`).
-- Quincenal: sustentación + `SEGUIMIENTO_QUINCENAL` + informe SENATI.
+**Del monitor (seguimiento y rumbo, ~30 min el Día 3):**
+- Revisar el digest + los PRs de la semana (DeepSeek como revisor técnico primero): comprensión, calidad y criterios del Issue.
+- Nota preliminar en `EVALUACION` del Excel (se calcula sola).
+- Dar feedback y desbloquear; 1–2 líneas por alumno en su expediente.
+- Quincenal: escuchar la sustentación y marcar "Revisado por monitor" en `SEGUIMIENTO_QUINCENAL`.
+
+**Del alumno:** registro diario, **informe quincenal SENATI**, sustentación y evidencia en PRs.
 
 Regla: la automatización dice **dónde** mirar; el monitor decide **cómo va**.
 

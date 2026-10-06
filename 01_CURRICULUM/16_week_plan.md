@@ -1,6 +1,6 @@
 # Plan 16 semanas — canónico (v2, en revisión)
 
-> **Estado:** v2 propuesta (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación. El detalle de sesiones se publica por bloques: **Bloques 1–3 (S1–S12) abajo**; S13–S16 en la siguiente entrega. La tabla v1 se conserva solo como histórico.
+> **Estado:** v2 completa (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación (nota preliminar que llena el monitor). **Los informes quincenales SENATI y el registro diario los elabora cada alumno**; el monitor da seguimiento (board, PRs, digest) y rumbo. Detalle de las 48 sesiones: Bloques 1–4 abajo.
 
 ### Histórico v1 (referencia)
 
@@ -43,7 +43,7 @@ Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR d
 | 15 | E2E + fallbacks locales + FinOps/costos + refactor/docs | #34–#36 |
 | 16 | Capstone + defensa + demo final | #37–#39 |
 
-S1–S3 se mantienen (Java/Git/HTTP). Bloques publicados: **S1–S12** (abajo); siguiente entrega: S13–S16.
+S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 ---
 
@@ -349,3 +349,99 @@ S1–S3 se mantienen (Java/Git/HTTP). Bloques publicados: **S1–S12** (abajo); 
 - Criterios: [ ] ≥20 casos evaluados; [ ] puntuación antes/después de una mejora de prompt; [ ] juez descartado si no supera el umbral de Lusser; [ ] informe Q6 + release `q6`.
 - Evidencia: PR + reporte de evals.
 - Foco de evaluación: evaluación, aprendizaje y mejora.
+
+---
+
+## Detalle de sesiones — Bloque 4 (S13–S16)
+
+### Semana 13 — Proactivo + analytics (Issues #28–#30)
+
+**D1 — Issue #28: Módulo proactivo de reactivación**
+- Objetivo: recuperar chats abandonados sin ser invasivo.
+- Actividades: background task (FastAPI) o cron que detecta conversaciones inactivas >2 h en los checkpoints (patrón heartbeat, handbook Parte II); respetar la ventana de 24 h o usar template aprobada por Meta; 5 casos de prueba (activo, inactivo, ya cerrado, en handoff, recién activo).
+- Criterios: [ ] detecta inactivos sin falsos positivos en 5 casos; [ ] respeta ventana/template de Meta; [ ] no reactiva si `handoff_requested`; [ ] test con reloj simulado.
+- Evidencia: PR + tabla de casos.
+- Foco de evaluación: calidad técnica, criterio.
+
+**D2 — Issue #29: Mensajes de seguimiento personalizados**
+- Objetivo: seguimiento con contexto, no spam.
+- Actividades: mensaje generado según el último estado (pidió precio, eligió horario, dudó del pago); máximo 1 seguimiento por conversación; tono humano y breve; prompt versionado; pruebas A/B.
+- Criterios: [ ] el mensaje cita el contexto correcto en 5/5; [ ] 1 solo envío por chat; [ ] sin inventar promociones.
+- Evidencia: PR + transcripciones.
+- Foco de evaluación: calidad técnica, mejora.
+
+**D3 — Issue #30: Analytics de conversión**
+- Objetivo: medir recuperación y embudo.
+- Actividades: dashboard del embudo (conversación → lead → cita → pago) con telemetría + Sheets; tasa de recuperación de abandonados; comparación contra baseline (ManyChat/primeras 2 semanas).
+- Criterios: [ ] embudo con 4 etapas visible; [ ] tasa de recuperación calculada; [ ] dataset anonimizado listo para el informe.
+- Evidencia: PR + captura del dashboard.
+- Foco de evaluación: evidencia, criterio.
+
+### Semana 14 — Producción: Postgres + Docker + deploy (Issues #31–#33)
+
+**D1 — Issue #31: Migración a PostgresSaver**
+- Objetivo: memoria de producción con concurrencia.
+- Actividades: `docker compose` con Postgres local; migrar de SqliteSaver a PostgresSaver; verificar continuidad de hilos; prueba de 10 conversaciones simultáneas; plan de migración de datos existentes (o corte aceptado).
+- Criterios: [ ] la conversación continúa tras migrar; [ ] 10 conversaciones sin mezclar hilos; [ ] compose documentado; [ ] CI con servicio Postgres.
+- Evidencia: PR + tests.
+- Foco de evaluación: calidad técnica, autonomía.
+
+**D2 — Issue #32: Dockerfile**
+- Objetivo: imagen reproducible y segura.
+- Actividades: Dockerfile multi-stage, usuario no root, sin secretos; `.dockerignore`; build local y run con env de prueba; tamaño razonable.
+- Criterios: [ ] build limpio; [ ] la imagen responde `/health`; [ ] sin secretos en capas; [ ] tamaño documentado.
+- Evidencia: PR + build log.
+- Foco de evaluación: calidad técnica.
+
+**D3 — Issue #33: Deploy webhook 24/7 + cierre Q7**
+- Objetivo: producción real.
+- Actividades: desplegar (Render/VPS/Railway) con Postgres; registrar la URL en Meta; secrets en el proveedor; smoke test E2E real; rollback documentado; demo quincenal + **informe Q7 (lo redacta el alumno)**; Excel S13–S14.
+- Criterios: [ ] webhook verificado en Meta y el bot responde desde la nube; [ ] un reinicio preserva la memoria; [ ] rollback probado; [ ] informe Q7 subido por el alumno.
+- Evidencia: URL + video + checklist.
+- Foco de evaluación: robustez, evidencia.
+
+### Semana 15 — E2E + fallbacks + FinOps + docs (Issues #34–#36)
+
+**D1 — Issue #34: Integración y reconciliación E2E**
+- Objetivo: ningún dato se pierde entre sistemas.
+- Actividades: verificar Calendar, Sheets y (si existe) ERP con reintentos e idempotencia; reconciliación si Sheets falla después de agendar; 3 escenarios de fallo parcial.
+- Criterios: [ ] 0 citas perdidas en 10 pruebas con fallos inyectados; [ ] reintentos con backoff; [ ] alerta si el fallo es definitivo.
+- Evidencia: PR + escenarios.
+- Foco de evaluación: calidad técnica, criterio.
+
+**D2 — Issue #35: Fallbacks de modelos + FinOps**
+- Objetivo: seguir funcionando si un modelo cae y saber cuánto cuesta.
+- Actividades: fallback local (p. ej. `qwen2.5-coder` ↔ `deepseek`) con detector de timeout/fallo; medir **costo por conversación** (cómputo local + mensajes Meta) y compararlo con alternativas cloud; registrar el resultado real en `00_PROJECT/roi_metrics.md`.
+- Criterios: [ ] conmutación probada (apagar un modelo a propósito); [ ] degradación visible en logs; [ ] costo por conversación calculado con datos reales.
+- Evidencia: PR + tabla de costos.
+- Foco de evaluación: criterio, evidencia.
+
+**D3 — Issue #36: Refactor SOLID + documentación**
+- Objetivo: repo presentable y mantenible.
+- Actividades: limpieza SOLID, eliminar código muerto, docstrings, OpenAPI/Swagger completo, README final con arquitectura y cómo correr; actualizar `docs/ARCHITECTURE.md` con las decisiones reales.
+- Criterios: [ ] `ruff` + `mypy` verdes; [ ] Swagger cubre todos los endpoints; [ ] README final; [ ] sin TODOs huérfanos.
+- Evidencia: PR + docs.
+- Foco de evaluación: mejora, evidencia.
+
+### Semana 16 — Capstone + defensa + transferencia (Issues #37–#39)
+
+**D1 — Issue #37: Pruebas E2E completas**
+- Objetivo: correr la batería completa como release candidate.
+- Actividades: suite E2E con los 4 agentes + voz + OCR + handoff + proactivo (≥20 escenarios); regresión de seguridad (inyección) y de evals (≥20 casos); bug bash y corrección de lo crítico.
+- Criterios: [ ] suite completa verde; [ ] regresión de seguridad y evals sobre umbral; [ ] incidencias críticas corregidas; [ ] tag `rc-1`.
+- Evidencia: resultados + issues creados/cerrados.
+- Foco de evaluación: calidad técnica, aprendizaje y mejora.
+
+**D2 — Issue #38: Defensa técnica**
+- Objetivo: preparar la presentación individual y colectiva.
+- Actividades: arquitectura, decisiones (ADRs), métricas de telemetría y ROI, demo guionizada; cada alumno prepara su parte y su retrospectiva; ensayo general.
+- Criterios: [ ] presentación lista (15 min); [ ] cada alumno explica 2 decisiones técnicas; [ ] métricas actualizadas.
+- Evidencia: slides + ensayo.
+- Foco de evaluación: comunicación.
+
+**D3 — Issue #39: Demo final + transferencia + cierre Q8**
+- Objetivo: entregar el sistema funcionando y transferirlo.
+- Actividades: demo E2E ante Hola Mujer/NeuraCode; entrega del repo, accesos y runbook; **informe final SENATI (lo redacta cada alumno)** + acta en `05_EVALUATION/`; release `v1.0`; retrospectiva del programa.
+- Criterios: [ ] demo en producción real; [ ] runbook y accesos entregados; [ ] release `v1.0` publicado; [ ] informes finales subidos por los alumnos; [ ] retrospectiva documentada.
+- Evidencia: release + runbook + informes.
+- **Demo final ✅**

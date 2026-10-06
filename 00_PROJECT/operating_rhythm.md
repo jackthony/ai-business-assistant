@@ -16,7 +16,7 @@
 
 ## Ciclo quincenal
 
-- Sustentación de la tarea más significativa + informe SENATI.
+- El **alumno** sustenta la tarea más significativa y presenta su **informe quincenal SENATI**; el monitor escucha, da rumbo y marca "Revisado por monitor".
 - Revisar `SEGUIMIENTO_QUINCENAL` del Excel y ajustar el plan si un tema no quedó sólido.
 
 ## Reglas del líder

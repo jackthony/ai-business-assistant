@@ -27,7 +27,7 @@
 | Ollama docs | Modelos locales (DeepSeek/Qwen) | activo | S4+ (ver `deepseek-local.md`) |
 | Docker docs | Imagen y compose | activo | S14 |
 | Trunk-Based Development | Flujo git/TBD | activo | S2+ (ver ADR-006) |
-| OWASP Top 10 Agentic 2026 + GenAI LLM Top 10 2026 | Seguridad ASI01–ASI10, mitigaciones | activo | S12, S15 (ver ADR-009) |
+| OWASP GenAI Security Project (`genai.owasp.org`) — Top 10 LLM 2026 + **Agent Control Standard (ACS, 2026-09)** + Top 10 for Agentic Applications (ASI) | Seguridad ASI01–ASI10, mitigaciones, estándar de control de agentes | activo (dominio migró de owasp.org) | S12, S15 (ver ADR-009) |
 | Anthropic — «Building Effective Agents» (Schluntz/Zhang, web) | Taxonomía workflows vs agentes: chaining, routing, parallel, orchestrator-workers, evaluator-optimizer; bloques base (retrieval/tools/memory) | activo — enlazar la web, no copiar (© Anthropic) | S5 chaining/paralelización · S10 routing/orchestrator · S12 evaluator/evals |
 
 ## Nivel 2 — Repos de ingeniería (leer código real, no copiar sin licencia)
@@ -53,7 +53,8 @@
 | `Nicolepcx/transformers-the-definitive-guide` (CH01–CH12, Apache-2.0, notebooks Colab) | Consulta **opcional** de alumnos: CH09 agentes y CH11 despliegue de modelos; el stack del proyecto usa Ollama/LangGraph, no transformers | cuando un alumno quiera ver qué hay debajo del modelo (S12 evals o curiosidad) |
 | `walkinglabs/learn-harness-engineering` (**MIT**, 19.4k★, sección `docs/es/`) | Harness engineering en **español**: por qué fallan agentes capaces (5 capas), brecha de verificación, Definition of Done verificable | activo | lecture-01 lectura obligatoria en S12; lectures 10–12 en S12/S14; conceptos en S9 (HITL) |
 | «Microservices Patterns» (Chris Richardson) + microservices.io | El libro fue **liberado por el autor** (2026-10) → ya es referenciable. Patrones traducibles al monolito modular multitenant (schema por tenant, API gateway, transacciones) | activo, gratuito | S10 multitenant — lectura opcional de alumnos; microservices.io como resumen rápido |
-| Langfuse — comparativa de frameworks (actualizada 2026) | Guion de la clase de panorama S10 | una sola clase, 20–30 min |
+| Langfuse docs + pricing (verificado 2026-10-06) | Telemetría/evals S8: **self-host gratis** (Docker en la M5) o cloud Hobby gratis (50k units, 2 users, 30 días) · Core $29/mes · Pro $199/mes | activo | S8 telemetría · S12 evals |
+| Kapso (BSP dev-first) + n8n — comparativa B/B/I en `kapso-n8n.md` | Capas no-diferenciadoras: canal WhatsApp (plan B) y glue operativo | activo (precios verificados 2026-10-06) | S10 decisión B/B/I |
 | Taller O'Reilly "Harness Engineering for Long-Running Agent Skills" (10-nov, Koenigstein) | Contenido avanzado (skills versionadas, repair loops). Intermedio-avanzado, requiere OpenRouter + Langfuse/LangSmith; sin precio suelto (solo suscripción O'Reilly USD 49/mes); repo "to come" | **No comprar para el monitor.** Si se asiste (trial): preparar Python 3.12 + OpenRouter + Langfuse self-host y lectura previa CH05/CH08/CH09/CH10 del libro. Autora verificada: Nicole Koenigstein (el "análisis forense" del doc de Agentes describe a Alake, no este evento) |
 
 ## Nivel 4 — Investigación (anexos opcionales S12+, jamás currículo)

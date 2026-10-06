@@ -3,6 +3,7 @@
 - **Programa:** HealthTech Software & AI — SENATI 2026 (ciclo 3)
 - **Fase:** Semana 4 — Producto (Issues #2–#4) con **cierre S3 acelerado integrado** · Q1 entregado; Q2 en curso
 - **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del D3 (jue 8-oct) alimenta ese informe.
+- **Investigación 6-oct completada:** precios Meta 1-oct-2026 verificados en estructura (service 1.000 gratis/número/mes, utility dentro de CSW siempre cobrado, FEP 7 días CTWA) — **falta solo confirmar las tarifas de Perú contra el panel Billing**; reglas de templates (aprobación <24 h, sin edición post-aprobación, opt-in) en `meta-pricing.md`; B/B/I Kapso vs n8n en `kapso-n8n.md` (decisión S10); OWASP GenAI 2026 (Top 10 LLM + Agent Control Standard) en source_map; Langfuse verificado (self-host gratis).
 - **Repo único:** https://github.com/jackthony/ai-business-assistant
 - **Board:** https://github.com/users/jackthony/projects/3 — público desde 2026-10-06 (practicantes solo lectura; lo ven en la pestaña Projects del repo). Asignaciones: campo `Alumno` + assignee en cada Issue (#2 Josue · #3 Pilar · #4 Allan · #11–#13 informes)
 - **Issue actual:** #2 (setup FastAPI + CI) — hoy lo arranca Josue por la mañana; Allan y Pilar se suman por la noche

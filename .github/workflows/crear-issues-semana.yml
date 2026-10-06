@@ -3,7 +3,7 @@ name: crear-issues-semana
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 16 * * 2" # martes 11:30 Lima (UTC-5): crea los Issues de la semana
+    - cron: "0 2 * * 1" # lunes 02:00 UTC = domingo 21:00 Lima: los Issues de la semana aparecen el domingo, listos para el lunes (Josue lun-mié, Pilar mié-vie)
 
 permissions:
   issues: write
@@ -23,10 +23,13 @@ jobs:
           import datetime as dt, re, subprocess
 
           REPO = "jackthony/ai-business-assistant"
-          START_S4_D1 = dt.date(2026, 10, 6)  # ajustar si cambia el calendario SENATI
+          START_S4_D1 = dt.date(2026, 10, 5)  # lunes de S4 (ajustar si cambia el calendario SENATI)
 
           today = dt.date.today()
-          week = 4 + (today - START_S4_D1).days // 7
+          # los Issues se crean el domingo para la semana que empieza el lunes siguiente;
+          # cualquier otro día, la semana en curso (idempotente por título)
+          monday = today + dt.timedelta(days=1) if today.weekday() == 6 else today - dt.timedelta(days=today.weekday())
+          week = 4 + (monday - START_S4_D1).days // 7
           if week < 4 or week > 16:
               print(f"Fuera de rango del plan: S{week}")
               raise SystemExit
@@ -41,6 +44,14 @@ jobs:
           for i in range(1, len(parts), 2):
               if int(parts[i]) == week:
                   week_block = parts[i + 1]
+                  break
+
+          # lecturas de la semana (tabla "Materiales por semana" del plan)
+          lecturas = ""
+          for rm in re.finditer(r"^\| (S\d+(?:[–-]S?\d*)?) \| (.+?) \|\s*$", plan_text, re.M):
+              rm2 = re.match(r"S(\d+)(?:[–-]S(\d+))?", rm.group(1))
+              if rm2 and int(rm2.group(1)) <= week <= int(rm2.group(2) or rm2.group(1)):
+                  lecturas = rm.group(2).strip()
                   break
 
           created = 0
@@ -63,10 +74,14 @@ jobs:
                   detalle = dm.group(1).strip() if dm else ""
               body = (f"> Creado automáticamente desde `program/01_CURRICULUM/issues_backlog.md` "
                       f"(S{s} D{d}).\n\n"
+                      f"## Lecturas de la semana (antes de codear)\n\n"
+                      f"{lecturas or 'Ver la tabla Materiales por semana en `program/01_CURRICULUM/16_week_plan.md`.'}\n\n"
                       f"## Detalle de la sesión (bloque {s_pad} del plan `16_week_plan.md`)\n\n"
                       f"{detalle}\n\n"
                       "## Reglas TBD y de calidad (las verifican los guardianes y el CI)\n\n"
                       "- Rama `issue-N-<slug>` desde `main`, `Closes #N` en el PR, ≤6 commits.\n"
+                      "- **Commits estrictos** (ver `GUIA_PRACTICANTE.md` §Commits): `tipo(alcance): verbo imperativo`, "
+                      "sin punto final, ≤72 caracteres, 1 cambio por commit.\n"
                       "- Tests que cubran los **criterios de aceptación de arriba** (casos borde incluidos).\n"
                       "- Las 4 puertas verdes antes de mergear (obligatorias): `ruff` + `mypy` + `pytest` + `bandit`.\n"
                       "- Sin secretos ni datos reales de clientes (fixtures anonimizados).\n"

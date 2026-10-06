@@ -6,11 +6,16 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   reglas-tbd:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      PR_NUM: ${{ github.event.pull_request.number }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Validar reglas TBD
@@ -21,7 +26,7 @@ jobs:
           COMMITS: ${{ github.event.pull_request.commits }}
         run: |
           python3 - <<'PY'
-          import os, re, sys
+          import os, re, sys, json, subprocess
           errors = []
           base = os.environ["BASE"]
           head = os.environ["HEAD"]
@@ -35,8 +40,25 @@ jobs:
               errors.append("el PR no cierra ningún Issue: escribe 'Closes #<numero>' en la descripción.")
           if commits > 6:
               errors.append(f"{commits} commits: TBD es batch pequeño (<=6). Divide el PR o haz squash.")
+
+          # Mensajes de commit estrictos (convención en GUIA_PRACTICANTE.md §Commits)
+          msgs = subprocess.run(
+              ["gh", "api", f"repos/{os.environ['GH_REPO']}/pulls/{os.environ['PR_NUM']}/commits",
+               "--jq", ".[].commit.message"], capture_output=True, text=True)
+          first_lines = [m.splitlines()[0] if m.splitlines() else "" for m in msgs.stdout.split("\n\n") if m.strip()]
+          PAT = re.compile(r"^(feat|fix|docs|test|refactor|ci|chore|perf|style)(\([a-z0-9/_-]+\))?: .{5,72}$")
+          for line in first_lines:
+              line = line.strip()
+              if not line:
+                  continue
+              if line.endswith(".") or ".." in line:
+                  errors.append(f"commit '{line}': sin punto final.")
+              if not PAT.match(line):
+                  errors.append(f"commit '{line}': debe ser 'tipo(alcance): verbo imperativo' (feat|fix|docs|test|refactor|ci|chore|perf|style) ≤72 chars.")
+              if re.search(r"(?i)^(fix|update|cambios|wip|final)$", line):
+                  errors.append(f"commit '{line}': mensaje prohibido (vacío/genérico).")
           if errors:
               print("::error::" + " | ".join(errors))
               sys.exit(1)
-          print("TBD OK: rama corta, apunta a main, cierra un Issue")
+          print("TBD OK: rama corta, apunta a main, cierra un Issue, commits convencionales")
           PY

@@ -21,7 +21,7 @@
 
 ### Trazabilidad (evidencia SENATI)
 
-- **Issues** = backlog #01–#39 (un Issue por sesión con criterios de aceptación; el workflow `crear-issues-semana` los crea cada martes).
+- **Issues** = backlog #01–#39 (un Issue por sesión con criterios de aceptación; el workflow `crear-issues-semana` los crea cada domingo por la noche, listos para el lunes de Josue y el miércoles de Pilar).
 - **PRs** = evidencia individual; cierran con `Closes #NN`; review del monitor (DeepSeek como reviewer).
 - **Milestones** = hitos; **Releases** = uno por hito con notas.
 
@@ -36,14 +36,14 @@
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |
-| `informe-quincenal.yml` | cada noche de trabajo (mar–vie 21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
-| `crear-issues-semana.yml` | martes + manual | crea los Issues de la semana desde el backlog y los agrega al board (✅ probado) |
+| `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
+| `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea los Issues de la semana (título `[S## D#]`) con lecturas + detalle de la sesión y los agrega al board (✅ probado) |
 
 ## Seguimiento del avance (híbrido)
 
 **Automático:** CI bloquea merge en rojo · el board cambia solo con Issues/PRs · milestones muestran % · digest e informe se generan solos.
 
-**Del monitor (~30 min el Día 3):** revisar digest + PRs (DeepSeek primero) → nota preliminar en Excel → feedback y desbloqueo → 1–2 líneas por alumno en su expediente. Quincenal: escuchar la sustentación y marcar "Revisado por monitor".
+**Del monitor (~30 min al cierre de cada alumno):** revisar digest + PRs (DeepSeek primero) → nota preliminar en Excel → feedback y desbloqueo → 1–2 líneas por alumno en su expediente. Quincenal: escuchar la sustentación y marcar "Revisado por monitor".
 
 **Del alumno:** registro diario, informe quincenal SENATI, sustentación y evidencia en PRs (guía completa: `GUIA_PRACTICANTE.md` en la raíz).
 
@@ -83,7 +83,7 @@ Miden la salud del delivery del equipo, no a personas.
 
 ### Ciclo semanal
 
-- **Día 3 (jueves):** 1) llenar las 3 filas semanales en el Excel `EVALUACION` (30 min, criterios 1–5) · 2) revisar PRs (DeepSeek como reviewer, `AGENTS.md` §Review) · 3) anotar patrones en `program/05_EVALUATION/students/` · 4) actualizar `current_status.md`.
+- **Cierre de cada alumno en su último día de práctica (Josue: miércoles; Pilar: viernes; Allan: TBD):** 1) llenar sus 3 filas semanales en el Excel `EVALUACION` (30 min, criterios 1–5) · 2) revisar PRs (DeepSeek como reviewer, `AGENTS.md` §Review) · 3) anotar patrones en `program/05_EVALUATION/students/` · 4) actualizar `current_status.md`.
 - **Viernes:** leer el digest semanal (commits por día + DORA) y confirmar que los borradores FPE estén listos para la sustentación del sábado.
 
 ### Ciclo quincenal

@@ -30,7 +30,7 @@
 ## Reglas de código (S4+)
 
 - Python 3.11+, type hints, Pydantic v2 para contratos. Sin secretos en código (`.env` + `.env.example`).
-- 1 Issue = 1 branch `(tbd|issue)-N-<slug>` = 1 PR. Commits pequeños en imperativo, referenciando `#NN`. TBD sin excepción (ADR-006): no hay ramas long-lived, `main` siempre desplegable.
+- 1 Issue = 1 branch `(tbd|issue)-N-<slug>` = 1 PR. Commits en convención estricta (`tipo(alcance): verbo imperativo`, ≤72 chars, 1 cambio por commit, sin punto final; tipos: feat|fix|docs|test|refactor|ci|chore|perf|style — la valida `tbd-guardian`); referenciando `#NN`. TBD sin excepción (ADR-006): no hay ramas long-lived, `main` siempre desplegable.
 - **Pull, no solo push:** el que termina antes jala el siguiente Issue del backlog (sin dueño), apoya PRs de compañeros (`apoyo`) o propone algo nuevo con la plantilla "Propuesta" (`propuesta`). Cualquier Issue sin `Alumno`/assignee está disponible; el board se sincroniza solo (`issue-on-create.yml`). Las propuestas las triagea el monitor: aceptar → backlog/semana + desglose de criterios; rechazar → cerrar con motivo claro.
 - Lo hacen cumplir: `tbd-guardian` (bloquea PR con base≠`main`, rama fuera de `(tbd|issue)-N-<slug>`, sin `Closes #N`, o >6 commits), `tbd-enforcer` (revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas) y el ruleset `main protegido (TBD)` (PR obligatorio, squash/lineal, checks requeridos `guardian-tbd / reglas-tbd` y `CI estricto / calidad`, push protection activo). Ramas de horas, no de días.
 - Antes de pushear (local, obligatorio): `pre-commit install` (ruff + formateo automático en cada commit) y luego las 4 puertas: `ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && bandit -r src -x tests -ll`. El CI estricto corre las mismas 4 puertas; un push directo a `main` lo revierte `tbd-enforcer`.
@@ -39,8 +39,9 @@
 
 ## Ciclo de informes y progreso (automático — debes conocerlo)
 
+- `crear-issues-semana` (domingo 21:00 Lima + manual): crea los Issues de la semana (título `[S## D#]`) con lecturas + detalle de la sesión; idempotente por título.
 - `digest-semanal` (viernes 17:00 Lima): crea un Issue con los **commits por día**, PRs e Issues abiertos de cada alumno.
-- `informe-quincenal` (cada noche de trabajo mar–vie + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
+- `informe-quincenal` (cada noche dom–vie 21:00 Lima + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
 - Progreso visible: board público `projects/3` (solo lectura) + expedientes en `program/05_EVALUATION/students/`.
 - Si un practicante pregunta cómo empezar, cómo se trabaja con TBD o dónde ve su asignación: remitir a **`GUIA_PRACTICANTE.md`** (raíz).
 

@@ -1,6 +1,8 @@
 # GUÍA PRACTICANTE — cómo trabajar en este repo
 
 > Léela entera una vez (10 min). Después, ante cualquier duda: **tu Issue es la ley** y las fuentes de tu semana están en la tabla "Materiales por semana" del plan.
+>
+> **Días de práctica:** Josue lun–mar–mié · Pilar mié–jue–vie (Allan: por confirmar). Tus Issues de la semana **aparecen solos el domingo por la noche**; D1/D2/D3 son tus 3 sesiones de la semana, no días fijos del calendario.
 
 ## 1. Tu panorama (dónde ves todo)
 
@@ -33,6 +35,24 @@
 1. Actualizar: `git pull origin main`.
 2. Rama: `git switch -c issue-N-<slug>` (ej. `issue-2-setup-fastapi`). Patrón válido: `(tbd|issue)-N-<slug>`.
 3. Commits **chicos**, en imperativo, referenciando el Issue (ej. `feat: endpoint /health (#2)`). **Máximo 6 commits por PR.**
+
+### Commits (convención estricta — la valida `tbd-guardian`)
+
+```
+tipo(alcance): verbo en imperativo, sin punto final, ≤72 caracteres
+
+[cuerpo opcional: por qué, decisiones, y Refs: #NN]
+```
+
+- **Tipos:** `feat` (nuevo), `fix` (arreglo), `docs`, `test`, `refactor`, `ci`, `chore`, `perf`, `style`.
+- **Imperativo:** "agrega", "valida", "corrige" — nunca "agregado", "agregando".
+- **1 commit = 1 cambio atómico**: si el mensaje dice "y" (dos cosas), divídelo en dos commits.
+- **Alcance** (opcional): el módulo (`(api)`, `(webhook)`, `(tests)`).
+- El cuerpo explica el POR QUÉ cuando no es obvio; `Refs: #N` enlaza el Issue.
+- **Prohibido:** `fix`, `update`, `cambios`, `wip`, `final`, mensajes con fecha, o terminar en punto.
+- Buenos: `feat(api): agrega endpoint /health` · `test: cubre 405 en POST /health` · `fix(sender): reintenta una vez ante error de red`.
+- Malos: `arreglando cosas` · `update` · `feat: agrega /health y .gitignore.` (dos cambios + punto).
+- Tu agente (DeepSeek/ChatGPT) también debe seguir esta convención: revísale cada mensaje antes de pushear.
 4. Tests que cubran los **criterios del Issue** (casos borde incluidos). Antes de pushear corre las 4 puertas:
    `ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && bandit -r src -x tests -ll`
 5. `git push -u origin issue-N-<slug>` y abre el PR con la plantilla: sección "Cómo se probó", checklist, evidencia (captura/video) y **`Closes #N` en el cuerpo**.
@@ -47,7 +67,7 @@
 
 Tu Issue mergeado no significa "me quedo esperando". En orden:
 
-1. **Jala el siguiente Issue.** Los Issues de tu semana ya existen (los crea el flujo cada martes) y cualquiera del backlog `program/01_CURRICULUM/issues_backlog.md` sin dueño es justo tomarlo: créalo tú con la plantilla "Tarea de sesión" (título `[S## D#] ...`, label `week:S#`), asígnatelo, y avisa al monitor. El board se actualiza solo (o el monitor lo sincroniza en su revisión).
+1. **Jala el siguiente Issue.** Los Issues de tu semana **aparecen solos el domingo por la noche** (los crea el flujo) y cualquiera del backlog `program/01_CURRICULUM/issues_backlog.md` sin dueño es justo tomarlo: créalo tú con la plantilla "Tarea de sesión" (título `[S## D#] ...`, label `week:S#`), asígnatelo, y avisa al monitor. El board se actualiza solo (o el monitor lo sincroniza en su revisión).
 2. **Apoya a un compañero.** Mira los PRs abiertos: deja comentarios constructivos (rúbrica: `program/05_EVALUATION/rubric.md`), propón cambios si están atascados, o ofrécete con el label `apoyo`. Tu review cuenta como evidencia en tu expediente.
 3. **Propón algo nuevo.** Usa la plantilla "Propuesta" + label `propuesta`: qué problema ves, qué harías, qué necesitas. El líder **@jackthony** la revisa y decide (aceptada → backlog/semana; o cerrada con motivo). No tomes decisiones de arquitectura sin pasar por un ADR.
 
@@ -55,7 +75,7 @@ Tu Issue mergeado no significa "me quedo esperando". En orden:
 
 - **Diario:** registra tus horas/actividades en tu Word FPE (tu registro se llena con tus commits).
 - **Viernes 17:00:** el workflow `digest-semanal` crea un Issue con **tus commits por día**, tus PRs y tus Issues abiertos.
-- **Cada noche (mar–vie 21:00):** el workflow `informe-quincenal` crea/refresca tu **borrador de informe FPE** (Issues #11 Allan, #12 Pilar, #13 Josue) con tu registro semanal real (desde commits/PRs/Issues), tu tarea más significativa sugerida y el checklist (horas, ATS, diagrama). No lo edites: se regenera; completa en tu Word FPE.
+- **Cada noche (dom–vie 21:00):** el workflow `informe-quincenal` crea/refresca tu **borrador de informe FPE** (Issues #11 Allan, #12 Pilar, #13 Josue) con tu registro semanal real (desde commits/PRs/Issues), tu tarea más significativa sugerida y el checklist (horas, ATS, diagrama). No lo edites: se regenera; completa en tu Word FPE.
 - **Tú:** completas horas, seguridad (ATS), resultados y la justificación de la tarea significativa; lo pasas al Word FPE (CNIU-108) y sustentas el sábado.
 - **Si no cumples la asignación:** no hay commits/PR → tu digest y tu borrador salen vacíos → no hay evidencia → los criterios del Issue se evalúan sin evidencia (afecta la nota) y tu PR se cierra a las 48 h.
 

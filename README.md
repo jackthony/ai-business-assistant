@@ -46,8 +46,9 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 | `ficha-pr.yml` | cada PR | ficha de revisión automática para el monitor (Issue que cierra, archivos, tests, criterios) |
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
+| `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea los Issues de la semana con lecturas + detalle de la sesión |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno |
-| `informe-quincenal.yml` | cada noche de trabajo (mar–vie 21:00 Lima) + manual | borrador del informe FPE por alumno desde commits/PRs/Issues reales (Issues #11–#13 ya creados; se refresca solo) |
+| `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador del informe FPE por alumno desde commits/PRs/Issues reales (Issues #11–#13 ya creados; se refresca solo) |
 | `crear-issues-semana.yml` | martes + manual | crea los Issues de la semana desde el backlog y los agrega al board |
 
 `main` está protegido por el ruleset **`main protegido (TBD)`**: PR obligatorio, historial lineal (squash), sin force-push, checks requeridos `guardian-tbd / reglas-tbd` y `CI estricto / calidad` (sin PR se puede mergear solo si ambas están verdes) y push protection activo.

@@ -45,10 +45,11 @@
 - **#16** 🔄 Gestión: habilitar app Meta (webhook, templates, Billing). **Los chicos trabajan con fixtures hasta que #16 esté listo** (las pruebas reales de #3/#4 dependen de esto)
 
 ### Rutina semanal (no son Issues)
-- **Martes:** el workflow `crear-issues-semana` crea los Issues de la semana en el board desde el backlog; yo asigno el campo `Alumno`.
-- **Jueves (Día 3):** revisar PRs (DeepSeek reviewer) + nota preliminar en Excel + escuchar la sustentación quincenal (el informe lo redacta el alumno).
-- **Viernes:** leer el digest semanal y confirmar que los borradores FPE (mar–vie, automáticos) estén completos para la sustentación del sábado.
+- **Domingo por la noche:** el workflow `crear-issues-semana` crea los Issues de la semana en el board desde el backlog (con lecturas + detalle); yo asigno el campo `Alumno`.
 
+- **Josue (lun–mar–mié):** practica conmigo; cierre de su semana el miércoles (revisar PRs con DeepSeek reviewer + nota preliminar en Excel).
+- **Pilar (mié–jue–vie):** cierre de su semana el viernes (revisar PRs + nota preliminar). **Allan: días por confirmar.**
+- **Sábado:** escuchar la sustentación quincenal (el informe lo redacta el alumno).
 ## Decisiones recientes (resumen)
 
 - 11 ADRs vigentes: FastAPI · LangGraph · WhatsApp Cloud API · ChromaDB · memoria Sqlite→Postgres · TBD · agente único primero · **DeepSeek local first (ADR-008 — aplica al runtime M5; los practicantes usan PCs Windows con modelos chicos o DeepSeek web)** · harness/seguridad N1/N2/N3 · gobernanza de frameworks · canal-agnóstico (ADR-011).

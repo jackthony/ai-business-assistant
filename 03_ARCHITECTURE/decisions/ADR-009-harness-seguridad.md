@@ -24,3 +24,7 @@ Harness mínimo obligatorio para todo lo que toque al usuario:
 - Prohibida la caché semántica por similitud de texto: claves por `service_id`/intención.
 - `RichmondAlake/agent_harness_course` se usa como lectura de patrones (sin licencia → no copiar código).
 - Referencias: OWASP ASI Top 10 2026 (PDF genai.owasp.org/download/52117/), GenAI LLM Top 10 2026, Agent Control Standard.
+
+## Referencia externa revisada (2026-10)
+
+Caso real de la industria (texto→lenguaje de consulta propietario, LangGraph): translate → generate → syntax_check contra el motor real → judge (rúbrica de 100) → execute, con bucle de reflexión y trazas Langfuse. Lectura correcta: la comprobación **ejecutada** es la única verdad de suelo; el juez LLM midió ~23 s por llamada (~8k tokens). Confirma nuestras reglas: determinista primero, juez solo offline, feedback de ejecución con reintentos acotados (≤2) y **nunca** un juez LLM en el camino caliente de una respuesta de WhatsApp.

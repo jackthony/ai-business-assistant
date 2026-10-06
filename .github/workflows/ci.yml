@@ -60,6 +60,16 @@ jobs:
       - name: 4. Seguridad — bandit (alta y media)
         run: |
           if [ -d src ]; then bandit -r src -x tests -ll; else echo "sin src — skip"; fi
+      - name: 5. Estándares — capas del núcleo (estandares.md §2)
+        run: |
+          DIRS=""
+          for d in src/agents src/tools src/rag; do [ -d "$d" ] && DIRS="$DIRS $d"; done
+          if [ -z "$DIRS" ]; then echo "sin núcleo todavía — skip"; exit 0; fi
+          if grep -rnE "(import|from)[[:space:]]+(src\.(channels|services)|httpx|requests)" $DIRS; then
+            echo "::error::El núcleo (agents/tools/rag) no puede conocer canales, servicios ni HTTP: usa un puerto (ver program/03_ARCHITECTURE/estandares.md §2)."
+            exit 1
+          fi
+          echo "capas OK"
 
   dependency-review:
     # la acción solo entiende PRs; en push a main fallaría sin este if

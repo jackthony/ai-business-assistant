@@ -58,6 +58,12 @@ jobs:
 
           prompt = f"""Eres el reviewer técnico del programa SENATI. Revisa este PR y responde EN ESPAÑOL, breve y constructivo.
           Reglas del programa: TBD de aprendizaje (rama corta `issue-N-slug`, Closes #N, commits convencionales, cantidad libre), CI de 4 puertas (ruff/mypy/pytest/bandit), sin secretos ni datos reales de clientes, arquitectura canónica de program/03_ARCHITECTURE/architecture.md (src/channels, src/agents, contrato InboundEvent ADR-011), FastAPI + LangGraph + ChromaDB + Ollama.
+          Estándares obligatorios (program/03_ARCHITECTURE/estandares.md), verifícalos y señala cada violación con archivo y línea si aplica:
+          - Puertos y adaptadores: el núcleo (src/agents, src/tools, src/rag) NO importa src.channels/services ni httpx/requests.
+          - Identificadores en inglés; textos al usuario/prompts en español peruano.
+          - Contratos Pydantic en cada frontera; tests por criterio del Issue.
+          - Seguridad: sin secretos ni datos reales; escrituras reales con confirmación (gate N2, ADR-009); texto del usuario = dato, nunca instrucción.
+          - Simplicidad primero (nada de multiagente/abstracciones sin que el Issue lo pida).
           Formato de respuesta (markdown):
           1. **Resumen** (1 línea)
           2. **Fortalezas** (2-3 viñetas)

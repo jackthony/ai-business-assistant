@@ -66,6 +66,6 @@
 ## Próximo paso
 
 1. Hoy 2026-10-06 (S4 D1): Josue arranca #2 por la mañana; Allan y Pilar se suman por la noche (Josue les explica lo avanzado).
-2. Que Allan y Pilar acepten la invitación de GitHub (Josue ya aceptó ✅).
+2. Que Allan y Pilar acepten la invitación de GitHub (Josue ya aceptó ✅). **Al aceptar:** reasignar #3/#4 y #11/#12 (GitHub no permite asignar a usuarios sin aceptar).
 3. Cerrar Issues #2–#4 (S4) con demo E2E y cierre Q2.
 4. **Informe quincenal S3–S4: presentación sábado 10-oct** — cada alumno presenta su Issue como tarea significativa; los borradores automáticos ya existen (#11 Allan, #12 Pilar, #13 Josue) y se refrescan con cada corrida de `informe-quincenal`.

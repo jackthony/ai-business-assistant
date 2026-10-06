@@ -14,4 +14,4 @@
 - **HITO 3 (S11 D3):** NeuraCode atendiendo + notas de voz.
 - **Demo final (S16 D3):** E2E, informe SENATI y transferencia.
 
-> El detalle diario actual (v1) vive en el Excel, hoja `PLAN_16_SEMANAS`. La re-secuencia v2 se aprobará y quedará 100% en `01_CURRICULUM/16_week_plan.md`.
+> El detalle diario actual (v1) vive en el Excel, hoja `PLAN_16_SEMANAS`. La re-secuencia v2 se aprobará y quedará 100% en `program/01_CURRICULUM/16_week_plan.md`.

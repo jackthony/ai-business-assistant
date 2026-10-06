@@ -17,7 +17,7 @@
 
 - Registro diario de actividades y horas reales en el Informe de Formación Práctica (individual).
 - Cada dos semanas: tarea más significativa sustentada + informe quincenal.
-- El monitor evalúa en el Excel `(EVALUABLE).xlsx` según `05_EVALUATION/rubric.md`.
+- El monitor evalúa en el Excel `(EVALUABLE).xlsx` según `program/05_EVALUATION/rubric.md`.
 
 ## Stack
 

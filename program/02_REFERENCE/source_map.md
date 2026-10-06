@@ -29,6 +29,7 @@
 | `strands-agents/sdk-python` | Hooks de ciclo de vida, límites de turno/tokens, evals | activo 1.x, Apache-2.0 | S10/S12: ideas de lifecycle y evaluación |
 | `RichmondAlake/agent_harness_course` | Approval gates, tiers de permisos, tests de inyección | activo, **sin licencia → prohibido copiar código** | S9/S12: leer patrones; NO correr live (Oracle/MemoRizz) |
 | `modelcontextprotocol/servers` | Servidores MCP de ejemplo | activo | S10–S12 (opcional) |
+| `jackthony/IA-local` (lab interno, **MIT**, del monitor) | **Jev**: decisiones tipadas de 1 token con confianza calibrada (logprobs, ~1–2 s en CPU); labs de 11 patrones; CI zero-trust (Actions por SHA, escáner de secretos); compose endurecido; datasets con SHA-256 y licencias | activo | Jev → triage S9, router S10, evals S12; labs → S5–S10; compose/CI → S14/S4 |
 
 ## Nivel 3 — Material educativo (conceptos)
 
@@ -53,7 +54,7 @@
 | 2. The AI Engineer Course 2026 (365 Careers) | 77 secciones · 445 lecciones · 29h46m · 4.5★ (25.9k) · inglés · actualizado ago-2026 | Complemento para nivelar: módulo LangGraph real (sin interrupt) + Chroma local/Pinecone. Reseñas negativas: desactualización y poca profundidad |
 | 3. Intro to AI Agents and Agentic AI (365 Careers) | 2h11m · 4.5★ (90k) · inglés | Contexto de negocio (2 h): conceptual, n8n, menciona frameworks sin código de grafo |
 
-**Gap global:** ninguno cubre Ollama ni WhatsApp. Plan de refuerzo con compras opcionales (máx. 1–2, ~$20–30 en oferta) en `01_CURRICULUM/cursos_de_refuerzo.md`; alternativas gratis: docs Meta/Ollama/ChatOllama, video de Dani Fuyà (WhatsApp + LangGraph, stack casi idéntico) y plantillas FastAPI de GitHub. Nunca son fuente de verdad; si contradicen una doc oficial, gana la doc.
+**Gap global:** ninguno cubre Ollama ni WhatsApp. Plan de refuerzo con compras opcionales (máx. 1–2, ~$20–30 en oferta) en `program/01_CURRICULUM/cursos_de_refuerzo.md`; alternativas gratis: docs Meta/Ollama/ChatOllama, video de Dani Fuyà (WhatsApp + LangGraph, stack casi idéntico) y plantillas FastAPI de GitHub. Nunca son fuente de verdad; si contradicen una doc oficial, gana la doc.
 
 ## Kit de rescate (síntoma → fuente)
 
@@ -65,9 +66,9 @@
 | Prompt injection / goal hijacking | OWASP ASI01/ASI02 + ADR-009 (permisos por nivel) |
 | La acción se ejecuta dos veces al reanudar | Patrón `draft → review → apply` (ADR-009) |
 | Errores al desplegar / fallback de modelos | CH07 + Docker docs + ADR-008 |
-| Latencia o costo alto | CH11 + `00_PROJECT/roi_metrics.md` |
+| Latencia o costo alto | CH11 + `program/00_PROJECT/roi_metrics.md` |
 | Duda de framework | ADR-002 y ADR-010 (no se migra sin ADR nuevo) |
-| Cliente pregunta "¿qué gano?" | `00_PROJECT/roi_metrics.md` (KPIs y benchmarks) |
+| Cliente pregunta "¿qué gano?" | `program/00_PROJECT/roi_metrics.md` (KPIs y benchmarks) |
 
 ## Reglas de curación
 

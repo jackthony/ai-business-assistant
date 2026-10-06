@@ -4,12 +4,12 @@
 
 ## Qué es este repo
 
-`ai-business-assistant` — programa de prácticas **HealthTech Software & AI · SENATI 2026** + producto multitenant (Hola Mujer y NeuraCode) para WhatsApp: FastAPI + LangGraph + ChromaDB + Ollama (DeepSeek local). La gestión del programa (currículo, evaluación, ADRs) vive en las carpetas `00_`–`05_`; el código del producto en `src/` (desde S4).
+`ai-business-assistant` — programa de prácticas **HealthTech Software & AI · SENATI 2026** + producto multitenant (Hola Mujer y NeuraCode) para WhatsApp: FastAPI + LangGraph + ChromaDB + Ollama (DeepSeek local). La gestión del programa (currículo, evaluación, ADRs) vive en `program/`; el código del producto en `src/` (desde S4).
 
 ## Protocolo de contexto (obligatorio)
 
-1. Lee **siempre primero** `00_PROJECT/current_status.md`.
-2. Luego solo 2–3 archivos de la tarea (Issue + arquitectura + módulo). Del plan (`01_CURRICULUM/16_week_plan.md`), solo el bloque de la semana en curso.
+1. Lee **siempre primero** `program/00_PROJECT/current_status.md`.
+2. Luego solo 2–3 archivos de la tarea (Issue + arquitectura + módulo). Del plan (`program/01_CURRICULUM/16_week_plan.md`), solo el bloque de la semana en curso.
 3. Nunca asumas contenido de archivos que no leíste. Si falta contexto, pídelo.
 4. Responde en español, salvo código/comentarios en inglés.
 
@@ -22,9 +22,9 @@
 ## Reglas duras
 
 - Nada clínico: el bot deriva a humano (safety_agent). Tú tampoco opinas de salud.
-- Nunca inventes datos del negocio (precios, horarios, cursos): salen de `04_DOMAIN/` o del RAG.
+- Nunca inventes datos del negocio (precios, horarios, cursos): salen de `program/04_DOMAIN/` o del RAG.
 - Nunca uses datos reales de clientes en ejemplos: fixtures anonimizados.
-- Respeta los ADRs (`03_ARCHITECTURE/decisions/`): no propongas cambiar FastAPI/LangGraph/DeepSeek local sin justificarlo contra un ADR.
+- Respeta los ADRs (`program/03_ARCHITECTURE/decisions/`): no propongas cambiar FastAPI/LangGraph/DeepSeek local sin justificarlo contra un ADR.
 - **Regla de evidencia:** cita la fuente (archivo, doc oficial o URL). Un LLM no es autoridad: doc oficial > código reproducible > libro/curso > paper. Si un dato no está en el contexto, dilo; no lo inventes.
 
 ## Reglas de código (S4+)
@@ -43,5 +43,5 @@ Formato: `Resumen` (1–3 líneas) + `Hallazgos [BLOCKER]/[MAJOR]/[MINOR]` + `Pr
 
 ## Reglas de evaluación (apoyo al monitor)
 
-- Puedes: redactar borradores de observación por criterio (`05_EVALUATION/rubric.md`), detectar patrones (errores recurrentes, PRs sin tests), redactar borradores de feedback semanal (1 logro + 1 mejora + 1 acción concreta) y de informes quincenales.
+- Puedes: redactar borradores de observación por criterio (`program/05_EVALUATION/rubric.md`), detectar patrones (errores recurrentes, PRs sin tests), redactar borradores de feedback semanal (1 logro + 1 mejora + 1 acción concreta) y de informes quincenales.
 - **No puedes:** asignar la nota definitiva (la decide el monitor en el Excel) ni inventar evidencia (si falta el link o commit, dilo explícitamente).

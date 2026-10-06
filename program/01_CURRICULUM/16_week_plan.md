@@ -195,7 +195,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D2 — Issue #08: Ingesta Excel → JSON → ChromaDB**
 - Objetivo: el bot conoce los 47 servicios reales.
-- Actividades: `etl_servicios.py` (05_SERVICIOS → JSON limpio: nombre, precio, duración, categoría); embeddings locales (nomic-embed-text o bge-m3) → ChromaDB namespace `hola_mujer`; tool de búsqueda; verificar 10 preguntas contra la fuente. **Caso de estudio (anti-ejemplo):** `cofounder-agi` — su "memoria RAG" usa vectores aleatorios sembrados con `hash()` (inestable entre procesos): parece memoria semántica pero recupera ruido. Discutir cómo se delata.
+- Actividades: `etl_servicios.py` (05_SERVICIOS → JSON limpio: nombre, precio, duración, categoría); embeddings locales (nomic-embed-text o bge-m3) → ChromaDB namespace `hola_mujer`; tool de búsqueda; verificar 10 preguntas contra la fuente. **Caso de estudio (anti-ejemplo):** `cofounder-agi` — su "memoria RAG" usa vectores aleatorios sembrados con `hash()` (inestable entre procesos): parece memoria semántica pero recupera ruido. Discutir cómo se delata. Si falta corpus de conversaciones de prueba: dataset Bitext de customer support (licencia CDLA, verificado por SHA-256) — referencia `jackthony/IA-local`.
 - Criterios: [ ] ETL reproducible y versionado; [ ] colección con los 47 servicios; [ ] 10/10 respuestas verificadas contra el JSON; [ ] sin datos personales; [ ] explican el anti-caso y cómo se detecta (retrieval sin relevancia).
 - Evidencia: PR + dataset JSON + resultados.
 
@@ -262,7 +262,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D1 — Issue #16: Agente 4 Safety & triage clínico**
 - Objetivo: el bot nunca improvisa en salud.
-- Actividades: clasificador de riesgo (médico complejo / foto clínica / reclamo / normal); nodo que congela el flujo (`status=handoff_requested`); respuestas puente definidas ("ya te contacta una especialista"); 15 casos (10 normales, 5 de riesgo).
+- Actividades: clasificador de riesgo **de 1 token con confianza calibrada** (patrón Jev de `jackthony/IA-local`: Choice + logprobs + umbral), no texto libre; nodo que congela el flujo (`status=handoff_requested`); respuestas puente definidas ("ya te contacta una especialista"); 15 casos (10 normales, 5 de riesgo).
 - Entregable: PR #16 + tabla de 15 casos.
 - Criterios: [ ] 5/5 casos de riesgo congelados; [ ] 0/10 falsos positivos en normales; [ ] respuesta puente sin diagnóstico; [ ] CI verde.
 - Evidencia: PR + tabla + transcripciones.
@@ -294,7 +294,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D2 — Issue #19: Supervisor router + clase de frameworks**
 - Objetivo: orquestar agentes y comparar arquitecturas con criterio.
-- Actividades: clasificador rápido (reglas/intención) primero y supervisor LLM para ambiguos; deriva a info/citas/checkout/safety; trazas del ruteo; clase 30 min: panorama (OpenAI Agents SDK, MS Agent Framework, Strands — handoffs, hooks, workflows) con la comparativa de Langfuse y por qué seguimos en LangGraph (ADR-010).
+- Actividades: clasificador rápido (reglas/intención) primero y supervisor LLM para ambiguos; deriva a info/citas/checkout/safety; trazas del ruteo; clase 30 min: panorama (OpenAI Agents SDK, MS Agent Framework, Strands — handoffs, hooks, workflows) con la comparativa de Langfuse y por qué seguimos en LangGraph (ADR-010); comparar la lib `langgraph-supervisor` y el triage de 1 token de Jev contra el router propio.
 - Criterios: [ ] ≥13/15 mensajes ruteados bien; [ ] fallback a LLM en ambiguos; [ ] trazas muestran el ruteo; [ ] nota de la comparativa entregada.
 - Evidencia: PR + tabla de ruteo + nota.
 - Foco de evaluación: comprensión, criterio.
@@ -345,7 +345,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D3 — Issue #27: Evals offline + cierre Q6**
 - Objetivo: medir calidad con datos, no con opiniones.
-- Actividades: set de ≥20 casos (fidelidad RAG, relevancia, tono, handoff correcto); LLM-as-a-Judge local offline (`deepseek-r1:14b`) con rúbrica; aplicar la heurística de validadores (Lusser: `v·r/f > p/(1-p)`) para decidir qué jueces valen; demo quincenal + informe SENATI Q6; Excel S11–S12.
+- Actividades: set de ≥20 casos (fidelidad RAG, relevancia, tono, handoff correcto); LLM-as-a-Judge local offline (`deepseek-r1:14b`) con rúbrica y, en paralelo, decisiones tipadas calibradas (Jev: Choice/Score con logprobs) comparando costo/calidad; aplicar la heurística de validadores (Lusser: `v·r/f > p/(1-p)`) para decidir qué jueces valen; demo quincenal + informe SENATI Q6; Excel S11–S12.
 - Criterios: [ ] ≥20 casos evaluados; [ ] puntuación antes/después de una mejora de prompt; [ ] juez descartado si no supera el umbral de Lusser; [ ] informe Q6 + release `q6`.
 - Evidencia: PR + reporte de evals.
 - Foco de evaluación: evaluación, aprendizaje y mejora.
@@ -411,7 +411,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D2 — Issue #35: Fallbacks de modelos + FinOps**
 - Objetivo: seguir funcionando si un modelo cae y saber cuánto cuesta.
-- Actividades: fallback local (p. ej. `qwen2.5-coder` ↔ `deepseek`) con detector de timeout/fallo; medir **costo por conversación** (cómputo local + mensajes Meta) y compararlo con alternativas cloud; registrar el resultado real en `00_PROJECT/roi_metrics.md`.
+- Actividades: fallback local (p. ej. `qwen2.5-coder` ↔ `deepseek`) con detector de timeout/fallo; medir **costo por conversación** (cómputo local + mensajes Meta) y compararlo con alternativas cloud; registrar el resultado real en `program/00_PROJECT/roi_metrics.md`.
 - Criterios: [ ] conmutación probada (apagar un modelo a propósito); [ ] degradación visible en logs; [ ] costo por conversación calculado con datos reales.
 - Evidencia: PR + tabla de costos.
 - Foco de evaluación: criterio, evidencia.
@@ -441,7 +441,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D3 — Issue #39: Demo final + transferencia + cierre Q8**
 - Objetivo: entregar el sistema funcionando y transferirlo.
-- Actividades: demo E2E ante Hola Mujer/NeuraCode; entrega del repo, accesos y runbook; **informe final SENATI (lo redacta cada alumno)** + acta en `05_EVALUATION/`; release `v1.0`; retrospectiva del programa.
+- Actividades: demo E2E ante Hola Mujer/NeuraCode; entrega del repo, accesos y runbook; **informe final SENATI (lo redacta cada alumno)** + acta en `program/05_EVALUATION/`; release `v1.0`; retrospectiva del programa.
 - Criterios: [ ] demo en producción real; [ ] runbook y accesos entregados; [ ] release `v1.0` publicado; [ ] informes finales subidos por los alumnos; [ ] retrospectiva documentada.
 - Evidencia: release + runbook + informes.
 - **Demo final ✅**

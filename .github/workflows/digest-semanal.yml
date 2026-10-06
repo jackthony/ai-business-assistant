@@ -50,7 +50,7 @@ jobs:
               }
               body += `- Issues abiertos: ${openIssues.length}\n\n`;
             }
-            body += `> La automatizacion muestra donde mirar; el monitor decide como va (ver 00_PROJECT/github_devops.md).`;
+            body += `> La automatizacion muestra donde mirar; el monitor decide como va (ver program/00_PROJECT/github_devops.md).`;
             await github.rest.issues.create({
               owner, repo, title: `Digest semanal — ${week}`, body, labels: ["senati"],
             });

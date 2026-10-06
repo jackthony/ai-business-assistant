@@ -26,16 +26,16 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 
 | Carpeta | Contenido |
 |---|---|
-| `00_PROJECT/` | Visión, alcance, roadmap y **`current_status.md`** (leer siempre primero) |
-| `01_CURRICULUM/` | Syllabus, plan de 16 semanas y backlog de Issues #01–#39 |
-| `02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate) y guías por tema |
-| `03_ARCHITECTURE/` | Arquitectura objetivo + ADRs en `decisions/` |
-| `04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
-| `05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |
+| `program/00_PROJECT/` | Visión, alcance, roadmap y **`current_status.md`** (leer siempre primero) |
+| `program/01_CURRICULUM/` | Syllabus, plan de 16 semanas y backlog de Issues #01–#39 |
+| `program/02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate) y guías por tema |
+| `program/03_ARCHITECTURE/` | Arquitectura objetivo + ADRs en `decisions/` |
+| `program/04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
+| `program/05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |
 | `AGENTS.md` (raíz) | Instrucciones para cualquier agente de IA (protocolo, coding, review, evaluación) |
 
 ## Cómo usarlo con DeepSeek local
 
-1. Leer `00_PROJECT/current_status.md` **siempre**.
+1. Leer `program/00_PROJECT/current_status.md` **siempre**.
 2. Cargar solo 2–3 archivos de la tarea en curso (nunca el repo completo).
 3. El protocolo completo está en `AGENTS.md` (raíz del repo).

@@ -31,7 +31,7 @@
 3. "Checkpoint everything. If you can't resume from a crash, you're not production-ready" → **ADR-005**.
 4. "Fight context rot from day one… the 40-60% rule" → chats largos de WhatsApp (compactación).
 5. "Human-in-the-loop is a feature, not a limitation" → **ADR-009**.
-6. "Track costs per task" → **FinOps** (`00_PROJECT/roi_metrics.md`).
+6. "Track costs per task" → **FinOps** (`program/00_PROJECT/roi_metrics.md`).
 
 ## Reglas de uso
 

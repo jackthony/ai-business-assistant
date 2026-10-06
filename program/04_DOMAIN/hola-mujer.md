@@ -8,6 +8,7 @@
 - **47 servicios** en Excel `05_SERVICIOS` (nombre, precio, duración) → a JSON para RAG.
 - Agenda en pestaña `02_CITAS`; promociones en `06_PROMOCIONES`.
 - Reglas clínicas/seguridad en `07_APRENDIZAJES_INBOX`.
+- Excel operativo verificado (2026-10-06): `Hola Mujer · MVP WhatsApp ManyChat · Operativo (1).xlsx` con hojas: `00_EMPEZAR` · `01_CONTACTOS` · `02_CITAS` · `03_EVENTOS` · `04_CONFIG` · `05_SERVICIOS` · `06_PROMOCIONES` · `07_APRENDIZAJES_INBOX` · `08_PLAN_IMPLEMENTACION` · `09_MUESTRA_INBOX_11D` · `MANYCHAT_SERVICE_SHEET`.
 - Pagos por **Yape / Plin / BCP** (capturas de comprobante).
 - Handoff humano a **Jioysi** (derivación por consultas médicas, reclamos o casos complejos).
 - Operación previa en ManyChat (botones rígidos) — se reemplaza por el agente.

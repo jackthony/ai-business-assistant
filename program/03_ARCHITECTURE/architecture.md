@@ -52,7 +52,7 @@ class AgentState(TypedDict):
 - **Validación determinista primero** (Pydantic/regex en tools); LLM-as-a-Judge solo offline.
 - **RAG íntegro:** provenance por documento; jamás re-ingerir salidas del bot (ASI06).
 - **Intent gate + action log:** validar esquema/rate-limit antes de cada tool; toda escritura con log y undo.
-- **Métricas de ROI** instrumentadas desde S4 (ver `00_PROJECT/roi_metrics.md`).
+- **Métricas de ROI** instrumentadas desde S4 (ver `program/00_PROJECT/roi_metrics.md`).
 
 ## Datos y límites
 

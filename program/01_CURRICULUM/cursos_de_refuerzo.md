@@ -26,3 +26,8 @@
 - **S9–S11:** handbook Partes VII–IX; repaso de HITL/checkpoints del curso 1.
 - **S12:** handbook Partes XI–XII (seguridad y evals).
 - **S13–S16:** handbook Parte XIII; proyectos finales del curso 1.
+
+## Material descargado del curso 1 (2026-10-06)
+
+- Ejercicios de Gmail (Tema 6: `agente_ia_langchain*.py`) y **proyecto SOC multiagente** (`soc_multiagent.zip`: supervisor, agentes, dashboard, webhook) — referencia directa para S7–S10.
+- `sistema_multiagente.py` usa la lib `langgraph-supervisor`; compararla en S10 con el router propio (ADR-002).

@@ -19,7 +19,7 @@ El programa se ejecuta en un M5 Pro con 24 GB de RAM unificada. Se busca minimiz
 
 ## Decisión
 
-Opción 2. Motor principal: DeepSeek local en Ollama (ver `02_REFERENCE/deepseek-local.md`). Nube inevitable: WhatsApp Cloud API. Voz (faster-whisper) y visión (Qwen2.5-VL) locales; si el hardware no da, se evalúa nube caso a caso con un ADR.
+Opción 2. Motor principal: DeepSeek local en Ollama (ver `program/02_REFERENCE/deepseek-local.md`). Nube inevitable: WhatsApp Cloud API. Voz (faster-whisper) y visión (Qwen2.5-VL) locales; si el hardware no da, se evalúa nube caso a caso con un ADR.
 
 ## Consecuencias
 

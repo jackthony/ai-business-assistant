@@ -15,7 +15,7 @@
 
 ## Protocolo de contexto (obligatorio)
 
-1. Leer `00_PROJECT/current_status.md`.
+1. Leer `program/00_PROJECT/current_status.md`.
 2. Cargar solo el Issue + 2–3 archivos de la tarea (ej.: `issues_backlog.md` + `architecture.md` + el módulo a tocar).
 3. Nunca cargar el repo completo ni sus 37+ archivos. Si falta contexto, pedirlo selectivamente.
 

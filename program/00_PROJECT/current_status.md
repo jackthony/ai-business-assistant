@@ -16,14 +16,14 @@
 
 | Área | Estado |
 |---|---|
-| Plan 16 semanas (48 sesiones) | ✅ v2 completo en `01_CURRICULUM/16_week_plan.md` |
+| Plan 16 semanas (48 sesiones) | ✅ v2 completo en `program/01_CURRICULUM/16_week_plan.md` |
 | GitHub: plantillas Issue/PR, CODEOWNERS, labels, milestones, Dependabot | ✅ aplicado |
 | Board + digest semanal | ✅ [projects/3](https://github.com/jackthony/projects/3); digest probado (Issue #1), corre cada viernes |
 | CI/CD | ⏳ CI entra con el Issue #2 (S4 D1); CD + environments en S14 |
-| Evaluación | ✅ Excel EVALUABLE (16×3, fórmulas verificadas); rúbrica y expedientes en `05_EVALUATION/` |
+| Evaluación | ✅ Excel EVALUABLE (16×3, fórmulas verificadas); rúbrica y expedientes en `program/05_EVALUATION/` |
 | Drive de distribución | ✅ `ciclo-3-pilar-alan-josue/SENATI-2026-GoogleDrive/` listo para arrastrar |
-| Material de alumnos | ✅ guía PDF (Vasilyev, MIT); cursos verificados en `01_CURRICULUM/cursos_de_refuerzo.md` |
-| Decisiones | ✅ 10 ADRs (`03_ARCHITECTURE/decisions/`) + `02_REFERENCE/source_map.md` curado |
+| Material de alumnos | ✅ guía PDF (Vasilyev, MIT); cursos verificados en `program/01_CURRICULUM/cursos_de_refuerzo.md` |
+| Decisiones | ✅ 10 ADRs (`program/03_ARCHITECTURE/decisions/`) + `program/02_REFERENCE/source_map.md` curado |
 | Código producto (`src/`) | ⏳ arranca con el Issue #2 |
 | Branch protection/rulesets | ⏳ requiere GitHub Pro o repo público (S16) |
 
@@ -31,7 +31,7 @@
 
 ### Producto (GitHub, board projects/3)
 - **Esta semana:** #2 Setup + CI · #3 Webhook Meta · #4 Sender + demo E2E + cierre Q2
-- **Backlog S5–S16:** `01_CURRICULUM/issues_backlog.md` (los Issues se crean cada lunes; referencia estable por título `[S## D#]`)
+- **Backlog S5–S16:** `program/01_CURRICULUM/issues_backlog.md` (los Issues se crean cada lunes; referencia estable por título `[S## D#]`)
 - **Hitos:** HITO 1 (S6) · HITO 2 (S9) · HITO 3 (S12) · Demo final (S16)
 
 ### Gestión (creadas 2026-10-06 en el board)
@@ -47,7 +47,7 @@
 ## Decisiones recientes (resumen)
 
 - 10 ADRs vigentes: FastAPI · LangGraph · WhatsApp Cloud API · ChromaDB · memoria Sqlite→Postgres · TBD · agente único primero · DeepSeek local first · harness/seguridad N1/N2/N3 · gobernanza de frameworks.
-- Repo único `ai-business-assistant` con transparencia total (ver `00_PROJECT/github_devops.md`).
+- Repo único `ai-business-assistant` con transparencia total (ver `program/00_PROJECT/github_devops.md`).
 - Nota semanal = **preliminar/formativa**; la oficial se consolida por quincena.
 - Guía MIT (Vasilyev) adoptada como apoyo; cursos Udemy verificados; malla Java archivada; Excel migrado a `(EVALUABLE).xlsx`.
 

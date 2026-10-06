@@ -45,7 +45,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 | S5 | `langgraph.md` + docs LangGraph + Anthropic «Building Effective Agents» (chaining/paralelización) + matriz semanal en `definitive-guide.md` |
 | S6 | `hola-mujer.md` (RAG real) + `agent-engineering-handbook.md` (RAG/memoria) |
 | S7 | `langgraph.md` (tools Pydantic) + matriz `definitive-guide.md` |
-| S8 | docs Langfuse (telemetría) + `roi_metrics.md` |
+| S8 | `observabilidad-costos.md` + docs Langfuse (telemetría) + `roi_metrics.md` |
 | S9 | ADR-009 + `agent-engineering-handbook.md` (HITL/seguridad) + harness lecture-01 (es) |
 | S10 | ADR-010 + comparativa Langfuse + microservices.io (multitenant) + Anthropic (routing/orchestrator) |
 | S11 | docs Ollama/faster-whisper + `deepseek-local.md` |
@@ -251,7 +251,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D3 — Issue #25: Telemetría temprana + cierre Q4**
 - Objetivo: ver el sistema por dentro antes de crecer.
-- Actividades: Langfuse (self-host/local) o LangSmith: trazas por nodo, latencia, tokens; dashboard mínimo (primera respuesta, contención, errores por nodo); demo quincenal + informe SENATI Q4; Excel S7–S8.
+- Actividades: **Langfuse self-host** (Docker en la M5, gratis — no LangSmith): trazas por nodo, latencia, tokens; instrumentación con conceptos OpenTelemetry (semconv GenAI, ver `observabilidad-costos.md`); dashboard mínimo (primera respuesta, contención, errores por nodo); demo quincenal + informe SENATI Q4; Excel S7–S8.
 - Entregable: release `q4` + informe Q4.
 - Criterios: [ ] trazas por conversación visibles; [ ] dashboard con 3 métricas; [ ] error inducido detectado en trazas; [ ] informe subido.
 - Evidencia: captura del dashboard + informe.

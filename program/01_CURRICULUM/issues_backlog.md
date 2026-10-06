@@ -28,7 +28,7 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas segú
 | #22 | S11 D2 | Pre-procesador multimodal: Whisper (local) | todo |
 | #23 | S11 D3 | Normalización de audio y contexto | todo |
 | #24 | S12 D1 | HITO 3: bot NeuraCode + multimodal | todo |
-| #25 | S8 D3 | Telemetría temprana (LangSmith o Langfuse) | todo |
+| #25 | S8 D3 | Telemetría temprana (Langfuse self-host + OTel GenAI semconv) | todo |
 | #26 | S12 D2 | Seguridad OWASP (guardrails ASI01/ASI02) | todo |
 | #27 | S12 D3 | Evaluaciones offline (LLM-as-a-Judge + heurística de Lusser) | todo |
 | #28 | S13 D1 | Módulo proactivo de reactivación (>2 h inactivo) | todo |

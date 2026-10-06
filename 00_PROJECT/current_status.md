@@ -2,9 +2,9 @@
 
 - **Fecha:** 2026-10-06
 - **Programa:** HealthTech Software & AI — SENATI 2026 (ciclo 3)
-- **Fase:** Semana 1 — Fundamentos Java/POO + Git
+- **Fase:** Semana 4 — Nace el producto · Q1 entregado por los alumnos; Q2 en curso
 - **Estado:** IN_PROGRESS
-- **Issue actual:** ninguno del backlog #01–#39 (arrancan en S4). Trabajo S1: 3 apps consola individuales contextualizadas a Hola Mujer.
+- **Issue actual:** #2 (setup FastAPI + CI). Issues de S4 creados en GitHub: #2–#4 (los IDs del backlog #01–#39 van +1 en GitHub por el Issue #1 del digest).
 
 ## Practicantes
 
@@ -29,11 +29,13 @@
 
 - **Operación actual en producción: ManyChat + n8n.** Flujos rígidos de botones; clientes no completan el recorrido y no se logra el objetivo. El proyecto los reemplaza progresivamente con el agente conversacional.
 - PEA oficial de 4.º ciclo (SINFO) aún no llega: columnas PEA pendientes en el seguimiento quincenal.
-- Re-secuencia v2 de las 48 sesiones pendiente (mover OCR/Whisper/NeuraCode, adelantar evaluación; motor DeepSeek local).
-- Estructura de producto (`src/`, CI, `docs/CONTEXT.md`/`ARCHITECTURE.md`) se crea en S4; branch protection/rulesets pendientes (requieren GitHub Pro para repo privado, o pasar a público en S16).
+- S4 en ejecución: `src/`, CI, webhook y sender (Issues #2–#4); branch protection/rulesets pendientes (GitHub Pro o repo público en S16).
+- Project board: requiere `gh auth refresh -s project,read:project` del monitor.
+- Usuarios de GitHub de Allan, Pilar y Josue: se solicitan el 2026-10-07; luego se agregan como colaboradores.
 - Validar Ley 29733 (protección de datos, Perú) con abogado antes de tocar datos reales de clientes.
 
 ## Próximo paso
 
-1. Aprobar el mapa v2 (`01_CURRICULUM/16_week_plan.md`) y publicar el detalle de sesiones por bloques (S1–S4 primero).
-2. S4: crear `src/` + CI + `docs/CONTEXT.md`/`ARCHITECTURE.md` dentro de este repo (Issue #01).
+1. Cerrar Issues #2–#4 (setup+CI, webhook, sender + demo E2E) y el informe Q2 del alumno.
+2. Crear el Project board (tras el refresh de scopes) y agregar los Issues de la semana.
+3. Agregar a los 3 practicantes como colaboradores cuando compartan sus usuarios (2026-10-07).

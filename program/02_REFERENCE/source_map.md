@@ -30,6 +30,9 @@
 | Trunk-Based Development | Flujo git/TBD | activo | S2+ (ver ADR-006) |
 | OWASP GenAI Security Project (`genai.owasp.org`) — Top 10 LLM 2026 + **Agent Control Standard (ACS, 2026-09)** + Top 10 for Agentic Applications (ASI) | Seguridad ASI01–ASI10, mitigaciones, estándar de control de agentes | activo (dominio migró de owasp.org) | S12, S15 (ver ADR-009) |
 | Anthropic — «Building Effective Agents» (Schluntz/Zhang, web) | Taxonomía workflows vs agentes: chaining, routing, parallel, orchestrator-workers, evaluator-optimizer; bloques base (retrieval/tools/memory) | activo — enlazar la web, no copiar (© Anthropic) | S5 chaining/paralelización · S10 routing/orchestrator · S12 evaluator/evals |
+| 12-Factor Agents (`github.com/humanlayer/12-factor-agents`, Dex Horthy) | Agentes que duran: prompts propios y versionados, contexto explícito, tools como salidas estructuradas, agentes chicos, control de flujo propio | activo — verificar licencia antes de copiar | S5+ (nodos y tools) · S10 (supervisor) · S12 (evals) |
+| «Architecture Patterns with Python» — Cosmic Python (Percival & Gregory, `cosmicpython.com`) | Puertos y adaptadores en Python: cómo mantener el núcleo (agentes) limpio de canales y servicios — base de `estandares.md` | activo — verificar licencia antes de copiar código | S4+ (estructura) · S7 (tools como puertos) · S14 |
+| `zhanymkanov/fastapi-best-practices` (guía comunitaria) | Convenciones FastAPI para proyectos medianos: estructura, dependencias, testing | activo — leer, no copiar texto | S4–S5 (estructura de `api/`) |
 
 ## Nivel 2 — Repos de ingeniería (leer código real, no copiar sin licencia)
 

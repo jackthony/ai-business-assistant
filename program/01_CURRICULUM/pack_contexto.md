@@ -30,6 +30,8 @@
 
 **Los ADRs en una línea** (lee solo el que toque tu semana): 001 FastAPI · 002 LangGraph · 003 WhatsApp Cloud API directo · 004 RAG con ChromaDB · 005 memoria sqlite→postgres · 006 TBD de aprendizaje · 007 agente único primero · 008 DeepSeek local-first · 009 harness de seguridad · 010 frameworks de referencia · 011 canal-agnóstico.
 
+**Cómo construimos (estándares):** `program/03_ARCHITECTURE/estandares.md` — stack con su porqué, puertos y adaptadores (el núcleo no conoce canales ni servicios), código limpio adaptado (inglés en código, español peruano al usuario), seguridad por diseño y de quién nos guiamos. Léelo tu primera semana y consúltalo **antes de diseñar cualquier cosa nueva**. Incluye al final un resumen listo para pegar en el primer prompt de diseño a tu IA.
+
 ## Uso controlado de tu IA (protocolo — aplícalo en toda la fase)
 
 1. **Antes de abrir la IA:** lee este pack y tu Issue (~30 min). Sin eso, tu prompt va a ser vago y el modelo va a gastar contexto adivinando.

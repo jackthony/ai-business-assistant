@@ -11,7 +11,8 @@
 3. Las **lecturas de la semana**: están en el propio Issue (sección "Lecturas de la semana") y en la tabla Materiales por semana de `program/01_CURRICULUM/16_week_plan.md`.
 4. `program/01_CURRICULUM/pack_contexto.md` — **el pack de la fase** (también viene embebido en cada Issue): contexto de negocio e ingeniería en corto + protocolo de **uso controlado de IA**. Es tu material de trabajo principal; respétalo.
 5. `program/02_REFERENCE/stack-versiones.md` — decisiones ya tomadas (Python 3.11, dependencias, límites de herramientas gratis). No dejes que el practicante re-decida nada de ahí.
-6. `GUIA_PRACTICANTE.md` — las reglas del practicante (TBD, commits, informes).
+6. `program/03_ARCHITECTURE/estandares.md` — **cómo se construye aquí y por qué**: stack, puertos y adaptadores (el núcleo no conoce canales), código limpio adaptado, seguridad por diseño y las fuentes canónicas (12-Factor Agents, Anthropic, Cosmic Python, OWASP). Es tu vara al revisar cualquier diseño o PR.
+7. `GUIA_PRACTICANTE.md` — las reglas del practicante (TBD, commits, informes).
 
 ## 2. Lo que debes enseñar y hacer cumplir (no negociable)
 

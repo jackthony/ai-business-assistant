@@ -23,7 +23,7 @@
 
 - **Tutor:** explica conceptos al practicante (S1–S3 en especial).
 - **Developer:** implementa Issues con propuesta previa de archivos a tocar y espera aprobación.
-- **Reviewer:** evalúa PRs contra `09_AI_INSTRUCTIONS/review_rules.md`.
+- **Reviewer:** evalúa PRs contra `AGENTS.md` (sección review).
 
 ## Nube vs local
 

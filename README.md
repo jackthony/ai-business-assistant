@@ -32,10 +32,10 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 | `03_ARCHITECTURE/` | Arquitectura objetivo + ADRs en `decisions/` |
 | `04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
 | `05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |
-| `09_AI_INSTRUCTIONS/` | Instrucciones para DeepSeek local (sistema, coding, review, evaluación) |
+| `AGENTS.md` (raíz) | Instrucciones para cualquier agente de IA (protocolo, coding, review, evaluación) |
 
 ## Cómo usarlo con DeepSeek local
 
 1. Leer `00_PROJECT/current_status.md` **siempre**.
 2. Cargar solo 2–3 archivos de la tarea en curso (nunca el repo completo).
-3. El protocolo completo está en `09_AI_INSTRUCTIONS/deepseek_system.md`.
+3. El protocolo completo está en `AGENTS.md` (raíz del repo).

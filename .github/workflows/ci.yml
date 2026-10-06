@@ -1,0 +1,45 @@
+name: CI estricto
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "requirements*.txt"
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "requirements*.txt"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Instalar toolchain
+        run: |
+          pip install -q ruff mypy pytest bandit
+          if [ -f requirements.txt ]; then pip install -q -r requirements.txt; fi
+      - name: 1. Lint — ruff (cero warnings)
+        run: ruff check src tests
+      - name: 2. Tipado — mypy (cero errores)
+        run: mypy src --ignore-missing-imports
+      - name: 3. Tests — pytest (mocks, sin tokens)
+        run: pytest tests -q --strict-markers
+      - name: 4. Seguridad — bandit (alta y media)
+        run: bandit -r src -x tests -ll

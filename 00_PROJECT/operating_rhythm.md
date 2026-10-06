@@ -10,7 +10,7 @@
 
 - **Día 3 (viernes):**
   1. Llenar las 3 filas semanales en el Excel `EVALUACION` (30 min, criterios 1–5).
-  2. Revisar PRs (DeepSeek como reviewer según `09_AI_INSTRUCTIONS/review_rules.md`).
+  2. Revisar PRs (DeepSeek como reviewer según `AGENTS.md` §Review).
   3. Anotar patrones de error en `05_EVALUATION/students/`.
   4. Actualizar `00_PROJECT/current_status.md`.
 

@@ -22,7 +22,7 @@
 | Dependabot (pip + GitHub Actions) | ✅ aplicado (actúa con el código en S4) |
 | Project board (Todo / In Progress / Done) | ✅ [projects/3](https://github.com/users/jackthony/projects/3) — vinculado al repo, Issues #2–#4 dentro |
 | Branch protection / rulesets en `main` | pendiente: requiere GitHub Pro para repo privado (o pasar a público en S16) |
-| CI: `ruff` + `pytest` (mocks) + `mypy`/`bandit` recomendados | S4 D1 (Issue #01) |
+| CI estricto: `ruff` + `mypy` + `pytest` + `bandit` (4 puertas) | ✅ workflow montado (`.github/workflows/ci.yml`); se activa con el primer PR de código (los practicantes crean `src/` en el Issue #2) |
 | CD + environments con aprobación | S14 |
 | Secret scanning / push protection / CodeQL | al pasar a público (S16) o con Pro |
 
@@ -70,8 +70,8 @@ Regla: si algo cambia en GitHub y tiene copia en Drive, la copia se regenera; nu
 
 ## Acciones pendientes
 
-1. Project board: ✅ creado ([projects/3](https://github.com/users/jackthony/projects/3)); agregar cada semana los Issues nuevos.
-2. Publicar el bloque final de sesiones S13–S16 (`16_week_plan.md`).
-3. S4: `src/`, CI, `docs/CONTEXT.md` y `docs/ARCHITECTURE.md` dentro de este mismo repo (Issue #2).
-4. Agregar a Allan, Pilar y Josue como colaboradores cuando se tengan sus usuarios de GitHub.
-5. Digest semanal: ✅ probado en vivo (Issue #1); corre solo cada viernes.
+1. Project board: ✅ creado ([projects/3](https://github.com/users/jackthony/projects/3)) con campos Semana/Alumno/Área; agregar cada semana los Issues nuevos.
+2. Plan v2: ✅ las 48 sesiones publicadas en `16_week_plan.md`.
+3. S4: `src/` + `docs/CONTEXT.md`/`ARCHITECTURE.md` los crean los practicantes (Issue #2); CI estricto ya montado.
+4. Agregar a Allan, Pilar y Josue como colaboradores cuando se tengan sus usuarios de GitHub (Issue #5).
+5. Digest semanal: ✅ probado en vivo; corre solo cada viernes.

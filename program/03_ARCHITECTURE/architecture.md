@@ -42,8 +42,34 @@ class AgentState(TypedDict):
 
 ## Repo único
 
-- `jackthony/ai-business-assistant`: programa (`program/00_PROJECT`–`05_EVALUATION`) + producto desde S4: `src/{api,agents,tools,rag,memory,channels,models,services,infrastructure}`, `tests/`, `configs/`.
+- `jackthony/ai-business-assistant`: programa (`program/00_PROJECT`–`05_EVALUATION`) + producto desde S4 (`src/`, `tests/`, `configs/`, `data/`, `docs/`).
 - Branches cortas por Issue (TBD) — guardianes `tbd-guardian`/`tbd-enforcer` en `.github/workflows/`. PRs = evidencia SENATI.
+
+## Estructura de carpetas del producto (v1 — la crea el Issue #2, crece por semanas)
+
+```
+src/
+  api/            # app FastAPI: routers, /health, /webhook (Issue #2/#3)
+  channels/       # WhatsApp Cloud API: verificación (GET) y parseo (POST) (Issue #3)
+  agents/         # grafos LangGraph: agente único primero; supervisor recién S10 (ADR-007)
+  tools/          # tools @tool con schemas Pydantic estrictos (S7)
+  rag/            # ChromaDB: ingesta, retriever, un namespace por tenant (S6)
+  memory/         # checkpointer: SqliteSaver dev → PostgresSaver prod (S14)
+  models/         # clientes Ollama (DeepSeek, Qwen2.5-VL) + fallback (S15)
+  services/       # efectos secundarios: Calendar, Sheets, sender saliente (Issue #4)
+  infrastructure/ # config, logging, métricas (FinOps desde S4)
+tests/            # unit + integración (mocks; sin llamadas reales a modelos ni APIs)
+configs/          # hola_mujer/ y neuracode/: system prompt, reglas, tools permitidas
+data/             # KB-A en JSON (anonimizado) — nunca datos reales
+docs/             # CONTEXT.md + ARCHITECTURE.md (los escriben los practicantes)
+```
+
+Reglas del código (obligatorias, verificadas por CI):
+
+- Un módulo = una responsabilidad; imports absolutos desde `src/`.
+- Cada módulo tiene tests que cubren los **criterios de aceptación de su Issue** (casos borde incluidos).
+- Nada clínico: el bot deriva a humano (`safety_agent`, ADR-009).
+- Sin secretos: `.env` + `.env.example`; las 4 puertas del CI corren en cada PR (`ruff`+`mypy`+`pytest`+`bandit`).
 
 ## Harness (confiabilidad alrededor del agente — ADR-009)
 

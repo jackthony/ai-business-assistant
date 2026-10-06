@@ -29,7 +29,7 @@ Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios
 
 | Carpeta | Contenido |
 |---|---|
-| `program/00_PROJECT/` | Visión, alcance, roadmap y **`current_status.md`** (leer siempre primero) |
+| `program/00_PROJECT/` | **`current_status.md`** (leer siempre primero), `roadmap.md` (visión+alcance+fases), `operacion.md` (GitHub+ritmo) |
 | `program/01_CURRICULUM/` | Syllabus, plan de 16 semanas y backlog de Issues #01–#39 |
 | `program/02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate) y guías por tema |
 | `program/03_ARCHITECTURE/` | Arquitectura objetivo + ADRs en `decisions/` |

@@ -50,7 +50,7 @@
 ## Decisiones recientes (resumen)
 
 - 10 ADRs vigentes: FastAPI · LangGraph · WhatsApp Cloud API · ChromaDB · memoria Sqlite→Postgres · TBD · agente único primero · DeepSeek local first · harness/seguridad N1/N2/N3 · gobernanza de frameworks.
-- Repo único `ai-business-assistant` con transparencia total (ver `program/00_PROJECT/github_devops.md`).
+- Repo único `ai-business-assistant` con transparencia total (ver `program/00_PROJECT/operacion.md`).
 - Nota semanal = **preliminar/formativa**; la oficial se consolida por quincena.
 - Guía MIT (Vasilyev) adoptada como apoyo; cursos Udemy verificados; malla Java archivada; Excel migrado a `(EVALUABLE).xlsx`.
 

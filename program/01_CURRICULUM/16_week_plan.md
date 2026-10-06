@@ -2,6 +2,14 @@
 
 > **Estado:** v2 vigente (2026-10-06). Este archivo es la fuente canónica del plan; el Excel queda solo para evaluación (nota preliminar que llena el monitor). **Los informes quincenales SENATI y el registro diario los elabora cada alumno**; el monitor da seguimiento (board, PRs, digest) y rumbo. Detalle de las 48 sesiones: Bloques 1–4 abajo.
 
+## Reglas del curso
+
+- **Jornadas:** 3 días oficiales/semana; D1 comprender/diseñar · D2 construir · D3 verificar/documentar/sustentar. No hay tareas obligatorias fuera de esos días.
+- **Flujo TBD (ADR-006):** cada sesión arranca de un Issue del backlog → branch `(tbd|issue)-N-<slug>` desde `main` → commits chicos → PR con tests y evidencia → CI verde (4 puertas: `ruff`+`mypy`+`pytest`+`bandit`) → merge squash. El push directo a `main` lo revierte `tbd-enforcer`.
+- **Evaluación por criterios:** los tests del PR deben cubrir los **criterios de aceptación del Issue** (casos borde incluidos); el monitor evalúa criterios vs evidencia. Buenas prácticas siempre: type hints, mocks, sin secretos, sin datos reales.
+- **Reportes SENATI:** registro diario de horas + informe quincenal con tarea significativa (proceso, herramientas, seguridad ATS, diagrama). Borradores automatizados por `informe-quincenal`. Nota numérica: Excel EVALUABLE + `program/05_EVALUATION/rubric.md`.
+- **Stack:** S1–S3 Java 17 + Maven + JUnit 5 (exigencia SENATI) · S4–S16 Python 3.11+, FastAPI, LangGraph, ChromaDB, Whisper local, visión local, Docker. LLM principal: DeepSeek local (Ollama); nube solo WhatsApp Cloud API.
+
 ### Histórico v1 (referencia)
 
 > Plan original: Java S1–S3, CI/CD tarde, OCR en S8, HITO 3 en S11. Superado por v2 (abajo); el delta está en "Cambios clave vs v1". No citar del histórico.
@@ -27,6 +35,25 @@ Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR d
 | 16 | Capstone + defensa + demo final | #37–#39 |
 
 S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
+
+## Materiales por semana (fuentes para apoyarse — siempre en `program/02_REFERENCE/source_map.md`)
+
+| Semana | Fuentes primarias (las leen los alumnos) |
+|---|---|
+| S1–S3 | explicación del monitor + `cursos_de_refuerzo.md` (opcional) |
+| S4 | `whatsapp-cloud-api.md` (webhook) + `deepseek-local.md` + repos N2 `pywa`/`fbsamples` (Issue #3/#4) |
+| S5 | `langgraph.md` + docs LangGraph + Anthropic «Building Effective Agents» (chaining/paralelización) + matriz semanal en `definitive-guide.md` |
+| S6 | `hola-mujer.md` (RAG real) + `agent-engineering-handbook.md` (RAG/memoria) |
+| S7 | `langgraph.md` (tools Pydantic) + matriz `definitive-guide.md` |
+| S8 | docs Langfuse (telemetría) + `roi_metrics.md` |
+| S9 | ADR-009 + `agent-engineering-handbook.md` (HITL/seguridad) + harness lecture-01 (es) |
+| S10 | ADR-010 + comparativa Langfuse + microservices.io (multitenant) + Anthropic (routing/orchestrator) |
+| S11 | docs Ollama/faster-whisper + `deepseek-local.md` |
+| S12 | harness-engineering lectures 10–12 (es) + Anthropic (evaluator-optimizer) + ADR-009 |
+| S13 | `agent-engineering-handbook.md` (proactivo/contexto) |
+| S14 | docs Docker + harness lecture-11/12 + ADR-008 |
+| S15 | `roi_metrics.md` (FinOps) + CI/pre-commit |
+| S16 | `rubric.md` + defensa (ADRs) |
 
 ---
 

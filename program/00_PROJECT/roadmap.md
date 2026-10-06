@@ -1,4 +1,45 @@
-# Roadmap
+# Roadmap — visión, alcance y fases
+
+## Visión (por qué)
+
+Construir un **asistente de IA empresarial multitenant para WhatsApp** (Hola Mujer + NeuraCode), con software y contexto corriendo en local (DeepSeek), como producto real que además sirve de vehículo de formación para 3 practicantes SENATI durante 16 semanas.
+
+## Objetivos
+
+1. **Producto:** agente que informa, agenda, cierra ventas, recibe comprobantes (Yape/Plin), deriva a humano y se reactiva — sin alucinar, con trazabilidad.
+2. **Formación:** llevar a los practicantes de fundamentos (Java/POO/Git) a un sistema multiagente en producción (FastAPI + LangGraph + RAG + multimodal).
+3. **Método:** TBD (Trunk-Based Development), Issues como unidad de trabajo, PRs como evidencia, DeepSeek local como tutor/coder/reviewer.
+
+## Criterios de éxito
+
+- Los 3 practicantes sustentan 16 semanas de evidencia verificable (commits/PRs/Issues).
+- Hola Mujer atendiendo WhatsApp con RAG real (47 servicios) y handoff humano.
+- NeuraCode como segundo tenant sobre la misma base.
+- Demo final E2E desplegada + informe SENATI completo.
+
+## Alcance — dentro
+
+- 48 sesiones (16 semanas × 3 días) y Issues #01–#39 del backlog.
+- Backend propio: FastAPI + LangGraph + ChromaDB + memoria persistente.
+- Canal WhatsApp Cloud API (Meta) — única dependencia de nube obligatoria.
+- Conversación natural y humanizada (sin menús rígidos); regla explícita de **cuándo escalar a humano** (safety_agent + HITL).
+- Multitenant: Hola Mujer y NeuraCode sobre el mismo núcleo con configs separadas.
+- Multimodal por fases: voz (faster-whisper, S11) y comprobantes por imagen (Qwen2.5-VL, S10); video se evalúa después.
+- Comprensión de campañas: capturar el origen del chat (click-to-WhatsApp/ads) para saber qué anuncio trae clientes.
+- Reutilizar plataformas existentes (Google Calendar, Sheets, ERP) e integrar donde aporten; construir solo el núcleo diferenciador.
+- **FinOps**: costo por conversación medido desde S4; LLM local y ventana de servicio 24 h de WhatsApp como palancas.
+- Evaluación semanal/quincenal + informes SENATI.
+- KB-A (negocio) vive en el Excel/Sheets operativo → se convierte a JSON/RAG; **nunca** se mezcla con KB-P (este repo).
+
+## Alcance — fuera
+
+- Diagnóstico o consejo clínico (el bot deriva siempre a humano).
+- Decisiones de precios/negocio sin validar con Hola Mujer o NeuraCode.
+- Datos reales de clientes en repos o en contexto de IA (anonimizar siempre).
+- Rediseñar scheduling/CRM propios: se integra lo existente (Cal.com, Sheets, ERP) cuando aplique.
+- Compra de infraestructura cloud más allá de lo mínimo para el canal WhatsApp.
+
+## Fases
 
 | Fase | Semanas | Foco | Entregable |
 |---|---|---|---|

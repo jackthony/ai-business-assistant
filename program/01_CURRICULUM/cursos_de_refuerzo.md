@@ -31,3 +31,9 @@
 
 - Ejercicios de Gmail (Tema 6: `agente_ia_langchain*.py`) y **proyecto SOC multiagente** (`soc_multiagent.zip`: supervisor, agentes, dashboard, webhook) — referencia directa para S7–S10.
 - `sistema_multiagente.py` usa la lib `langgraph-supervisor`; compararla en S10 con el router propio (ADR-002).
+- `agente_ia_langgraph.py` (Gmail con `create_react_agent` + `MemorySaver` + `thread_id`) → espejo exacto del patrón de S5 (#04–#06).
+- `herramientas*.py` (Tool de PythonREPL, `@tool`, `bind_tools` + `tool_calls`, `content_and_artifact`) → S7 #11; el patrón `content_and_artifact` (datos por fuera del contexto) es una buena práctica.
+- SOC `prompt_supervisor.txt` (flujo de 3 pasos impuesto por texto: "NO volver a un agente ya ejecutado", "máximo 3 delegaciones") → **contraste en S10 #19**: imponer la FSM por prompt es frágil; en LangGraph la estructura vive en el grafo/código (misma lección de IA-local).
+- `app (2).py` (chatbot multi-usuario con memoria por categorías: personal/profesional/preferencias/tareas/hechos) → S5 D3 y S13 (memoria del usuario).
+- `peticion_powershell.txt` → ejemplo real de pruebas de webhook (GET /health, POST payload) útil para S4 D2–D3.
+- Nota: los ejemplos del curso usan `gpt-4o`/OpenAI → adaptar a `ChatOllama` (DeepSeek local) al seguirlos.

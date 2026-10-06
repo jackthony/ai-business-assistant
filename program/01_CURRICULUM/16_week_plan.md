@@ -294,7 +294,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D2 — Issue #19: Supervisor router + clase de frameworks**
 - Objetivo: orquestar agentes y comparar arquitecturas con criterio.
-- Actividades: clasificador rápido (reglas/intención) primero y supervisor LLM para ambiguos; deriva a info/citas/checkout/safety; trazas del ruteo; clase 30 min: panorama (OpenAI Agents SDK, MS Agent Framework, Strands — handoffs, hooks, workflows) con la comparativa de Langfuse y por qué seguimos en LangGraph (ADR-010); comparar la lib `langgraph-supervisor` y el triage de 1 token de Jev contra el router propio.
+- Actividades: clasificador rápido (reglas/intención) primero y supervisor LLM para ambiguos; deriva a info/citas/checkout/safety; trazas del ruteo; clase 30 min: panorama (OpenAI Agents SDK, MS Agent Framework, Strands — handoffs, hooks, workflows) con la comparativa de Langfuse y por qué seguimos en LangGraph (ADR-010); comparar la lib `langgraph-supervisor` y el triage de 1 token de Jev contra el router propio. **Contraste en vivo:** el `prompt_supervisor.txt` del SOC del curso 1 intenta imponer el flujo por texto ("no vuelvas a ejecutar", "máximo 3 delegaciones") — frágil; la lección: la estructura vive en el grafo, no en el prompt.
 - Criterios: [ ] ≥13/15 mensajes ruteados bien; [ ] fallback a LLM en ambiguos; [ ] trazas muestran el ruteo; [ ] nota de la comparativa entregada.
 - Evidencia: PR + tabla de ruteo + nota.
 - Foco de evaluación: comprensión, criterio.

@@ -35,6 +35,7 @@
 | Fuente | Rol | Consultar |
 |---|---|---|
 | `Nicolepcx/ai-agents-the-definitive-guide` (CH01–CH12) | Eje conceptual del programa (ver `definitive-guide.md`). Libro O'Reilly publicado el 6-oct-2026 (376 pp, aún sin reseñas que lo validen → lectura guiada, no verdad) | semana a semana según matriz |
+| «Comprehensive Guide to AI Agent Engineering» (Vasilyev, MIT, 138 pp) | Guía de apoyo de alumnos: loops, context rot, compaction, memoria, tools, HITL, seguridad, evals, costos (ver `agent-engineering-handbook.md`) | por partes, según matriz semanal |
 | Langfuse — comparativa de frameworks (actualizada 2026) | Guion de la clase de panorama S10 | una sola clase, 20–30 min |
 | Taller O'Reilly "Harness Engineering for Long-Running Agent Skills" (10-nov, Koenigstein) | Contenido avanzado (skills versionadas, repair loops). Intermedio-avanzado, requiere OpenRouter + Langfuse/LangSmith; sin precio suelto (solo suscripción O'Reilly USD 49/mes); repo "to come" | **No comprar para el monitor.** Si hay curiosidad: trial gratuito y ver 2 h |
 
@@ -51,7 +52,7 @@
 | 2. The AI Engineer Course 2026 (365 Careers) | 77 secciones · 445 lecciones · 29h46m · 4.5★ (25.9k) · inglés · actualizado ago-2026 | Complemento para nivelar: módulo LangGraph real (sin interrupt) + Chroma local/Pinecone. Reseñas negativas: desactualización y poca profundidad |
 | 3. Intro to AI Agents and Agentic AI (365 Careers) | 2h11m · 4.5★ (90k) · inglés | Contexto de negocio (2 h): conceptual, n8n, menciona frameworks sin código de grafo |
 
-**Gap global:** ninguno cubre Ollama/modelos locales ni WhatsApp → eso se cubre con docs oficiales y tutoriales puntuales. Nunca son fuente de verdad; si contradicen una doc oficial, gana la doc. Precios fluctúan (cupones no verificables; rango típico S/40–57): comprar solo en oferta.
+**Gap global:** ninguno cubre Ollama ni WhatsApp. Plan de refuerzo con compras opcionales (máx. 1–2, ~$20–30 en oferta) en `01_CURRICULUM/cursos_de_refuerzo.md`; alternativas gratis: docs Meta/Ollama/ChatOllama, video de Dani Fuyà (WhatsApp + LangGraph, stack casi idéntico) y plantillas FastAPI de GitHub. Nunca son fuente de verdad; si contradicen una doc oficial, gana la doc.
 
 ## Kit de rescate (síntoma → fuente)
 

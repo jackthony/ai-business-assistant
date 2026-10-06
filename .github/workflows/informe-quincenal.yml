@@ -33,6 +33,9 @@ jobs:
           # presentación = sábado siguiente (el informe se entrega el sábado de la quincena)
           days_to_sat = (5 - now.weekday()) % 7 or 7
           presentacion = (now + dt.timedelta(days=days_to_sat)).date()
+          # etiqueta de quincena: S4 D1 = 2026-10-06 (ajustar si cambia el calendario SENATI)
+          week = 4 + (now.date() - dt.date(2026, 10, 6)).days // 7
+          quincena = f"S{max(1, week - 1)}–S{week}"
 
           def gh(args):
               return subprocess.run(["gh"] + args, capture_output=True, text=True)
@@ -65,7 +68,7 @@ jobs:
 
               lines = []
               lines.append(f"## Registro quincenal — {name} (borrador automático)\n")
-              lines.append(f"- **Quincena:** {since.date()} → {now.date()} (S3–S4)")
+              lines.append(f"- **Quincena:** {since.date()} → {now.date()} ({quincena})")
               lines.append(f"- **Presentación:** sábado {presentacion}")
               lines.append("> ⚠️ Este borrador se **regenera cada noche (mar–vie)** con tu actividad real de GitHub: no lo edites aquí. Completa horas, seguridad (ATS), reflexiones en tu **Word FPE (CNIU-108)** y pégalo ahí. Tu expediente en `program/05_EVALUATION/students/` es el respaldo.\n")
 
@@ -110,7 +113,8 @@ jobs:
               if existing:
                   num = existing[0]["number"]
                   subprocess.run(["gh", "api", "-X", "PATCH", f"repos/{REPO}/issues/{num}",
-                                  "-f", f"body={body}"], capture_output=True, text=True)
+                                  "-f", f"title={title}", "-f", f"body={body}"],
+                                 capture_output=True, text=True)
                   print(f"{name}: refrescado (#{num})")
                   continue
               r = gh(["issue", "create", "-R", REPO, "-t", title, "-b", body, "-l", "senati"])

@@ -2,7 +2,7 @@
 
 - **Programa:** HealthTech Software & AI — SENATI 2026 (ciclo 3)
 - **Fase:** Semana 4 — Producto (Issues #2–#4) con **cierre S3 acelerado integrado** · Q1 entregado; Q2 en curso
-- **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del viernes alimenta ese informe.
+- **Informe FPE (CNIU-108) revisado:** registro diario con horas (LUN–SÁB + total), PEA de 151 operaciones (pendiente SINFO, Issue #6) y tarea significativa con proceso/herramientas/seguridad (ATS)/diagrama + firma del monitor. La demo del D3 (jue 8-oct) alimenta ese informe.
 - **Repo único:** https://github.com/jackthony/ai-business-assistant
 - **Board:** https://github.com/users/jackthony/projects/3 — público desde 2026-10-06 (practicantes solo lectura; lo ven en la pestaña Projects del repo). Asignaciones: campo `Alumno` + assignee en cada Issue (#2 Josue · #3 Pilar · #4 Allan · #11–#13 informes)
 - **Issue actual:** #2 (setup FastAPI + CI) — hoy lo arranca Josue por la mañana; Allan y Pilar se suman por la noche
@@ -46,7 +46,8 @@
 
 ### Rutina semanal (no son Issues)
 - **Martes:** el workflow `crear-issues-semana` crea los Issues de la semana en el board desde el backlog; yo asigno el campo `Alumno`.
-- **Viernes (Día 3):** leer digest + revisar PRs (DeepSeek reviewer) + nota preliminar en Excel + escuchar la sustentación quincenal (el informe lo redacta el alumno).
+- **Jueves (Día 3):** revisar PRs (DeepSeek reviewer) + nota preliminar en Excel + escuchar la sustentación quincenal (el informe lo redacta el alumno).
+- **Viernes:** leer el digest semanal y confirmar que los borradores FPE (mar–vie, automáticos) estén completos para la sustentación del sábado.
 
 ## Decisiones recientes (resumen)
 

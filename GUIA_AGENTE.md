@@ -27,7 +27,7 @@
 | **YouTube (gratis)** | Dani Fuyà «WhatsApp AI Support Agent with RAG & Memory» (34 min, stack casi idéntico) · MoureDev «Domina la IA Local» (1h12) | S4 (Fuyà) · S5 (MoureDev) |
 | **Libros/guías** | «AI Agents: The Definitive Guide» (matriz semanal en `definitive-guide.md`) · «Comprehensive Guide to AI Agent Engineering» (handbook) · Microservices Patterns (S10, liberado por el autor) | según matriz semanal |
 | **GitHub (leer código real)** | `langchain-ai/langgraph`, `david-lev/pywa`, `fbsamples/whatsapp-api-examples`, `jackthony/IA-local` (Jev), `openai/openai-agents-python` — lista completa y licencias en `source_map.md` N2 | según Issue (#3/#4 pywa+fbsamples; S5+ langgraph) |
-| **LinkedIn (lista del LT)** | *(pendiente: el LT pasa su lista de recursos de LinkedIn Learning/posts — anotar aquí qué mirar y cuándo)* | TBD |
+| **Curaduría del LT** | Ya integrada: los agentes auditaron en 2026-10-06 los proyectos de GitHub/LangChain/LangGraph interesantes (qué sirve, qué mejorar, qué no se tiene en cuenta) y quedó curado en `source_map.md` N1–N4 + `cursos_de_refuerzo.md` (los 3 de Udemy son justo ese contenido) | semana a semana, según la matriz del plan |
 
 Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper > "lo dijo un LLM"**. Tú (IA) nunca eres la fuente de verdad: verifica contra las fuentes y dilo cuando no sepas.
 

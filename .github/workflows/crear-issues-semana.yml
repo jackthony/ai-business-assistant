@@ -17,7 +17,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Crear Issues de la semana desde el backlog
         env:
-          GH_TOKEN: ${{ github.token }}
+          # BOARD_PAT: actor real para que el evento "issues: opened" SÍ dispare
+          # issue-on-create.yml (los eventos creados con GITHUB_TOKEN no disparan
+          # otros workflows). Sin el PAT: se crean igual, el monitor sincroniza el board a mano.
+          GH_TOKEN: ${{ secrets.BOARD_PAT != '' && secrets.BOARD_PAT || github.token }}
         run: |
           python3 - <<'PY'
           import datetime as dt, re, subprocess
@@ -96,10 +99,8 @@ jobs:
               url = r.stdout.strip()
               if url.startswith("https://"):
                   created += 1
-                  subprocess.run(["gh", "project", "item-add", "3", "--owner", "jackthony",
-                                  "--url", url], capture_output=True, text=True)
-                  subprocess.run(["gh", "project", "item-edit", "3", "--owner", "jackthony",
-                                  "--url", url, "--field", "Semana", "--value", f"S{s}"],
-                                 capture_output=True, text=True)
+                  # El board lo sincroniza issue-on-create.yml al recibir el evento
+                  # (por eso este step usa BOARD_PAT como actor). No duplicar aquí:
+                  # los comandos `gh project` fallan en CI con GH_TOKEN.
           print(f"S{week}: {created} issues creados")
           PY

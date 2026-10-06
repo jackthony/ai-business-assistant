@@ -31,6 +31,7 @@
 |---|---|---|
 | `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit |
 | `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, ≤6 commits |
+| `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) — la mesa de revisión del Día 3 lista sola |
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, cierra PRs >48 h, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |

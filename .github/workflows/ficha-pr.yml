@@ -1,0 +1,104 @@
+name: ficha-pr
+
+# Ficha de revisión automática en cada PR: qué Issue cierra, qué archivos toca,
+# qué tests trae y qué debe verificar el monitor. No requiere secretos: es la
+# "mesa de revisión" del Día 3 lista antes de que el monitor abra el PR.
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: read
+
+jobs:
+  ficha:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Publicar ficha de revisión
+        env:
+          PR_NUM: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          python3 - <<'PY'
+          import os, re, subprocess
+
+          pr_num = os.environ["PR_NUM"]
+          base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]
+          body = os.environ.get("PR_BODY") or ""
+
+          def run(*a):
+              return subprocess.run(a, capture_output=True, text=True).stdout.strip()
+
+          # Issue que cierra
+          issue_ref = "—"
+          criterios = ""
+          m = re.search(r"(?i)(closes|fixes|resolves)\s+#(\d+)", body)
+          if m:
+              num = m.group(2)
+              ib = run("gh", "api", f"repos/{os.environ['GH_REPO']}/issues/{num}",
+                       "--jq", ".title + \"|\" + .body")
+              if "|" in ib:
+                  ttl, idd = ib.split("|", 1)
+                  issue_ref = f"#{num} {ttl}"
+                  for sec in ("criterios", "definición de hecho", "criterios de aceptación"):
+                      mm = re.search(rf"(?is)##?\s*{re.escape(sec)}[^\n]*\n(.*?)(?=\n##?\s|\Z)", idd)
+                      if mm:
+                          criterios = mm.group(1).strip()
+                          break
+
+          # Qué toca
+          files = run("git", "diff", "--name-only", base, head).splitlines()
+          stat = run("git", "diff", "--stat", base, head)
+          tests = [f for f in files if f.startswith("tests/") and f.endswith(".py")]
+          srcs = [f for f in files if f.startswith("src/")]
+          otros = [f for f in files if f not in tests and f not in srcs]
+
+          def li(x):
+              return (", ".join(f"`{i}`" for i in x[:12]) or "ninguno") + (" …" if len(x) > 12 else "")
+
+          ficha = f"""## 📋 Ficha de revisión (automática — para el monitor)
+
+- **Autor:** {os.environ["PR_AUTHOR"]} · **PR:** {os.environ["PR_TITLE"]}
+- **Cierra:** {issue_ref}
+
+### Qué toca
+
+- **Código (`src/`):** {li(srcs)}
+- **Tests:** {li(tests)}
+- **Otros:** {li(otros)}
+
+```
+{stat}
+```
+
+### Contra qué se evalúa (rúbrica)
+
+- **Criterios del Issue** (abajo) — lo que el PR debe cubrir
+- **4 puertas del CI** (`ruff`, `mypy`, `pytest`, `bandit`) — obligatorias para mergear
+- **Sin secretos ni datos reales** (fixtures anonimizados)
+- **Preguntas de comprensión** de la plantilla del PR — demuestran que entiende lo que hizo
+
+{criterios if criterios else "> Criterios: ver el cuerpo del Issue."}
+
+---
+_La nota final la decide el monitor (`program/05_EVALUATION/rubric.md`)._
+"""
+          with open("ficha.md", "w") as f:
+              f.write(ficha)
+          run("gh", "pr", "comment", pr_num, "--body-file", "ficha.md")
+          print("ficha publicada")
+          PY

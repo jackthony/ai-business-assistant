@@ -33,6 +33,23 @@
 - **Milestones** = HITO 1 / 2 / 3 / Demo final; **Releases** = uno por hito con notas.
 - **Labels** = semana (`week:S5` se creará al usarla), `tipo:*`, `alumno:*`, `blocked`, `hito`, `senati`.
 
+## Seguimiento del avance (híbrido)
+
+**Automático (GitHub lo hace solo):**
+- CI en cada PR: verde/rojo bloquea el merge (nadie avanza con tests rotos).
+- Project board (cuando esté creado): el estado cambia solo al abrir/cerrar Issues y PRs.
+- Milestones: barra de avance % por HITO.
+- **Digest semanal** (`.github/workflows/digest-semanal.yml`): cada viernes crea un Issue resumen por alumno (PRs movidos, Issues abiertos). Se prueba con *Actions → Digest semanal → Run workflow*.
+- Dependabot y alertas de seguridad: solas.
+
+**Manual (monitor, ~45 min el Día 3):**
+- Review de PRs de la semana (checklist + DeepSeek como revisor): comprensión, calidad, criterios del Issue.
+- Llenar `EVALUACION` del Excel (nota preliminar).
+- Anotar patrones en expedientes (`05_EVALUATION/students/`).
+- Quincenal: sustentación + `SEGUIMIENTO_QUINCENAL` + informe SENATI.
+
+Regla: la automatización dice **dónde** mirar; el monitor decide **cómo va**.
+
 ## Acceso
 
 - Practicantes: colaboradores con push vía PR (branch corta por Issue; `main` protegido desde que el plan lo permita).
@@ -52,6 +69,7 @@ Regla: si algo cambia en GitHub y tiene copia en Drive, la copia se regenera; nu
 ## Acciones pendientes
 
 1. Project board: ejecutar `gh auth refresh -s project` y crear el Project único (o crearlo en la web de GitHub).
-2. Aprobar el mapa v2 (`01_CURRICULUM/16_week_plan.md`) y publicar el detalle de sesiones (bloques S1–S4, S5–S8, S9–S12, S13–S16).
+2. Publicar el bloque final de sesiones S13–S16 (`16_week_plan.md`).
 3. S4: `src/`, CI, `docs/CONTEXT.md` y `docs/ARCHITECTURE.md` dentro de este mismo repo (Issue #01).
 4. Agregar a Allan, Pilar y Josue como colaboradores cuando se tengan sus usuarios de GitHub.
+5. Probar el digest semanal (Actions → "Digest semanal" → Run workflow) y crear el Project board.

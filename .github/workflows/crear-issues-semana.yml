@@ -23,7 +23,7 @@ jobs:
           GH_TOKEN: ${{ secrets.BOARD_PAT != '' && secrets.BOARD_PAT || github.token }}
         run: |
           python3 - <<'PY'
-          import datetime as dt, re, subprocess
+          import datetime as dt, json, re, subprocess
 
           REPO = "jackthony/ai-business-assistant"
           START_S4_D1 = dt.date(2026, 10, 5)  # lunes de S4 (ajustar si cambia el calendario SENATI)

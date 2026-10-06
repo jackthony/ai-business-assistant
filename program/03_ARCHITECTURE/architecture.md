@@ -50,6 +50,7 @@ class AgentState(TypedDict):
 - **Permisos por nivel:** N1 automático (info/RAG/disponibilidad) · N2 con aprobación/HITL (agendar, validar comprobante, registrar lead) · N3 nunca expuesto (borrar, precios base).
 - **Efectos con gating:** `draft_effects → human_review (interrupt) → apply_effects` — evita dobles cobros/citas al reanudar un checkpoint.
 - **Validación determinista primero** (Pydantic/regex en tools); LLM-as-a-Judge solo offline.
+- **Decisiones rápidas (patrón Jev, MIT):** clasificar/rutear con salida tipada de 1 token + logprobs y umbral de confianza; bajo el umbral → handoff. Aplica a triage (#16), router (#19) y evals (#27) — ver `program/02_REFERENCE/jev-pattern.md`.
 - **RAG íntegro:** provenance por documento; jamás re-ingerir salidas del bot (ASI06).
 - **Intent gate + action log:** validar esquema/rate-limit antes de cada tool; toda escritura con log y undo.
 - **Métricas de ROI** instrumentadas desde S4 (ver `program/00_PROJECT/roi_metrics.md`).

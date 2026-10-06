@@ -270,7 +270,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D2 — Issue #17: HITL con interrupt + permisos N1/N2/N3**
 - Objetivo: cuando el bot se congela, avisa a Jioysi y un humano reanuda.
-- Actividades: `interrupt()` de LangGraph; alerta a Jioysi (WhatsApp/Email); clasificar tools por nivel (N1 auto: RAG/precios/disponibilidad · N2 aprobación: agendar/registrar/validar pago · N3 nunca: borrar/precios base); patrón `draft → review → apply`; probar reanudación sin re-ejecutar efectos.
+- Actividades: `interrupt()` de LangGraph; alerta a Jioysi (WhatsApp/Email) dentro del SLA del negocio (10 min, `04_CONFIG`); clasificar tools por nivel (N1 auto: RAG/precios/disponibilidad · N2 aprobación: agendar/registrar/validar pago · N3 nunca: borrar/precios base); patrón `draft → review → apply`; probar reanudación sin re-ejecutar efectos.
 - Entregable: PR #17.
 - Criterios: [ ] pausa y reanuda con `Command(resume=)`; [ ] alerta real recibida por Jioysi (prueba); [ ] tools clasificadas N1/N2/N3; [ ] efecto no se duplica al reanudar (test).
 - Evidencia: PR + captura de alerta + test de re-ejecución.

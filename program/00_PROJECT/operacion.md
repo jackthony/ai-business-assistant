@@ -12,7 +12,7 @@
 | Milestones: HITO 1 (S6) · HITO 2 (S9) · HITO 3 (S12) · Demo final (S16) | ✅ aplicados |
 | Dependabot (pip + Actions) | ✅ aplicado |
 | Board [projects/3](https://github.com/users/jackthony/projects/3) con campos Status/Semana/Alumno/Area/Complejidad — **público** (practicantes solo lectura), enlazado al repo | ✅ activo |
-| Ruleset `main protegido (TBD)`: PR obligatorio, squash/lineal, sin force-push, checks `guardian-tbd / reglas-tbd` **y** `CI estricto / calidad` + push protection | ✅ activo |
+| Ruleset `main protegido (TBD)`: PR obligatorio, squash/lineal, sin force-push, required checks **por nombre de job**: `reglas-tbd` **y** `calidad` (⚙️ NO usar "workflow / job": con ese formato quedan "Expected" para siempre) + push protection | ✅ activo |
 
 ## DevSecOps — toda la seguridad en GitHub (sin Google Drive)
 

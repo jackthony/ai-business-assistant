@@ -42,6 +42,13 @@
 
 ### Trazabilidad (evidencia SENATI)
 
+#### Estructura de Projects (todo conectado, nada suelto)
+- **Trackers con sub-issues:** cada semana tiene su tracker (`[S##] Semana N — tracker: …`) y los 3 Issues del día cuelgan como sub-issues (#25 → #2/#3/#4 y siguientes automáticos). Trackers permanentes: **#26 Gestión** (→#5–#8/#10/#16) y **#27 Informes FPE** por quincena (→#11–#13).
+- **Milestones:** HITO 1 (S6), HITO 2 (S9), HITO 3 (S12), Demo final (S16) — asignados automáticamente según la semana.
+- **Views del board:** Tabla por Semana · Board por Estado · Roadmap (+ la vista original).
+- **Labels:** `tipo:` (feature/bug/docs/infra/gestion) · `alumno:` (allan/pilar/josue) · `week:S##` · `hito` · `senati` · flujo pull (`disponible`/`apoyo`/`propuesta`).
+- Regla: todo Issue nuevo lleva tracker padre, milestone y label — si algo queda suelto, el monitor lo reubica en su revisión.
+
 - **Issues** = backlog #01–#39 (un Issue por sesión con criterios de aceptación; el workflow `crear-issues-semana` los crea cada domingo por la noche, listos para el lunes de Josue y el miércoles de Pilar).
 - **PRs** = evidencia individual; cierran con `Closes #NN`; review del monitor (DeepSeek como reviewer).
 - **Milestones** = hitos; **Releases** = uno por hito con notas.
@@ -50,17 +57,17 @@
 
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
-| `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit |
+| `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit + 5.º chequeo determinista: el núcleo no importa canales/servicios/HTTP (`estandares.md` §2) |
 | `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits convencionales (cantidad libre) |
-| `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) — la mesa de revisión del Día 3 lista sola |
+| `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) + checkbox mecánico de estándares (capas, secretos, src sin tests) |
 | `release.yml` | push de tag (`v*`/`hito-*`/`q*`) | publica el Release con notas generadas — tags del plan: `hito-1` (S6), `q4` (S8), `hito-2` (S9), `q5` (S10), `hito-3` (S12), `q6` (S12), `v1.0` (S16) |
 | `issue-on-create.yml` | cada Issue nuevo | lo agrega al board con `Semana` (del título `[S## D#]`) y `Alumno` (del assignee) — soporta el flujo pull |
 | `issue-closed.yml` | cada Issue cerrado | los Issues no se cierran sin terminar (PR mergeado) ni justificar: si un practicante cierra sin eso, se **reabre solo** |
-| `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
+| `deepseek-review.yml` | cada PR | primer pase de review con DeepSeek API (activo con `DEEPSEEK_API_KEY`): revisa TBD, CI, arquitectura y **estándares** (`estandares.md`); la nota final la decide el monitor |
 | `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, avisa PRs >4 días y cierra >7 días, borra ramas muertas |
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |
 | `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
-| `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea los Issues de la semana (título `[S## D#]`) con lecturas + detalle de la sesión y los agrega al board (✅ probado) |
+| `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea el **tracker semanal** `[S##]` + los Issues del día `[S## D#]` (lecturas + detalle + pack + estándares), los enlaza como **sub-issues** del tracker, les pone **milestone** por hito (S4–6→HITO 1, S7–9→HITO 2, S10–12→HITO 3, S13–16→Demo) y el board los sincroniza solo |
 
 ## Seguimiento del avance (híbrido)
 

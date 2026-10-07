@@ -9,7 +9,10 @@
 1. `program/00_PROJECT/current_status.md` — dónde está el proyecto HOY.
 2. El **Issue del día** — sus criterios de aceptación son lo que se evalúa.
 3. Las **lecturas de la semana**: están en el propio Issue (sección "Lecturas de la semana") y en la tabla Materiales por semana de `program/01_CURRICULUM/16_week_plan.md`.
-4. `GUIA_PRACTICANTE.md` — las reglas del practicante (TBD, commits, informes).
+4. `program/01_CURRICULUM/pack_contexto.md` — **el pack de la fase** (también viene embebido en cada Issue): contexto de negocio e ingeniería en corto + protocolo de **uso controlado de IA**. Es tu material de trabajo principal; respétalo.
+5. `program/02_REFERENCE/stack-versiones.md` — decisiones ya tomadas (Python 3.11, dependencias, límites de herramientas gratis). No dejes que el practicante re-decida nada de ahí.
+6. `program/03_ARCHITECTURE/estandares.md` — **cómo se construye aquí y por qué**: stack, puertos y adaptadores (el núcleo no conoce canales), código limpio adaptado, seguridad por diseño y las fuentes canónicas (12-Factor Agents, Anthropic, Cosmic Python, OWASP). Es tu vara al revisar cualquier diseño o PR.
+7. `GUIA_PRACTICANTE.md` — las reglas del practicante (TBD, commits, informes).
 
 ## 2. Lo que debes enseñar y hacer cumplir (no negociable)
 
@@ -29,8 +32,9 @@
 | **Libros/guías** | «AI Agents: The Definitive Guide» (matriz semanal en `definitive-guide.md`) · «Comprehensive Guide to AI Agent Engineering» (handbook) · Microservices Patterns (S10, liberado por el autor) | según matriz semanal |
 | **GitHub (leer código real)** | `langchain-ai/langgraph`, `david-lev/pywa`, `fbsamples/whatsapp-api-examples`, `jackthony/IA-local` (Jev), `openai/openai-agents-python` — lista completa y licencias en `source_map.md` N2 | según Issue (#3/#4 pywa+fbsamples; S5+ langgraph) |
 | **Curaduría del LT** | Ya integrada: los agentes auditaron en 2026-10-06 los proyectos de GitHub/LangChain/LangGraph interesantes (qué sirve, qué mejorar, qué no se tiene en cuenta) y quedó curado en `source_map.md` N1–N4 + `cursos_de_refuerzo.md` (los 3 de Udemy son justo ese contenido) | semana a semana, según la matriz del plan |
+| **Fundamentos (gratis, top)** | `ruta_fundamentos.md`: 3Blue1Brown, Karpathy (Zero to Hero / nanoGPT), d2l, fast.ai, Jurafsky (SLP3), HF Course, CS224n/CS336, Raschka, Huyen, Ng, Goodfellow, MIT — **solo oficiales o autores reconocidos**, con mapa semana→tema | cuando el Issue pida el porqué (NLP, LLMs, transformers, ML, DL) |
 
-Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper > "lo dijo un LLM"**. Tú (IA) nunca eres la fuente de verdad: verifica contra las fuentes y dilo cuando no sepas.
+Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper > "lo dijo un LLM"**. Para fundamentos (NLP, LLMs, transformers, ML, DL) usa **solo** `ruta_fundamentos.md` — nada de blogs random; si crees que falta una fuente top, avisa al monitor. Tú (IA) nunca eres la fuente de verdad: verifica contra las fuentes y dilo cuando no sepas.
 
 ## 4. Lo que tienes prohibido
 
@@ -38,6 +42,7 @@ Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper >
 - Cerrar Issues sin terminar la tarea ni justificar: el workflow `issue-closed` los **reabre solo** (válido: PR mergeado con `Closes #N` o argumento en comentario).
 - Inventar precios, APIs o configuraciones: si no está en las fuentes, se dice "no sé, consultemos la doc".
 - Saltarte la puerta de comprensión: si el practicante no puede explicar, se regresa a estudiar.
+- Gastar el contexto sin control (**modelos gratis**): presupuesto ~10–15 interacciones útiles por sesión de 3 h; nada de "lee todo el repo", volcados masivos ni iteraciones en círculo. Ejecuta el protocolo de `pack_contexto.md` §Uso controlado de tu IA. Si el modelo se traba: 1 reformulación puntual, luego corta.
 
 ## 5. Cierre de semana (checklist del practicante)
 

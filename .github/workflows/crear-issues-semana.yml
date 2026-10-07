@@ -14,13 +14,16 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 (pin por SHA)
       - name: Crear Issues de la semana desde el backlog
         env:
-          GH_TOKEN: ${{ github.token }}
+          # BOARD_PAT: actor real para que el evento "issues: opened" SÍ dispare
+          # issue-on-create.yml (los eventos creados con GITHUB_TOKEN no disparan
+          # otros workflows). Sin el PAT: se crean igual, el monitor sincroniza el board a mano.
+          GH_TOKEN: ${{ secrets.BOARD_PAT != '' && secrets.BOARD_PAT || github.token }}
         run: |
           python3 - <<'PY'
-          import datetime as dt, re, subprocess
+          import datetime as dt, json, re, subprocess
 
           REPO = "jackthony/ai-business-assistant"
           START_S4_D1 = dt.date(2026, 10, 5)  # lunes de S4 (ajustar si cambia el calendario SENATI)
@@ -55,16 +58,61 @@ jobs:
                   break
 
           created = 0
+          s_pad = f"S{week:02d}"
+          MILESTONES = {
+              (4, 6): "HITO 1 — Bot Hola Mujer respondiendo (S6)",
+              (7, 9): "HITO 2 — Agente único completo + handoff (S9)",
+              (10, 12): "HITO 3 — NeuraCode + multimodal (S12)",
+              (13, 16): "Demo final — Transferencia (S16)",
+          }
+          milestone = next(t for (a, b), t in MILESTONES.items() if a <= week <= b)
+
+          def gh_run(args):
+              return subprocess.run(["gh"] + args, capture_output=True, text=True)
+
+          def gql(q):
+              r = gh_run(["api", "graphql", "-f", f"query={q}"])
+              try:
+                  return json.loads(r.stdout)
+              except Exception:
+                  return {}
+
+          def issue_id(num):
+              d = gql('query { repository(owner: "jackthony", name: "ai-business-assistant") '
+                      f'{{ issue(number: {num}) {{ id }} }} }}').get("data", {}).get("repository", {})
+              return d.get("issue", {}).get("id")
+
+          # Tracker semanal (idempotente): el padre de los sub-issues del día
+          ht = re.search(rf"(?m)^### Semana {week} — (.+)$", plan_text)
+          bloque_titulo = ht.group(1).strip() if ht else f"Semana {week}"
+          trl = json.loads(gh_run(["issue", "list", "-R", REPO, "--state", "all",
+                                   "--search", f'in:title "[{s_pad}] Semana {week}"', "--json", "number"]).stdout or "[]")
+          if trl:
+              tracker = trl[0]["number"]
+              print(f"tracker existe: #{tracker}")
+          else:
+              r = gh_run(["issue", "create", "-R", REPO,
+                          "-t", f"[{s_pad}] Semana {week} — tracker: {bloque_titulo}",
+                          "-b", (f"Tracker de la semana {week}. Los Issues del día se agregan como sub-issues.\n\n"
+                                 f"- Pack de contexto: `program/01_CURRICULUM/pack_contexto.md` §Semana {week}\n"
+                                 f"- Fundamentos: `program/01_CURRICULUM/ruta_fundamentos.md` §mapa semana→tema"),
+                          "-l", "senati", "--milestone", milestone])
+              tracker = int(r.stdout.strip().rstrip("/").split("/")[-1]) if r.stdout.startswith("https://") else 0
+              print(f"tracker creado: #{tracker}")
+
+          dailies_nums = []
           for m in re.finditer(r"^\| #(\d+) \| S(\d+) D(\d+) \| (.+?) \| .* \|$", backlog, re.M):
               num, s, d, title = m.groups()
               if int(s) != week:
                   continue
-              s_pad = f"S{int(s):02d}"
               t = f"[{s_pad} D{d}] {title.strip()}"
               existing = subprocess.run(["gh", "issue", "list", "-R", REPO, "--state", "all",
                                          "--search", f'in:title "{s_pad} D{d}"', "--json", "number"],
                                         capture_output=True, text=True)
               if existing.stdout.strip() not in ("", "[]"):
+                  nums_ex = json.loads(existing.stdout)
+                  if nums_ex:
+                      dailies_nums.append(nums_ex[0]["number"])
                   print(f"existe ({s_pad} D{d}): {t}")
                   continue
               detalle = ""
@@ -72,12 +120,32 @@ jobs:
                   dm = re.search(rf"\*\*D{d}\s*[—–-].*?\*\*\s*(.*?)(?=\n\*\*D\d\s*[—–-]|\n## |\Z)",
                                  week_block, re.S)
                   detalle = dm.group(1).strip() if dm else ""
+              pack = ""
+              try:
+                  with open("program/01_CURRICULUM/pack_contexto.md", encoding="utf-8") as pf:
+                      pm = re.search(rf"(?ms)^## Semana {int(s)}\b(.*?)(?=^## |\Z)", pf.read())
+                  pack = pm.group(1).strip() if pm else ""
+              except FileNotFoundError:
+                  pass
               body = (f"> Creado automáticamente desde `program/01_CURRICULUM/issues_backlog.md` "
                       f"(S{s} D{d}).\n\n"
                       f"## Lecturas de la semana (antes de codear)\n\n"
                       f"{lecturas or 'Ver la tabla Materiales por semana en `program/01_CURRICULUM/16_week_plan.md`.'}\n\n"
                       f"## Detalle de la sesión (bloque {s_pad} del plan `16_week_plan.md`)\n\n"
                       f"{detalle}\n\n"
+                      f"## Pack de contexto de la semana (léelo ANTES de abrir tu IA)\n\n"
+                      f"{pack or 'Ver `program/01_CURRICULUM/pack_contexto.md`.'}\n\n"
+                      "## Uso de tu IA (controlado)\n\n"
+                      "Presupuesto ~10–15 interacciones útiles por sesión · un prompt = una tarea verificable · "
+                      "adjunta solo los archivos del pack (nunca todo el repo) · prohibido pedir el Issue entero, "
+                      "informes o que la IA commitee · tú ejecutas, verificas y firmas lo que subes "
+                      "(protocolo completo en `program/01_CURRICULUM/pack_contexto.md`).\n\n"
+                      "## Estándares obligatorios (los revisan el CI, la ficha y DeepSeek)\n\n"
+                      "- Núcleo (`agents/`, `tools/`, `rag/`) sin importar canales, servicios ni HTTP → **puertos y adaptadores**.\n"
+                      "- Identificadores en **inglés**; textos al usuario y prompts en **español peruano**.\n"
+                      "- Contratos Pydantic en cada frontera; tests por criterio del Issue.\n"
+                      "- Seguridad: sin secretos ni datos reales; escrituras con confirmación (N2).\n"
+                      "- Simplicidad primero. Porqués y prompt de diseño listo para tu IA en `program/03_ARCHITECTURE/estandares.md` §6.\n\n"
                       "## Reglas TBD y de calidad (las verifican los guardianes y el CI)\n\n"
                       "- Rama `issue-N-<slug>` desde `main`, `Closes #N` en el PR (cantidad de commits libre; el merge squash une todo).\n"
                       "- **Commits estrictos** (ver `GUIA_PRACTICANTE.md` §Commits): `tipo(alcance): verbo imperativo`, "
@@ -92,14 +160,23 @@ jobs:
               subprocess.run(["gh", "label", "create", f"week:S{s}", "-R", REPO, "--force"],
                              capture_output=True, text=True)
               r = subprocess.run(["gh", "issue", "create", "-R", REPO, "-t", t, "-b", body,
-                                  "-l", f"week:S{s},senati"], capture_output=True, text=True)
+                                  "-l", f"week:S{s},senati", "--milestone", milestone],
+                                 capture_output=True, text=True)
               url = r.stdout.strip()
               if url.startswith("https://"):
                   created += 1
-                  subprocess.run(["gh", "project", "item-add", "3", "--owner", "jackthony",
-                                  "--url", url], capture_output=True, text=True)
-                  subprocess.run(["gh", "project", "item-edit", "3", "--owner", "jackthony",
-                                  "--url", url, "--field", "Semana", "--value", f"S{s}"],
-                                 capture_output=True, text=True)
-          print(f"S{week}: {created} issues creados")
+                  dailies_nums.append(int(url.rstrip("/").split("/")[-1]))
+                  # El board lo sincroniza issue-on-create.yml al recibir el evento
+                  # (por eso este step usa BOARD_PAT como actor). No duplicar aquí:
+                  # los comandos `gh project` fallan en CI con GH_TOKEN.
+          # Enlazar los Issues del día como sub-issues del tracker (idempotente)
+          if tracker:
+              pid = issue_id(tracker)
+              for num in sorted(set(dailies_nums)):
+                  cid = issue_id(num)
+                  if pid and cid:
+                      res = gql(f'mutation {{ addSubIssue(input: {{issueId: "{pid}", subIssueId: "{cid}"}}) {{ subIssue {{ number }} }} }}')
+                      ok2 = res.get("data", {}).get("addSubIssue")
+                      print(f"sub-issue #{num}: {'vinculado' if ok2 else 'ya vinculado'}")
+          print(f"S{week}: {created} issues creados · tracker #{tracker or '-'} · milestone: {milestone}")
           PY

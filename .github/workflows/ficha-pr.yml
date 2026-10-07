@@ -34,7 +34,7 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
           python3 - <<'PY'
-          import os, re, subprocess
+          import os, re, subprocess, json
 
           pr_num = os.environ["PR_NUM"]
           base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]
@@ -50,22 +50,40 @@ jobs:
           if m:
               num = m.group(2)
               ib = run("gh", "api", f"repos/{os.environ['GH_REPO']}/issues/{num}",
-                       "--jq", ".title + \"|\" + .body")
-              if "|" in ib:
-                  ttl, idd = ib.split("|", 1)
+                       "--jq", '{t:.title, b:(.body // ""), a:[.assignees[].login], l:[.labels[].name]}')
+              try:
+                  meta = json.loads(ib)
+                  ttl, idd = meta["t"], meta["b"]
                   issue_ref = f"#{num} {ttl}"
+                  owners = meta.get("a", [])
+                  if owners and os.environ["PR_AUTHOR"] not in owners and "disponible" not in meta.get("l", []):
+                      issue_ref += f" ⚠️ asignado a @{' @'.join(owners)} — política de equipo: verificar permiso/justificación"
                   for sec in ("criterios", "definición de hecho", "criterios de aceptación"):
                       mm = re.search(rf"(?is)##?\s*{re.escape(sec)}[^\n]*\n(.*?)(?=\n##?\s|\Z)", idd)
                       if mm:
                           criterios = mm.group(1).strip()
                           break
+              except Exception:
+                  pass
 
-          # Qué toca
-          files = run("git", "diff", "--name-only", base, head).splitlines()
-          stat = run("git", "diff", "--stat", base, head)
+          # Qué toca — diff de 3 puntos (merge-base..head): solo lo que aporta ESTE PR,
+          # no lo que main movió después de ramificar (dos puntos muestra falsos borrados).
+          files = run("git", "diff", "--name-only", f"{base}...{head}").splitlines()
+          stat = run("git", "diff", "--stat", f"{base}...{head}")
           tests = [f for f in files if f.startswith("tests/") and f.endswith(".py")]
           srcs = [f for f in files if f.startswith("src/")]
           otros = [f for f in files if f not in tests and f not in srcs]
+
+          # Chequeo mecánico de estándares (estandares.md §2–4)
+          nucleo = [f for f in files if f.startswith(("src/agents/", "src/tools/", "src/rag/"))]
+          capas_err = run("grep", "-rnE", r"(import|from)[[:space:]]+(src\.(channels|services)|httpx|requests)", *nucleo) if nucleo else ""
+          diff_txt = run("git", "diff", f"{base}...{head}")
+          secretos = re.findall(
+              r"(AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ghp_[A-Za-z0-9]{36}|sk-[A-Za-z0-9]{20,})",
+              diff_txt)
+
+          def chk(msg, ok):
+              return ("✅ " if ok else "⚠️ ") + msg
 
           def li(x):
               return (", ".join("`" + i + "`" for i in x[:12]) or "ninguno") + (" …" if len(x) > 12 else "")
@@ -86,10 +104,31 @@ jobs:
           lines.append(stat)
           lines.append("```")
           lines.append("")
+          lines.append("### 🔎 Chequeo automático de estándares (`estandares.md`)")
+          lines.append("")
+          capas_msg = "**Capas:** el núcleo no importa canales/servicios/HTTP (§2)"
+          if capas_err:
+              capas_msg += f"\n\n```\n{capas_err}\n```"
+          lines.append(chk(capas_msg, not capas_err))
+          sec_msg = "**Secretos en el diff:** ninguno" if not secretos else f"**Secretos en el diff:** 🚨 detectado `{secretos[0][:12]}…` — no pushear"
+          lines.append(chk(sec_msg, not secretos))
+          if not srcs:
+              tst_msg, tst_ok = "**Tests:** n/a (no toca `src/`)", True
+          elif tests:
+              tst_msg, tst_ok = "**Tests:** hay `src/` y también `tests/`", True
+          else:
+              tst_msg, tst_ok = "**Tests:** toca `src/` sin tocar `tests/` — justifica o agrega tests", False
+          lines.append(chk(tst_msg, tst_ok))
+          deps = [f for f in files if f.endswith("pyproject.toml") or "requirements" in f]
+          if deps:
+              lines.append("📦 **Dependencias tocadas:** " + ", ".join(f"`{d}`" for d in deps[:5]) +
+                           " — ¿está en `stack-versiones.md`? Pieza nueva = requiere ADR (ADR-010).")
+          lines.append("")
           lines.append("### Contra qué se evalúa (rúbrica)")
           lines.append("")
           lines.append("- **Criterios del Issue** (abajo) — lo que el PR debe cubrir")
           lines.append("- **4 puertas del CI** (`ruff`, `mypy`, `pytest`, `bandit`) — obligatorias para mergear")
+          lines.append("- **Estándares de `estandares.md`** (§2–4): capas, idioma (código EN / usuario ES), seguridad, simplicidad")
           lines.append("- **Sin secretos ni datos reales** (fixtures anonimizados)")
           lines.append("- **Preguntas de comprensión** de la plantilla del PR — demuestran que entiende lo que hizo")
           lines.append("")

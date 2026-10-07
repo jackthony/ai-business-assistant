@@ -14,6 +14,7 @@
 
 - [ ] Sin secretos ni tokens en el diff
 - [ ] Sin datos reales de clientes (fixtures anonimizados)
+- [ ] Estándares (`estandares.md`): núcleo sin canales/servicios/HTTP · inglés en código, español peruano al usuario · simplicidad primero
 - [ ] Branch `issue-NN-slug` corta (TBD) — sin merges largos
 - [ ] Docs/README actualizados si aplica
 - [ ] Evidencia adjunta (captura, video o log)

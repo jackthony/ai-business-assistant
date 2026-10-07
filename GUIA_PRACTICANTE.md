@@ -58,7 +58,7 @@ tipo(alcance): verbo en imperativo, sin punto final, ≤72 caracteres
 4. Tests que cubran los **criterios del Issue** (casos borde incluidos). Antes de pushear corre las 4 puertas:
    `ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && bandit -r src -x tests -ll`
 5. `git push -u origin issue-N-<slug>` **cuantas veces quieras** (cada push corre el CI y queda respaldado) y abre el PR con la plantilla: sección "Cómo se probó", checklist, evidencia (captura/video) y **`Closes #N` en el cuerpo**. ¿Aún no está listo? Ábrelo como **Draft** y conviértelo cuando termines.
-6. Espera CI verde (4 puertas) y el review del monitor. **Ambos checks son obligatorios para mergear**: `guardian-tbd / reglas-tbd` y `CI estricto / calidad`. Si el repo tiene `DEEPSEEK_API_KEY`, DeepSeek deja un primer pase de review automático en tu PR; la nota final la pone el monitor. El merge es **squash** a `main`; la rama muere y el Issue se cierra solo.
+6. Espera CI verde (4 puertas + chequeo de capas de `estandares.md`) y el review del monitor. **Ambos checks son obligatorios para mergear**: `guardian-tbd / reglas-tbd` y `CI estricto / calidad`. Si el repo tiene `DEEPSEEK_API_KEY`, DeepSeek deja un primer pase de review automático en tu PR (y la ficha del PR muestra un chequeo automático de estándares); la nota final la pone el monitor. El merge es **squash** a `main`; la rama muere y el Issue se cierra solo.
 
 **Qué NO hacer (lo vigila `tbd-enforcer` automáticamente):**
 - Push directo a `main` → **se revierte** y se te avisa.

@@ -31,11 +31,14 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0 (pin por SHA)
         with:
           python-version: "3.11"
-          cache: pip
+          # caché solo si ya existe un archivo de dependencias; si no, setup-python falla
+          cache: ${{ hashFiles('**/requirements*.txt', '**/pyproject.toml') != '' && 'pip' || '' }}
       - name: Instalar toolchain
         run: |
           pip install -q ruff mypy pytest bandit
-          if [ -f requirements.txt ]; then pip install -q -r requirements.txt; fi
+          # Fuente única de dependencias: pyproject (estándar del programa);
+          # requirements.txt solo como compatibilidad para ramas antiguas.
+          if [ -f pyproject.toml ]; then pip install -q -e .; elif [ -f requirements.txt ]; then pip install -q -r requirements.txt; fi
       - name: 1. Lint — ruff (cero warnings)
         run: |
           if [ -d src ] || [ -d tests ]; then
@@ -59,8 +62,20 @@ jobs:
       - name: 4. Seguridad — bandit (alta y media)
         run: |
           if [ -d src ]; then bandit -r src -x tests -ll; else echo "sin src — skip"; fi
+      - name: 5. Estándares — capas del núcleo (estandares.md §2)
+        run: |
+          DIRS=""
+          for d in src/agents src/tools src/rag; do [ -d "$d" ] && DIRS="$DIRS $d"; done
+          if [ -z "$DIRS" ]; then echo "sin núcleo todavía — skip"; exit 0; fi
+          if grep -rnE "(import|from)[[:space:]]+(src\.(channels|services)|httpx|requests)" $DIRS; then
+            echo "::error::El núcleo (agents/tools/rag) no puede conocer canales, servicios ni HTTP: usa un puerto (ver program/03_ARCHITECTURE/estandares.md §2)."
+            exit 1
+          fi
+          echo "capas OK"
 
   dependency-review:
+    # la acción solo entiende PRs; en push a main fallaría sin este if
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     permissions:
       contents: read

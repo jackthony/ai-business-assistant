@@ -66,9 +66,10 @@ jobs:
               except Exception:
                   pass
 
-          # Qué toca
-          files = run("git", "diff", "--name-only", base, head).splitlines()
-          stat = run("git", "diff", "--stat", base, head)
+          # Qué toca — diff de 3 puntos (merge-base..head): solo lo que aporta ESTE PR,
+          # no lo que main movió después de ramificar (dos puntos muestra falsos borrados).
+          files = run("git", "diff", "--name-only", f"{base}...{head}").splitlines()
+          stat = run("git", "diff", "--stat", f"{base}...{head}")
           tests = [f for f in files if f.startswith("tests/") and f.endswith(".py")]
           srcs = [f for f in files if f.startswith("src/")]
           otros = [f for f in files if f not in tests and f not in srcs]
@@ -76,7 +77,7 @@ jobs:
           # Chequeo mecánico de estándares (estandares.md §2–4)
           nucleo = [f for f in files if f.startswith(("src/agents/", "src/tools/", "src/rag/"))]
           capas_err = run("grep", "-rnE", r"(import|from)[[:space:]]+(src\.(channels|services)|httpx|requests)", *nucleo) if nucleo else ""
-          diff_txt = run("git", "diff", base, head)
+          diff_txt = run("git", "diff", f"{base}...{head}")
           secretos = re.findall(
               r"(AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ghp_[A-Za-z0-9]{36}|sk-[A-Za-z0-9]{20,})",
               diff_txt)

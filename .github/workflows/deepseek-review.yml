@@ -48,8 +48,10 @@ jobs:
           def run(*args):
               return subprocess.run(args, capture_output=True, text=True)
 
-          diff = run("git", "diff", "--unified=2", base, head).stdout[:8000]
-          files = run("git", "diff", "--name-only", base, head).stdout.strip().splitlines()
+          # Diff de 3 puntos (merge-base..head): solo los cambios del PR.
+          # Con dos puntos, si main avanzó tras ramificar, se ven "borrados" falsos.
+          diff = run("git", "diff", "--unified=2", f"{base}...{head}").stdout[:8000]
+          files = run("git", "diff", "--name-only", f"{base}...{head}").stdout.strip().splitlines()
           cuerpo_issue = run("gh", "api", f"repos/jackthony/ai-business-assistant/issues/{pr_num}", "--jq", ".body").stdout
           import re
           m = re.search(r"(?i)(closes|fixes|resolves)\s+#(\d+)", os.environ["PR_BODY"])

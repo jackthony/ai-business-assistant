@@ -22,7 +22,7 @@
 **Rangos de dependencias aceptados** (cuando los necesites, en `pyproject.toml`):
 `fastapi>=0.115,<1` · `uvicorn[standard]>=0.30,<1` · `httpx>=0.27,<1` · `python-dotenv>=1,<2` · `langgraph>=0.2,<1` · `langchain-core>=0.3,<1` · `langchain-ollama>=0.2,<1` · `chromadb>=0.5,<1` · `openpyxl>=3.1,<4`
 
-**Claves de `.env.example`** (S4): `APP_ENV` · `WHATSAPP_VERIFY_TOKEN` · `WHATSAPP_TOKEN` · `WHATSAPP_PHONE_NUMBER_ID`. Valores de ejemplo/vacíos, nunca reales.
+**Claves de `.env.example`** (S4): `APP_ENV` · `WHATSAPP_VERIFY_TOKEN` · `WHATSAPP_APP_SECRET` · `WHATSAPP_TOKEN` · `WHATSAPP_PHONE_NUMBER_ID` · `LOG_LEVEL` (opcional). Valores de ejemplo/vacíos, nunca reales.
 
 **Comandos Windows** (PCs de practicantes):
 ```

@@ -38,7 +38,7 @@ jobs:
           pip install -q ruff mypy pytest bandit
           # Fuente única de dependencias: pyproject (estándar del programa);
           # requirements.txt solo como compatibilidad para ramas antiguas.
-          if [ -f pyproject.toml ]; then pip install -q -e .; elif [ -f requirements.txt ]; then pip install -q -r requirements.txt; fi
+          if [ -f pyproject.toml ]; then pip install -q -e ".[dev]"; elif [ -f requirements.txt ]; then pip install -q -r requirements.txt; fi
       - name: 1. Lint — ruff (cero warnings)
         run: |
           if [ -d src ] || [ -d tests ]; then

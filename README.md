@@ -5,6 +5,15 @@ Repositorio único (**público** desde 2026-10-06): **programa de prácticas** (
 - **Board de seguimiento (público, solo lectura para practicantes):** https://github.com/users/jackthony/projects/3 (campos Status, Semana, Alumno, Area, Complejidad) — también en la pestaña Projects del repo
 - **Estado siempre vigente:** `program/00_PROJECT/current_status.md`
 
+## Empieza aquí (practicantes) — antes de tocar nada
+
+Trabaja **siempre** en una carpeta ordenada, no en Descargas. Un solo comando la crea, clona el repo, prepara el entorno y te deja tu bitácora del día (corre el mismo cada día de práctica):
+
+- **Windows:** `powershell -ExecutionPolicy Bypass -File tools\onboarding\empezar.ps1`
+- **macOS/Linux:** `bash tools/onboarding/empezar.sh`
+
+Dejará `senati-2026/` con `ai-business-assistant/` (aquí se programa), `bitacora/`, `evidencias/`, `informes/` y `notas-estudio/`. Detalle y el porqué de cada cosa: [`tools/onboarding/README.md`](tools/onboarding/README.md) y [`GUIA_PRACTICANTE.md`](GUIA_PRACTICANTE.md). Tu primera semana empieza con la **inducción** (`program/01_CURRICULUM/induccion_s5.md`): el negocio, la visión y el porqué de cada paso.
+
 ## Regla de oro
 
 | Artefacto | Rol |

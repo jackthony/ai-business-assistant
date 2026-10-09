@@ -36,6 +36,9 @@ VISTAS = [  # (nombre, layout, filtro)
     ("📣 Disponibles (pull)", "TABLE_LAYOUT", "label:disponible -status:Done"),
     ("🧑‍🏫 Gestión del monitor", "TABLE_LAYOUT", "area:Gestión -status:Done"),
 ]
+RENOMBRES = {
+    "View 1": "📋 Resumen del proyecto"
+}  # la vista por defecto no dice nada: se nombra por lo que muestra
 CAMPOS_VISIBLES = [
     "Title", "Assignees", "Status", "Alumno", "Semana", "Complejidad", "Fecha objetivo",
     "Labels", "Linked pull requests", "Parent issue", "Sub-issues progress",
@@ -126,9 +129,23 @@ def main() -> int:
                     "-f", f"v={vid}",
                 )  # fmt: skip
 
+    # 3a) nombres claros para las vistas por defecto
+    for viejo, nuevo in RENOMBRES.items():
+        if viejo in existentes and not dry:
+            gql(
+                "mutation($v:ID!,$n:String!){ updateProjectV2View(input:{viewId:$v,name:$n}){ projectV2View{ id } } }",
+                v=existentes[viejo], n=nuevo,
+            )  # fmt: skip
+            existentes[nuevo] = existentes.pop(viejo)
+            print(f"~ vista '{viejo}' -> '{nuevo}'")
+
     # 3b) columnas útiles también en las vistas que ya existían (no se toca su filtro)
     if not dry and visibles:
-        for nombre in ("View 1", "Tabla por Semana", "Board por Estado"):
+        for nombre in (
+            "📋 Resumen del proyecto",
+            "Tabla por Semana",
+            "Board por Estado",
+        ):
             if nombre in existentes:
                 gh(
                     "api", "graphql", "-f",

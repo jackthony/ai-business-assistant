@@ -117,3 +117,13 @@ def test_merge_propone_informe_pull_y_apoyo():
 def test_todos_los_dias_de_practica_son_validos():
     for alumno in co.ALUMNOS:
         assert alumno["dias"] and all(0 <= d <= 4 for d in alumno["dias"])
+
+
+def test_aviso_personal_y_general_se_combinan_y_respetan_al_alumno():
+    assert "inducción" in co.aviso_para("adbon-dm1", dt.date(2026, 10, 12))
+    assert co.aviso_para("estefanyP-hub", dt.date(2026, 10, 12)) is None
+    assert "inducción" in co.aviso_para("WhoAllan", dt.date(2026, 10, 14))
+    assert (
+        co.aviso_para("WhoAllan", dt.date(2026, 10, 9)) is not None
+    )  # general del viernes
+    assert co.aviso_para("WhoAllan", dt.date(2026, 11, 2)) is None

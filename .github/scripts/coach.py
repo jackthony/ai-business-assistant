@@ -65,6 +65,17 @@ def hubo_actividad(eventos: list[dict[str, Any]], fecha: dt.date) -> bool:
     return False
 
 
+def aviso_para(login: str, fecha: dt.date) -> str | None:
+    """Aviso de calendario de ese día: el personal de `avisos_por_alumno` y/o el general de `avisos`."""
+    dia = fecha.isoformat()
+    partes = [
+        CONFIG.get("avisos", {}).get(dia),
+        CONFIG.get("avisos_por_alumno", {}).get(dia, {}).get(login),
+    ]
+    texto = "\n\n".join(p for p in partes if p)
+    return texto or None
+
+
 def enlaces(login: str) -> str:
     return (
         f"[Board]({BOARD}) · "
@@ -434,11 +445,11 @@ def publicar(
 
 
 def modo_programado(modo: str, fecha: dt.date, dry: bool, solo: str | None) -> None:
-    aviso = CONFIG.get("avisos", {}).get(fecha.isoformat())
     for alumno in ALUMNOS:
         login = alumno["login"]
         if solo and login != solo:
             continue
+        aviso = aviso_para(login, fecha)
         if not practica_hoy(alumno, fecha) and not (modo == "arranque" and aviso):
             print(
                 f"{login}: hoy ({DIAS[fecha.weekday()]}) no es día de práctica — omitido"

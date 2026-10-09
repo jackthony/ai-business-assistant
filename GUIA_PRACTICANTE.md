@@ -16,6 +16,8 @@
 
 ## 2. Primer día: descargar y preparar
 
+> **Atajo recomendado (hace los pasos 2–5 por ti y te enseña el orden profesional):** `powershell -ExecutionPolicy Bypass -File tools\onboarding\empezar.ps1` (Windows) o `bash tools/onboarding/empezar.sh` (macOS/Linux). Crea tu carpeta ordenada `senati-2026/` (`ai-business-assistant/` · `bitacora/` · `evidencias/` · `informes/` · `notas-estudio/`), clona o actualiza el repo, prepara el entorno de Python 3.11, instala pre-commit, revisa que tu correo de git sea el privado de GitHub y te crea la bitácora del día. **Córrelo todos los días de práctica.** Si descargaste el proyecto en *Descargas* o como ZIP, no trabajes ahí: el script te lleva a la carpeta ordenada. Abajo están los mismos pasos a mano, con su porqué.
+
 1. Aceptar la invitación de colaborador (correo de GitHub).
 2. `git clone https://github.com/jackthony/ai-business-assistant.git && cd ai-business-assistant`
 3. Entorno (**Windows — tu caso**): `py -3.11 -m venv .venv` y activa con `.venv\Scripts\activate` (PowerShell: `.venv\Scripts\Activate.ps1`); luego `pip install -e ".[dev]"` (o `uv sync`); si aún no hay `pyproject.toml`, `pip install -r requirements.txt`. En macOS/Linux: `python -m venv .venv && source .venv/bin/activate`.

@@ -5,12 +5,48 @@
   "project_id": "PVT_kwHOApTTrs4Bl4tv",
   "tz": "America/Lima",
   "alumnos": [
-    {"nombre": "Josue Marreros", "login": "adbon-dm1", "label": "alumno:josue", "dias": [0, 1, 2]},
-    {"nombre": "Pilar Aguilar", "login": "estefanyP-hub", "label": "alumno:pilar", "dias": [2, 3, 4]},
-    {"nombre": "Allan Zerpa", "login": "WhoAllan", "label": "alumno:allan", "dias": [2, 3, 4]}
+    {
+      "nombre": "Josue Marreros",
+      "login": "adbon-dm1",
+      "label": "alumno:josue",
+      "dias": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "nombre": "Pilar Aguilar",
+      "login": "estefanyP-hub",
+      "label": "alumno:pilar",
+      "dias": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "nombre": "Allan Zerpa",
+      "login": "WhoAllan",
+      "label": "alumno:allan",
+      "dias": [
+        2,
+        3,
+        4
+      ]
+    }
   ],
   "avisos": {
     "2026-10-09": "Mañana sábado 10-oct es la presentación del informe quincenal: hoy deja tu PR listo y tu informe (Issues #11, #12 o #13) revisado. La demo del ciclo es hoy.",
     "2026-10-10": "Hoy es la presentación del informe quincenal (formato FPE: tarea significativa con proceso, herramientas, seguridad ATS y diagrama). Después del informe, pasa a los Issues `disponible`."
+  },
+  "avisos_por_alumno": {
+    "2026-10-12": {
+      "adbon-dm1": "Hoy empiezas S5 con la **inducción** (90–120 min con el monitor): el negocio, la visión, las herramientas y el porqué de cada paso. Antes, 30 min de lectura: `program/01_CURRICULUM/induccion_s5.md` (sección «Antes de la sesión»). Al cerrar entregas tu *mapa de una página*."
+    },
+    "2026-10-14": {
+      "estefanyP-hub": "Hoy empiezas S5 con la **inducción** (90–120 min con el monitor): el negocio, la visión, las herramientas y el porqué de cada paso. Antes, 30 min de lectura: `program/01_CURRICULUM/induccion_s5.md` (sección «Antes de la sesión»). Al cerrar entregas tu *mapa de una página*.",
+      "WhoAllan": "Hoy empiezas S5 con la **inducción** (90–120 min con el monitor): el negocio, la visión, las herramientas y el porqué de cada paso. Antes, 30 min de lectura: `program/01_CURRICULUM/induccion_s5.md` (sección «Antes de la sesión»). Al cerrar entregas tu *mapa de una página*."
+    }
   }
 }

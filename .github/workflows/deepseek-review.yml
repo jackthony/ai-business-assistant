@@ -71,7 +71,7 @@ jobs:
           2. **Fortalezas** (2-3 viñetas)
           3. **Problemas** (viñetas con archivo y línea si aplica; N/A si no hay)
           4. **Preguntas de comprensión para el practicante** (2-3 preguntas que demuestren que entiende lo que hizo, no que lo hizo un agente)
-          5. **Nota preliminar sugerida** (1-5, referencia: program/05_EVALUATION/rubric.md)
+          (No incluyas ninguna nota numérica: la evaluación la decide el monitor.)
           PR: {os.environ['PR_TITLE']}
           Archivos: {', '.join(files[:20])}
           Diff:\n{diff}\n

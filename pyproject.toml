@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-asyncio", "ruff", "mypy", "bandit", "pre-commit"]
+dev = ["pytest", "pytest-asyncio>=0.23", "respx>=0.21", "ruff", "mypy", "bandit", "pre-commit"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

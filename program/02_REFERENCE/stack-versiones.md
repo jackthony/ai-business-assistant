@@ -20,7 +20,9 @@
 | Método de trabajo | **Contract-first en fronteras** (Pydantic primero) + **TDD pragmático** (test del criterio antes/junto a la implementación) — ver `estandares.md` §3 | No escribir specs a mano ni tests "de relleno" después. |
 
 **Rangos de dependencias aceptados** (cuando los necesites, en `pyproject.toml`):
-`fastapi>=0.115,<1` · `uvicorn[standard]>=0.30,<1` · `httpx>=0.27,<1` · `python-dotenv>=1,<2` · `langgraph>=0.2,<1` · `langchain-core>=0.3,<1` · `langchain-ollama>=0.2,<1` · `chromadb>=0.5,<1` · `openpyxl>=3.1,<4`
+`fastapi>=0.115,<1` · `uvicorn[standard]>=0.30,<1` · `httpx>=0.27,<1` · `python-dotenv>=1,<2` · `langgraph>=1,<2` · `langgraph-checkpoint-sqlite>=3,<4` · `langchain-core>=1,<2` · `langchain-ollama>=1,<2` · `chromadb>=1,<2` · `openpyxl>=3.1,<4`
+
+> **Verificado el 2026-10-08** (Python 3.11.16): este conjunto resuelve e instala junto — `langgraph 1.2.14`, `langgraph-checkpoint-sqlite 3.1.1`, `langchain-core 1.6.9`, `langchain-ollama 1.1.0`, `chromadb 1.5.9`, `fastapi 0.143.0`, `openpyxl 3.1.5` — y los ejemplos de `program/02_REFERENCE/ejemplos/` pasan (67 tests). Los topes antiguos `<1` de langgraph/langchain/chromadb hacían que `pip` instalara series viejas (0.x). **`mypy` 2.x marca `add_node` de LangGraph 1.x con `call-overload`**: se silencia solo esa línea con `# type: ignore[call-overload]` (ver `ejemplos/langgraph-memoria/README.md`). Al subir un tope en el futuro, repite la verificación.
 
 **Claves de `.env.example`** (S4): `APP_ENV` · `WHATSAPP_VERIFY_TOKEN` · `WHATSAPP_APP_SECRET` · `WHATSAPP_TOKEN` · `WHATSAPP_PHONE_NUMBER_ID` · `LOG_LEVEL` (opcional). Valores de ejemplo/vacíos, nunca reales.
 

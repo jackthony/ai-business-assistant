@@ -41,6 +41,8 @@
 
 - `crear-issues-semana` (domingo 21:00 Lima + manual): crea los Issues de la semana (título `[S## D#]`) con lecturas + detalle de la sesión; idempotente por título.
 - `digest-semanal` (viernes 17:00 Lima): crea un Issue con los **commits por día**, PRs e Issues abiertos de cada alumno.
+- `coach` (lun–sáb): avisos que @mencionan al practicante en sus días de práctica (arranque 08:00, pulso 14:00 solo si no hay actividad, cierre 17:30 Lima) y al recibir revisión, asignación o merge; siempre dicen dónde mirar. Config y roster en `.github/coach.json`; lógica en `.github/scripts/coach.py`.
+- `board-sync` (eventos + nightly): sincroniza el board con labels/assignees/PRs (`.github/scripts/board_sync.py`); **tras crear o mover Issues/PRs, sincroniza el board** (`board_sync.py --all`) y revisa que se vea bien.
 - `informe-quincenal` (cada noche dom–vie 21:00 Lima + manual): crea/refresca el **borrador de informe FPE** por alumno (#11–#13) desde su actividad real (commits/PRs/Issues); el alumno completa horas, ATS, resultados y justificación.
 - Progreso visible: board público `projects/3` (solo lectura) + expedientes en `program/05_EVALUATION/students/`.
 - **Cierre de Issues:** solo con PR mergeado (`Closes #N`) o justificación escrita; si un practicante cierra sin eso, `issue-closed` lo reabre y comenta. El monitor cierra directo cuando corresponda.

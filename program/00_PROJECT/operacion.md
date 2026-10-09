@@ -69,6 +69,15 @@
 | `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
 | `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea el **tracker semanal** `[S##]` + los Issues del día `[S## D#]` (lecturas + detalle + pack + estándares), los enlaza como **sub-issues** del tracker, les pone **milestone** por hito (S4–6→HITO 1, S7–9→HITO 2, S10–12→HITO 3, S13–16→Demo) y el board los sincroniza solo |
 
+## Coach automático y board sincronizado
+
+Dos automatizaciones del monitor (lógica en `.github/scripts/`, configuración y roster en `.github/coach.json`):
+
+- **`coach.yml`** — avisos proactivos que @mencionan al practicante (lo notifica GitHub): *arranque* 08:00, *pulso* 14:00 (solo si no hay actividad; avisa al monitor) y *cierre* 17:30 (hora Lima) en **sus días de práctica** (Josue lun–mié; Pilar y Allan mié–vie), más avisos de calendario (`avisos` en `coach.json`), aviso de **revisión recibida**, **Issue asignado** y **PR mergeado** (qué sigue). Prueba local: `python .github/scripts/coach.py arranque --dry-run --fecha 2026-10-09 --solo WhoAllan`. A mano: *Actions → coach → Run workflow* (por defecto `dry_run`).
+- **`board-sync.yml`** — Alumno, Semana, Área, Complejidad y Status del board salen de labels, assignees y PRs en cada evento y cada noche. A mano: `python .github/scripts/board_sync.py --all [--dry-run]`.
+- **`board_setup.py`** (idempotente) — campo *Fecha objetivo*, vistas (`🎯 Mis tareas`, `📣 Disponibles (pull)`, `🧑‍🏫 Gestión del monitor`), columnas visibles y fechas de los hitos. Lo que la API no deja y se hace una vez en la UI: agrupar *Tabla por Semana* por Semana, *Board por Estado* por Alumno y poner *Fecha objetivo* en el Roadmap.
+- **Regla del monitor:** después de crear o mover Issues/PRs, correr `board_sync.py --all` (o esperar al workflow) y mirar el board. Roster nuevo o cambio de días → editar `coach.json`.
+
 ## Seguimiento del avance (híbrido)
 
 **Automático:** CI bloquea merge en rojo · el board cambia solo con Issues/PRs · milestones muestran % · digest e informe se generan solos.

@@ -7,6 +7,7 @@ on:
 
 permissions:
   issues: write
+  pull-requests: read
   contents: read
 
 jobs:
@@ -44,6 +45,11 @@ jobs:
               r = gh(args)
               return json.loads(r.stdout) if r.stdout.strip() else []
 
+          LIMA = dt.timezone(dt.timedelta(hours=-5))
+
+          def dia_lima(iso):
+              return dt.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(LIMA).date().isoformat()
+
           def in_range(iso, since):
               d = dt.datetime.fromisoformat(iso.replace("Z", "+00:00"))
               return d >= since
@@ -51,16 +57,25 @@ jobs:
           for name, login in STUDENTS.items():
               commits = jget(["api", f"repos/{REPO}/commits?author={login}&since={since.isoformat()}&per_page=100"])
               prs = jget(["pr", "list", "-R", REPO, "--author", login, "--state", "all",
-                          "--json", "number,title,state,mergedAt,additions,deletions", "--limit", "100"])
-              issues = jget(["issue", "list", "-R", REPO, "--author", login, "--state", "closed",
+                          "--json", "number,title,state,mergedAt,additions,deletions,commits", "--limit", "100"])
+              issues = jget(["issue", "list", "-R", REPO, "--assignee", login, "--state", "closed",
                              "--json", "number,title,closedAt", "--limit", "100"])
 
               by_day = collections.defaultdict(list)
+              vistos = set()
               for c in commits:
                   d = c["commit"]["author"]["date"]
                   if in_range(d, since):
+                      vistos.add(c["sha"][:7])
                       msg = c["commit"]["message"].split("\n")[0][:90]
-                      by_day[d[:10]].append(f"`{c['sha'][:7]}` {msg}")
+                      by_day[dia_lima(d)].append(f"`{c['sha'][:7]}` {msg}")
+              # commits de PRs (también los aún no fusionados)
+              for p in prs:
+                  for c in p.get("commits") or []:
+                      d, sha = c.get("authoredDate"), (c.get("oid") or "")[:7]
+                      if d and sha and sha not in vistos and in_range(d, since):
+                          vistos.add(sha)
+                          by_day[dia_lima(d)].append(f"`{sha}` {c.get('messageHeadline', '')[:90]} (PR #{p['number']})")
 
               merged = [p for p in prs if p.get("mergedAt") and in_range(p["mergedAt"], since)]
               open_prs = [p for p in prs if p["state"] != "MERGED" and p["state"] != "CLOSED"]

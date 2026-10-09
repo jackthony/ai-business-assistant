@@ -83,6 +83,23 @@ Tu Issue mergeado no significa "me quedo esperando". En orden:
 - **Tú:** completas horas, seguridad (ATS), resultados y la justificación de la tarea significativa; lo pasas al Word FPE (CNIU-108) y sustentas el sábado.
 - **Si no cumples la asignación:** no hay commits/PR → tu digest y tu borrador salen vacíos → no hay evidencia → los criterios del Issue se evalúan sin evidencia (afecta la nota) y tu PR se cierra solo a los 7 días.
 
+### Notificaciones: tu coach automático (actívalas una vez)
+
+Un coach automático te escribe **@mencionándote**, así que te llega una notificación de GitHub (web, correo y app móvil). Así sabes **qué hacer, dónde mirar y cuándo**, sin que nadie tenga que perseguirte:
+
+| Cuándo | Qué te llega | Dónde |
+|---|---|---|
+| Tus días de práctica, 8:00 a. m. (Lima) | **Arranque:** tu foco del día, qué leer primero, qué jalar si terminas antes | tu hilo `📣 Coach — <tu nombre>` |
+| Tus días de práctica, 2:00 p. m. | **Pulso:** solo si aún no hay actividad tuya; pregunta cómo vas y avisa al monitor | tu hilo |
+| Tus días de práctica, 5:30 p. m. | **Cierre:** qué dejar hecho antes de irte (push, PR, preguntas, Word FPE) | tu hilo |
+| Cuando revisan tu PR | **Tienes revisión:** qué hacer en orden (leer, responder, corregir, pedir revisión) | tu PR |
+| Cuando te asignan un Issue | **Primeros pasos** del Issue y dónde mirar | el Issue |
+| Cuando mergean tu PR | **¿Qué sigue?** tu informe, el siguiente Issue disponible y a quién apoyar | tu PR |
+
+**Actívalo (2 min):** GitHub → *Settings → Notifications*: deja marcadas *Participating, @mentions and custom* por **Email** y/o **Web and Mobile**; instala **GitHub Mobile** (iOS/Android) y permite notificaciones push. En este repo pulsa *Watch → All Activity*. Si no te llega un aviso, mira primero tus *spam*.
+
+**Tu centro de mando:** el [board](https://github.com/users/jackthony/projects/3) tiene vistas hechas para ti: **🎯 Mis tareas** (solo lo tuyo, sin terminar), **📣 Disponibles (pull)** (qué jalar al terminar) y **Tabla por Semana**. Se sincroniza solo con tus Issues, PRs y labels; si algo se ve mal, avisa en tu hilo.
+
 ## 6. Reglas duras (siempre)
 
 - Nada clínico: el bot deriva a humano; tú tampoco opinas de salud.

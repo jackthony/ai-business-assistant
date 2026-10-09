@@ -1,0 +1,16 @@
+{
+  "repo": "jackthony/ai-business-assistant",
+  "monitor": "jackthony",
+  "board_url": "https://github.com/users/jackthony/projects/3",
+  "project_id": "PVT_kwHOApTTrs4Bl4tv",
+  "tz": "America/Lima",
+  "alumnos": [
+    {"nombre": "Josue Marreros", "login": "adbon-dm1", "label": "alumno:josue", "dias": [0, 1, 2]},
+    {"nombre": "Pilar Aguilar", "login": "estefanyP-hub", "label": "alumno:pilar", "dias": [2, 3, 4]},
+    {"nombre": "Allan Zerpa", "login": "WhoAllan", "label": "alumno:allan", "dias": [2, 3, 4]}
+  ],
+  "avisos": {
+    "2026-10-09": "Mañana sábado 10-oct es la presentación del informe quincenal: hoy deja tu PR listo y tu informe (Issues #11, #12 o #13) revisado. La demo del ciclo es hoy.",
+    "2026-10-10": "Hoy es la presentación del informe quincenal (formato FPE: tarea significativa con proceso, herramientas, seguridad ATS y diagrama). Después del informe, pasa a los Issues `disponible`."
+  }
+}

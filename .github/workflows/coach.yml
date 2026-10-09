@@ -1,0 +1,93 @@
+name: coach
+
+# Coach proactivo: avisa a cada practicante qué hacer, dónde mirar y cuándo.
+# Los mensajes @mencionan al practicante, así que GitHub lo notifica (web, correo, app móvil).
+# Horarios en hora de Lima (UTC-5): arranque 08:00 · pulso 14:00 · cierre 17:30.
+# Lógica en .github/scripts/coach.py (prueba local: `python .github/scripts/coach.py arranque --dry-run`).
+# SEGURIDAD: siempre se ejecuta el script de la rama por defecto (nunca código de un PR) y los datos
+# del evento entran por variables de entorno, jamás interpolados en el script.
+
+on:
+  schedule:
+    - cron: "0 13 * * 1-6" # arranque — 08:00 Lima, lun–sáb (el sábado solo avisos de calendario)
+    - cron: "0 19 * * 1-5" # pulso — 14:00 Lima
+    - cron: "30 22 * * 1-5" # cierre — 17:30 Lima
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [assigned]
+  pull_request_target:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "Qué aviso generar"
+        type: choice
+        options: [arranque, pulso, cierre]
+        default: arranque
+      solo:
+        description: "Login de un solo practicante (vacío = todos)"
+        type: string
+        default: ""
+      dry_run:
+        description: "Solo imprimir, sin publicar"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: coach-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || 'cron' }}
+  cancel-in-progress: false
+
+jobs:
+  coach:
+    # En pull_request_target solo importa el PR mergeado.
+    if: github.event_name != 'pull_request_target' || github.event.pull_request.merged == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 (pin por SHA — zero trust)
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Avisar
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          IN_MODO: ${{ inputs.modo }}
+          IN_SOLO: ${{ inputs.solo }}
+          IN_DRY: ${{ inputs.dry_run }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          REVIEWER: ${{ github.event.review.user.login }}
+          REVIEW_STATE: ${{ github.event.review.state }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ASSIGNEE: ${{ github.event.assignee.login }}
+        run: |
+          set -euo pipefail
+          coach() { python3 .github/scripts/coach.py "$@"; }
+          case "$EVENT" in
+            schedule)
+              case "$SCHEDULE" in
+                "0 13 * * 1-6")  coach arranque ;;
+                "0 19 * * 1-5")  coach pulso ;;
+                *)               coach cierre ;;
+              esac ;;
+            workflow_dispatch)
+              args=()
+              [ -n "$IN_SOLO" ] && args+=(--solo "$IN_SOLO")
+              [ "$IN_DRY" = "true" ] && args+=(--dry-run)
+              coach "$IN_MODO" "${args[@]}" ;;
+            pull_request_review)
+              coach revision --pr "$PR_NUM" --autor "$PR_AUTHOR" --reviewer "$REVIEWER" --estado "$REVIEW_STATE" ;;
+            issues)
+              coach asignado --issue "$ISSUE_NUM" --asignado "$ASSIGNEE" --titulo "$ISSUE_TITLE" ;;
+            pull_request_target)
+              coach merge --pr "$PR_NUM" --autor "$PR_AUTHOR" ;;
+          esac

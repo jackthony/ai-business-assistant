@@ -54,6 +54,7 @@
 - **Negocio en foco:** cada mensaje de una clienta entra por el webhook y una respuesta del negocio sale por el sender. Es la puerta de entrada: si esto no funciona, nada más importa.
 - **Lee antes (repo):** tu Issue (`#2`/`#3`/`#4` en GitHub) · `program/02_REFERENCE/whatsapp-cloud-api.md` (§Puntos clave) · `program/03_ARCHITECTURE/decisions/ADR-011-canal-agnostico.md` · `program/02_REFERENCE/stack-versiones.md`.
 - **Fuentes externas:** la FORMA del payload real en `fbsamples/whatsapp-api-examples` o `david-lev/pywa` (solo mirar, no copiar) · quickstart de ngrok o `cloudflared tunnel`.
+- **Ejemplos guiados (con tests, cárgalos antes que cualquier tutorial):** `program/02_REFERENCE/ejemplos/webhook-meta/` para #3 (firma HMAC + payload) · `program/02_REFERENCE/ejemplos/sender-httpx/` para #4 (reintento + latencia con `MockTransport`) · `program/02_REFERENCE/ejemplos/pr-ejemplo.md` (cómo se ve un PR completo). No resuelven tu Issue: son bloques que tú conectas al contrato.
 - **No cargues:** el plan completo · ADRs que no sean de tu semana · el Excel del negocio (para #2/#3/#4 no hacen falta sus datos).
 - **Con tu IA, ejemplo bueno:** "Implementa `parse_message(payload)` en `src/channels/whatsapp/webhook.py` según el contrato `InboundEvent` de ADR-011: devuelve wa_id, texto y tipo; ignora `statuses`. Genera también su test con `tests/fixtures/webhook_text.json`. Sin llamadas reales a Meta."
 - **Mal pedido:** "ármame el webhook de WhatsApp" (sin contrato, sin archivos, sin tests).
@@ -65,6 +66,7 @@
 - **Negocio en foco:** el bot debe **hablar como Hola Mujer**: ≤3 líneas, 1 pregunta por turno, español peruano empático, nunca inventar precios.
 - **Lee antes (repo):** tu Issue (`#04`/`#05`/`#06`) · `program/02_REFERENCE/agent-engineering-handbook.md` (Partes II–III) · `ADR-002` y `ADR-008` · secciones del prompt/tono en `program/04_DOMAIN/hola-mujer.md`.
 - **Fuentes externas:** documentación oficial de LangGraph (conceptos StateGraph/checkpoint), nada más.
+- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/langgraph-memoria/` (estado + reducer + `SqliteSaver` + `thread_id` = teléfono, con test de reinicio y nota de seguridad `LANGGRAPH_STRICT_MSGPACK`).
 - **No cargues:** ETL/Chroma (S6) ni agentes (S7): no los necesitas aún.
 - **Con tu IA:** pide el grafo mínimo con su test de CLI por partes; para el prompt, pide componentes separados (identidad, tono, límites) — nunca un monolito.
 - **Listo cuando:** grafo compilando y respondiendo por CLI, prompt versionado en `configs/hola_mujer/prompt_v1.md`, memoria por teléfono sobrevive reinicio.
@@ -86,6 +88,7 @@
 - **Lee antes (repo):** tus Issues (`#10`/`#11`/`#12`) · `ADR-007` · handbook (Parte VI: diseñar la ACI/tools).
 - **No cargues:** pagos (S10), recordatorios (S13): fuera de fase.
 - **Con tu IA:** schemas Pydantic estrictos con tests de argumentos inválidos; revisión de colisiones caso por caso.
+- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/s7-tools-y-citas/` (tool con Pydantic estricto + errores tipados; reserva sin colisiones ni duplicados con `request_id`). Vocabulario de arquitectura: `ejemplos/patrones-arquitectura.md`.
 - **Listo cuando:** 0 precios inventados, guardrail probado, tool-calling local funcionando, 0 colisiones en 10 pruebas.
 - **Fundamentos si te trabas:** Nivel 4 Anthropic (tool-use) + 12-Factor Agents; Nivel 2 HF (agents).
 
@@ -95,9 +98,34 @@
 - **Lee antes (repo):** tus Issues (`#13`/`#14`/`#25`) · `ADR-009` y `ADR-005` · `program/02_REFERENCE/observabilidad-costos.md`.
 - **Fuentes externas:** docs de Langfuse self-host (Docker) solo para levantarlo en la M5.
 - **Con tu IA:** mock de Sheets para los tests; pruebas de idempotencia (mismo `request_id` no duplica).
+- **Ejemplo guiado:** la idempotencia ya está explicada con tests en `program/02_REFERENCE/ejemplos/s7-tools-y-citas/reserva_idempotente.py`; úsala como modelo para la escritura en Sheets.
 - **Listo cuando:** flujo info→cita→datos completo, dashboard con 3 métricas, release `q4`.
 - **Fundamentos si te trabas:** Nivel 4 «LLM Engineer's Handbook» (observabilidad) + Langfuse (`source_map.md`).
 
 ---
 
-S9–S16: su bloque se añade al inicio de cada quincena (los Issues dominicales lo incluirán automáticamente).
+## Semana 9 — Safety + HITL + HITO 2: el bot nunca improvisa en salud
+
+- **Negocio en foco:** si el tema es médico o de emergencia, el bot **se detiene** y deriva a Jioysi con un mensaje puente fijo y sin diagnóstico. Toda escritura real pasa por aprobación humana (ADR-009).
+- **Lee antes (repo):** tus Issues (`#16`/`#17`/`#18`) · `ADR-009` · `program/02_REFERENCE/agent-engineering-handbook.md` (HITL/seguridad) · `program/04_DOMAIN/hola-mujer.md` (protocolo de seguridad clínica).
+- **Fuentes externas:** documentación oficial de LangGraph (*Interrupts*) · patrones `input_guardrails` y `human_in_the_loop` de `openai/openai-agents-python` (solo leer el patrón; no se adopta el SDK).
+- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/s9-guardrail-y-gate/` (guardrail con duda→humano + gate `borrador → interrupt → aplicar`). Pregúntate siempre: ¿hay algún efecto antes del `interrupt`?
+- **No cargues:** OCR, supervisor y multitenant (S10): fuera de fase.
+- **Con tu IA:** un prompt = un nodo con su test; el clasificador de riesgo se **inyecta** (en tests, un doble). Pide los 15 casos (10 normales, 5 de riesgo) como tabla antes de calibrar el umbral.
+- **Listo cuando:** 5/5 casos de riesgo congelados, 0/10 falsos positivos, reanudación con `Command(resume=)` sin duplicar el efecto, y las preguntas de comprensión respondidas.
+- **Fundamentos si te trabas:** OWASP Agentic (ASI) y GenAI Top 10 2026 en `source_map.md`; Nivel 4 Anthropic (tool-use).
+
+## Semana 10 — OCR + supervisor + multitenant: un núcleo, varios negocios
+
+- **Negocio en foco:** leer el comprobante Yape/Plin sin humano cuando es el caso feliz, rutear cada mensaje al agente correcto y que NeuraCode viva en el mismo núcleo sin mezclar datos con Hola Mujer.
+- **Lee antes (repo):** tus Issues (`#15`/`#19`/`#20`) · `ADR-010` · `ADR-011` · `program/02_REFERENCE/ejemplos/patrones-arquitectura.md` (qué patrones de microservicios aplican y cuáles no).
+- **Fuentes externas:** `microservices.io` (Saga, Tenant isolation) · `routing.py` y `deterministic.py` de `openai/openai-agents-python` solo para comparar con LangGraph.
+- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/s10-router-saga-tenant/` (router reglas→LLM con seguridad primero, saga con compensación, aislamiento por tenant).
+- **No cargues:** el Excel completo del negocio ni datos reales de comprobantes; los 8 casos de OCR son capturas de prueba anonimizadas.
+- **Con tu IA:** pide primero la tabla de 15 mensajes con su ruta esperada, luego el router; el fallback LLM se inyecta y tiene su test con un doble.
+- **Listo cuando:** ≥13/15 ruteos correctos con traza, dudas del comprobante → humano, tenant desconocido = error, y la nota de comparativa de frameworks entregada.
+- **Fundamentos si te trabas:** *Microservices Patterns* (Richardson) y la comparativa de Langfuse (`source_map.md`).
+
+---
+
+S11–S16: su bloque se añade al inicio de cada quincena (los Issues dominicales lo incluirán automáticamente).

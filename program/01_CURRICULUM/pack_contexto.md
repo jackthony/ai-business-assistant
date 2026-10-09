@@ -54,6 +54,7 @@
 - **Negocio en foco:** cada mensaje de una clienta entra por el webhook y una respuesta del negocio sale por el sender. Es la puerta de entrada: si esto no funciona, nada más importa.
 - **Lee antes (repo):** tu Issue (`#2`/`#3`/`#4` en GitHub) · `program/02_REFERENCE/whatsapp-cloud-api.md` (§Puntos clave) · `program/03_ARCHITECTURE/decisions/ADR-011-canal-agnostico.md` · `program/02_REFERENCE/stack-versiones.md`.
 - **Fuentes externas:** la FORMA del payload real en `fbsamples/whatsapp-api-examples` o `david-lev/pywa` (solo mirar, no copiar) · quickstart de ngrok o `cloudflared tunnel`.
+- **Ejemplos guiados (con tests, cárgalos antes que cualquier tutorial):** `program/02_REFERENCE/ejemplos/webhook-meta/` para #3 (firma HMAC + payload) · `program/02_REFERENCE/ejemplos/sender-httpx/` para #4 (reintento + latencia con `MockTransport`) · `program/02_REFERENCE/ejemplos/pr-ejemplo.md` (cómo se ve un PR completo). No resuelven tu Issue: son bloques que tú conectas al contrato.
 - **No cargues:** el plan completo · ADRs que no sean de tu semana · el Excel del negocio (para #2/#3/#4 no hacen falta sus datos).
 - **Con tu IA, ejemplo bueno:** "Implementa `parse_message(payload)` en `src/channels/whatsapp/webhook.py` según el contrato `InboundEvent` de ADR-011: devuelve wa_id, texto y tipo; ignora `statuses`. Genera también su test con `tests/fixtures/webhook_text.json`. Sin llamadas reales a Meta."
 - **Mal pedido:** "ármame el webhook de WhatsApp" (sin contrato, sin archivos, sin tests).
@@ -65,6 +66,7 @@
 - **Negocio en foco:** el bot debe **hablar como Hola Mujer**: ≤3 líneas, 1 pregunta por turno, español peruano empático, nunca inventar precios.
 - **Lee antes (repo):** tu Issue (`#04`/`#05`/`#06`) · `program/02_REFERENCE/agent-engineering-handbook.md` (Partes II–III) · `ADR-002` y `ADR-008` · secciones del prompt/tono en `program/04_DOMAIN/hola-mujer.md`.
 - **Fuentes externas:** documentación oficial de LangGraph (conceptos StateGraph/checkpoint), nada más.
+- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/langgraph-memoria/` (estado + reducer + `SqliteSaver` + `thread_id` = teléfono, con test de reinicio y nota de seguridad `LANGGRAPH_STRICT_MSGPACK`).
 - **No cargues:** ETL/Chroma (S6) ni agentes (S7): no los necesitas aún.
 - **Con tu IA:** pide el grafo mínimo con su test de CLI por partes; para el prompt, pide componentes separados (identidad, tono, límites) — nunca un monolito.
 - **Listo cuando:** grafo compilando y respondiendo por CLI, prompt versionado en `configs/hola_mujer/prompt_v1.md`, memoria por teléfono sobrevive reinicio.

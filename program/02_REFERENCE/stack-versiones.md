@@ -9,6 +9,7 @@
 | **Python** | **3.11** (3.11.x) | El CI ya usa 3.11 y el stack (LangGraph, ChromaDB) está verificado ahí. No uses 3.12/3.13 aunque tu PC lo traiga. `.python-version` en el repo lo fija para pyenv. |
 | Entorno | `venv` simple (`python -m venv .venv`) | Menos piezas que poetry/conda; el CI instala igual. |
 | Toolchain (local = CI) | `ruff` `mypy` `pytest` `bandit` | Las 4 puertas obligatorias; el CI las instala sin pinear. |
+| Tests async y mocks HTTP | `pytest-asyncio` + `respx` (extras `[dev]` de `pyproject.toml`) | Probar el sender sin llamar a Meta; el CI instala `.[dev]`. Alternativa sin dependencia: `httpx.MockTransport`. |
 | Web | FastAPI + Uvicorn | ADR-001. |
 | HTTP cliente | `httpx` (async) | Estándar moderno; `requests` no. |
 | Config | `python-dotenv` + `.env` (nunca al repo) | `.env.example` sí va al repo. |

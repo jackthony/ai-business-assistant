@@ -55,6 +55,10 @@ jobs:
           r = gh("pr", "create", "--draft", "--base", "main", "--head", branch,
                  "--title", f"WIP: avance del Issue #{n}", "--body", body)
           print(r.stdout or r.stderr)
+          if r.returncode == 0:
+              num = r.stdout.strip().rstrip("/").split("/")[-1]
+              subprocess.run(["python3", ".github/scripts/equipo_avisa.py", "borrador"],
+                             env={**os.environ, "PR_NUM": num, "PR_AUTHOR": actor, "ISSUE": n}, check=False)
           if r.returncode:
               print("::warning::No se pudo abrir el PR en borrador (¿permiso de Actions para crear PRs?). Ábrelo a mano en borrador.")
           PY

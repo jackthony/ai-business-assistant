@@ -1,6 +1,6 @@
 # Datos del negocio — Hola Mujer (normalizados)
 
-Datos del negocio que viven en el Excel operativo, pasados a JSON validado para trabajarlos en el repo sin depender del Excel. **Son datos del negocio, no de personas**: no hay contactos, citas, eventos ni conversaciones reales (ver «Qué no entra»).
+Datos del negocio que viven en el Excel operativo, pasados a JSON validado para trabajarlos en el repo sin depender del Excel. **Los datos del negocio (servicios, promociones, config) no son de personas.** Las hojas operativas con personas entran solo pseudonimizadas en `operativo/` (ver «Datos operativos pseudonimizados»); no hay nombres, teléfonos ni conversaciones reales.
 
 | Archivo | Qué es | Fuente |
 |---|---|---|
@@ -40,9 +40,9 @@ El esquema (Pydantic v2) valida: IDs únicos con formato `HM-LINEA-NNN`, precio 
 4. **Integridad entre hojas**: 2 eventos apuntan a un `contact_id` que no existe en contactos, 8 a un `cita_id` que no existe y 3 citas a un contacto inexistente. Hay valores fuera de lista (`CANCELADO` en vez de `CANCELLED`, `Whatsapp` en vez de `WHATSAPP`, el evento `CANCELLED_MISMATCH` que la lista no incluye), teléfonos con formatos mezclados y fechas de cita como texto (`07/09 09:30`). Todo esto debe validarse en el esquema del agente, no asumirse.
 5. **Datos operativos: sí están en el repo, pseudonimizados** (`operativo/`; ver sección siguiente). Solo quedan fuera `00_EMPEZAR` y la hoja oculta, que no tienen valor de dominio: `00_EMPEZAR` (trae nombres y apellidos de personas con estado «Cliente» y enlaces a documentos de Google) y la hoja oculta `MANYCHAT_SERVICE_SHEET` (borrador de 930 fórmulas `QUERY` rotas con algunos nombres y teléfonos). Conviene limpiarlas en el Excel.
 
-## Qué no entra y por qué
+## Qué no entra tal cual, y por qué
 
-`01_CONTACTOS`, `02_CITAS`, `03_EVENTOS`, `09_MUESTRA_INBOX_11D`, `00_EMPEZAR` y `MANYCHAT_SERVICE_SHEET`: contienen o pueden contener datos de personas (Ley 29733 sin validar; el repo es público). Sus **patrones agregados** ya alimentan el corpus sintético (`data/conversaciones/INDICE_v2.md`).
+`01_CONTACTOS`, `02_CITAS`, `03_EVENTOS` y `09_MUESTRA_INBOX_11D` **no entran crudas** (datos de personas; Ley 29733 sin validar; el repo es público): entran pseudonimizadas en `operativo/`. `00_EMPEZAR` y `MANYCHAT_SERVICE_SHEET` **no entran de ninguna forma** (nombres, enlaces y fórmulas rotas, sin valor de dominio). Sus **patrones agregados** ya alimentan el corpus sintético (`data/conversaciones/INDICE_v2.md`).
 
 ## Datos operativos pseudonimizados (`operativo/`)
 

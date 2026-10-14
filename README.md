@@ -44,6 +44,27 @@ Este repo se construyó a partir de dos fuentes de inspiración directa del moni
 
 Otras referencias de ingeniería consultadas (se **leen**, no se copian; sin licencia = no se copia código): Anthropic *Building Effective Agents*, *12-Factor Agents*, *Cosmic Python*, OWASP GenAI, LangGraph, `walkinglabs/learn-harness-engineering`, `zhanymkanov/fastapi-best-practices`, `david-lev/pywa`, [`unclebob/swarm-forge`](https://github.com/unclebob/swarm-forge) (SwarmForge de Robert C. Martin: agentes con roles para el SDLC), entre otras. Lista completa, con licencia y «cuándo consultar», en [`source_map.md`](program/02_REFERENCE/source_map.md) y en la [wiki](https://github.com/jackthony/ai-business-assistant/wiki/Fuentes-y-referencias).
 
+## Alcance: de un agente a multiagente
+
+El producto **será multiagente, pero no desde el inicio** ([ADR-007](program/03_ARCHITECTURE/decisions/ADR-007-agente-unico-primero.md)). Primero un agente con RAG y tools confiables, medido y probado; el supervisor llega cuando haya métricas que justifiquen dividir responsabilidades.
+
+| Fase | Semanas | Qué se construye | Se pasa a la siguiente cuando |
+|---|---|---|---|
+| Agente único | S4–S9 | Webhook, grafo LangGraph, RAG, tools (citas), safety y handoff humano como nodos/tools del **mismo** grafo | **HITO 2** (S9): 12/12 escenarios E2E, handoff real, latencia y contención medidas |
+| Supervisor | S10 (Issue #19) | Router: clasificador por reglas primero, LLM solo para mensajes ambiguos; deriva a info / citas / checkout / safety | ≥13/15 mensajes ruteados bien, fallback a LLM, trazas del ruteo |
+| Multitenant | S10–S11 (#20, #21) | El mismo grafo atiende Hola Mujer y NeuraCode con prompt, namespace RAG y tools propios | 2 números, sin fugas de datos entre tenants |
+| Evals y costo | S12, S15 | Evals por escenario; costo por conversación (FinOps) | decisión de seguir, fusionar o dividir agentes con datos |
+
+Destino de diseño: [`architecture.md`](program/03_ARCHITECTURE/architecture.md) (supervisor → `info_agent`, `booking_agent`, `checkout_agent`, `safety_agent`).
+
+**Por qué en este orden** (fuentes primarias, abiertas y verificadas el 2026-10-14):
+
+- Anthropic, [*Building effective agents*](https://www.anthropic.com/engineering/building-effective-agents) (19-dic-2024): recomienda «finding the simplest solution possible, and only increasing complexity when needed»; el *routing* sirve cuando hay categorías distintas que conviene tratar por separado.
+- Anthropic, [*How we built our multi-agent research system*](https://www.anthropic.com/engineering/multi-agent-research-system) (13-jun-2025): un orquestador con subagentes superó en 90,2 % a un solo agente en su evaluación interna, pero gasta «about 15× more tokens than chats» y es mal ajuste cuando los agentes necesitan compartir el mismo contexto. Es una medición propia de Anthropic sobre investigación, no sobre atención al cliente.
+- LangChain, README de [`langgraph-supervisor-py`](https://github.com/langchain-ai/langgraph-supervisor-py) (MIT): su propio equipo recomienda hoy el patrón supervisor «directly via tools» en lugar de la librería, por el control sobre el contexto. Por eso el Issue #19 compara la librería contra el router propio.
+
+**Lo que esto implica para nosotros** (inferencia del equipo, no cita): una conversación de WhatsApp es secuencial y comparte contexto entre pasos (info → cita → pago), así que el multiagente aquí es sobre todo **ruteo y aislamiento de responsabilidades** (seguridad clínica, pagos), no subagentes paralelos. El costo extra de tokens se mide en FinOps (S15) antes de aceptarlo. Lista completa de fuentes y su estado en [`source_map.md`](program/02_REFERENCE/source_map.md).
+
 ## Estructura
 
 | Carpeta / archivo | Contenido |

@@ -11,3 +11,17 @@ Estructura de Capas (src/):
 - models/ (Conectores de LLM): Administra las conexiones a los modelos de lenguaje locales, integrando DeepSeek para texto y Qwen para capacidades de visión.
 - services/ (Efectos Secundarios): Se encarga de las integraciones con herramientas externas para ejecutar acciones, tales como Google Calendar, Google Sheets y el envío final de mensajes.
 - infrastructure/ (Soporte Técnico): Centraliza la configuración global del sistema, la gestión de logs (registros) y las métricas para el control de costos de computación.
+
+## Flujo de extremo a extremo (diagrama)
+
+```
+Meta ──webhook──▶ ngrok ──▶ FastAPI (Integration Hub)
+                              ├─ GET  /health   → {"status": "ok"}
+                              └─ POST /webhook   (futuro — Issue #3)
+                                        │
+                                        ▼
+                              (futuro) grafo del agente (LangGraph)
+                                        │
+                                        ▼
+                              sender (httpx) ──▶ Meta ──▶ Clienta
+```

@@ -2,6 +2,8 @@
 
 > **Para quién:** practicante de 2.º año de AI Engineering, con Python básico y Git básico, que **no** conoce todavía LangGraph, `TypedDict` ni reducers. Este archivo te acompaña **mientras trabajas**; el contrato ([`S05_D1.md`](S05_D1.md)) dice **qué** debe quedar. Aquí aprendes **cómo abordarlo sin perderte**.
 >
+> **Dos numeraciones:** los «Paso N» de esta guía no son los pasos numerados de la sección 7 del contrato. Cuando aquí diga «sección 7, paso N» se refiere al contrato.
+>
 > **Reglas del juego:** no hay código de la solución aquí (si lo hubiera, no aprenderías). Hay explicación, pistas y puntos de control. Una sesión dura ~3 h; los tiempos son una guía. Todos los comandos son para Windows (cmd), desde la raíz del repo.
 
 ## Mapa de la sesión
@@ -9,9 +11,9 @@
 | Bloque | Tiempo | Resultado que puedes comprobar |
 |---|---|---|
 | Lectura + mini-conceptos | 30 min | Sabes explicar qué es un estado, un nodo y un reducer |
-| Calentamiento | 15 min | Un reducer de números funciona en un archivo suelto |
-| Pasos 0–1 (terreno y dependencias) | 25 min | `imports ok` y las 4 puertas en verde |
-| Pasos 2–9 (T1–T8, una prueba por paso) | 80 min | `8 passed` |
+| Calentamiento (después del Paso 1) | 20 min | Un reducer de números funciona en un archivo suelto |
+| Pasos 0–1 (terreno y dependencias; `pip install` puede tardar en PCs antiguas) | 35–40 min | `imports ok` y las 4 puertas en verde |
+| Pasos 2–9 (T1–T8, una prueba por paso, y la implementación) | 100–120 min | `8 passed` |
 | Paso 10 (sin LLM, CLI a mano, 4 puertas) | 15 min | `eco: hola` en tu terminal |
 | Paso 11 (commits, push, PR) | 25 min | PR abierto con `Closes #52` |
 
@@ -41,8 +43,9 @@ duplicar = lambda s: {"n": s["n"] * 2}
 - **Analogía:** la libreta de una tienda: o borras la página y escribes encima (reemplazo), o anotas debajo de lo anterior (añadir).
 - **Ejemplo:**
 ```python
-total: Annotated[int, operator.add]
-# el nodo devuelve {"total": 5} y se SUMA
+from typing import Annotated
+import operator
+total: Annotated[int, operator.add]  # el nodo devuelve {"total": 5} y se SUMA
 ```
 - **Profundiza:** <https://langchain-ai.github.io/langgraph/concepts/low_level/#reducers>
 
@@ -63,7 +66,7 @@ assert sumar(2, 3) == 5  # falla si `sumar` aún no existe
 
 ## Calentamiento (fuera del proyecto)
 
-Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Declara un `TypedDict` con un campo `total: Annotated[int, operator.add]` y un campo `nombre: str`. Pide a tu IA, o busca en la documentación, cómo armar un `StateGraph` de **un nodo** que devuelva `{"total": 5}`. Ejecútalo con `total=10` de entrada.
+Hazlo **después del Paso 1** (ya tienes `.venv` y `langgraph` instalados). Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Declara un `TypedDict` con un campo `total: Annotated[int, operator.add]` y un campo `nombre: str`. Pide a tu IA, o busca en la documentación, cómo armar un `StateGraph` de **un nodo** que devuelva `{"total": 5}`. Ejecútalo con `total=10` de entrada.
 
 **Resultado esperado:** `total` termina en `15` (se sumó) y `nombre` llega intacto. Cambia el reducer por nada (solo `total: int`) y repite: ahora termina en `5` (reemplazó). Esa diferencia es la pregunta 1 del PR. Borra el archivo al terminar.
 
@@ -81,9 +84,9 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Decla
 **Por qué:** las puertas verdes **antes** de tu código te dicen que, si algo se pone rojo después, fue tu cambio y no el entorno.
 **Debes ver:** `imports ok` y las cuatro salidas verdes (`All checks passed!`, `Success: no issues found`, `N passed`, `No issues identified.`).
 **Si falla:** `ImportError` en el comando de imports: no sigas; pega el error en el Issue. Si alguna puerta ya estaba roja sin tu código, anótalo en el Issue y no lo arregles aquí.
-**Punto de control:** ¿las dos dependencias quedaron dentro de `[project] dependencies` y no en `optional-dependencies`?
+**Punto de control:** ¿las dos dependencias quedaron dentro de `[project] dependencies` y no en `optional-dependencies`? (abre `pyproject.toml` y compara con la línea `dependencies = [`; `findstr /N` solo te da números de línea).
 
-> **Antes de los pasos 2–9:** crea los dos archivos de prueba vacíos y ve añadiendo una prueba por paso. En cada paso, la prueba se **escribe y se ve fallar** (rojo por `ModuleNotFoundError`). Cuando hayas escrito las ocho, recién implementas (Paso 8 abajo marca ese momento). Imports de `agents.*` a nivel de módulo.
+> **Antes de los pasos 2–9:** crea los dos archivos de prueba vacíos y ve añadiendo una prueba por paso. En cada paso, la prueba se **escribe y se ve fallar** (rojo por `ModuleNotFoundError`). Cuando hayas escrito las ocho, recién implementas (el Paso 9 marca ese momento). Imports de `agents.*` a nivel de módulo.
 
 ### Paso 2 — T1: el estado tiene exactamente 5 campos
 **Haz esto:** crea `tests\test_agent_graph.py` y escribe T1: pide los tipos de `AgentState` con `typing.get_type_hints(..., include_extras=True)` y comprueba las claves exactas y que los metadatos de `messages` incluyen `add_messages`. Corre el archivo.
@@ -123,7 +126,7 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Decla
 ### Paso 7 — T6: importar el grafo no carga ningún modelo
 **Haz esto:** escribe T6: lanza un proceso **nuevo** de Python con `subprocess` y `sys.executable`, que importe `agents.graph` y revise `sys.modules`; la prueba comprueba código de salida `0` y que ningún módulo empieza por `ollama` ni `langchain_ollama`.
 **Por qué:** pytest ya cargó muchos módulos en su proceso; solo un proceso limpio demuestra que tu grafo no depende de un LLM.
-**Debes ver:** el proceso hijo falla (rojo) porque `agents.graph` no existe.
+**Debes ver:** nada nuevo todavía: tu archivo sigue fallando en la colección por `agents.state` o `agents.graph`. T6 recién correrá cuando exista el grafo.
 **Si falla:** si el hijo no encuentra `agents`, recuerda que `pythonpath = ["src"]` es de pytest, no del hijo: piensa cómo le pasas ese camino (pista 2 abajo).
 **Punto de control:** ¿puedes explicar por qué importar en el mismo proceso no sería concluyente?
 
@@ -137,20 +140,21 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Decla
 ### Paso 9 — Implementa lo mínimo y ponlo en verde
 **Haz esto:** crea `src\agents\state.py`, `src\agents\graph.py` y `src\agents\cli.py` según la sección 5 del contrato, **uno a la vez**, corriendo las pruebas tras cada archivo. Mira cuántas pasan en cada momento.
 **Por qué:** ir archivo por archivo te enseña qué prueba depende de qué pieza; si lo haces todo junto no sabrás qué rompió qué.
-**Debes ver:** tras `state.py`, T1 sigue fallando por `agents.graph`; tras `graph.py`, T1–T6 pasan; tras `cli.py`, `8 passed`.
+**Debes ver:** tras `state.py`, el archivo de pruebas del grafo sigue con error de colección por `agents.graph`; tras `graph.py`, T1–T6 corren y pasan; tras `cli.py`, `8 passed`.
 **Si falla:** lee el error de abajo hacia arriba: la última línea suele nombrar la causa. Si `mypy` marca `add_node` con `call-overload`, aplica solo la excepción que permite la sección 5b.
 **Punto de control:** ¿tu `echo_node` devuelve solo `messages`, `intent` y `status`? Si devuelve `phone` o `tenant`, rompes la regla R4.
 
 ### Paso 10 — Sin LLM, CLI a mano y las 4 puertas
 **Haz esto:** cierra Ollama si lo tienes abierto y comprueba con `tasklist | findstr /I ollama` (sin salida). Vuelve a correr las pruebas. Luego ejecuta los tres comandos de CLI de la sección 7, paso 10, y las 4 puertas del paso 11.
-**Por qué:** demuestra que tu trabajo es determinista y que el CI estricto (las mismas 4 puertas) no te va a sorprender.
+**Por qué:** esto es solo una comprobación de entorno (la independencia real del LLM la demuestra T6); además muestra que tu trabajo es determinista y que el CI estricto (las mismas 4 puertas) no te va a sorprender.
 **Debes ver:** `8 passed`; `eco: hola`; `eco: ¿Cuánto cuesta?`; mensaje `usage:` y `2` en `echo %errorlevel%`; las cuatro puertas verdes.
 **Si falla:** si la CLI no imprime nada, falta el bloque `if __name__ == "__main__":` con `sys.exit(main())`. Si las tildes salen raras, `chcp 65001`.
 **Punto de control:** ¿`git diff --name-only main` lista exactamente las 6 rutas de la sección 4? Ni una más.
 
 ### Paso 11 — Commits pequeños, push y PR
-**Haz esto:** `pre-commit install`; haz los 5 commits de la sección 7, paso 12 (uno por cambio); `git push -u origin issue-52-langgraph-core`; abre el PR contra `main` con `Closes #52`, la plantilla completa, la captura de `eco: hola` y tus respuestas de la sección 11.
+**Haz esto:** `pre-commit install`; haz los 5 commits de la sección 7, paso 12 (uno por cambio); `git push -u origin issue-52-langgraph-core`; abre el PR contra `main` con `Closes #52`, la plantilla completa, el texto de la salida de `eco: hola` en un bloque de código y tus respuestas de la sección 11.
 **Por qué:** commits pequeños dejan historia legible; el PR es la evidencia que el monitor revisa contra el contrato.
+**Nota:** los commits de pruebas quedan en rojo a propósito (van antes de la implementación) y el PR se squashea. Usa `git add` solo con las rutas de cada commit, no `git add .`.
 **Debes ver:** `set up to track 'origin/issue-52-langgraph-core'`; `guardian-tbd / reglas-tbd` y `CI estricto / calidad` en verde.
 **Si falla:** si un hook reformatea un archivo, el commit falla: `git add` de ese archivo y repite el commit. Si el guardian rechaza, revisa el nombre de la rama y el `Closes #52`.
 **Punto de control:** antes de abrir el PR, haz la Autoevaluación de abajo y ensaya con `/comprension`.
@@ -161,15 +165,15 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Decla
 
 **Paso 3 (T2).** Pista 1: lo que sale es el estado final, y `messages` debe tener la lista completa de la conversación. Pista 2: busca `HumanMessage`, `AIMessage` en <https://python.langchain.com/docs/concepts/messages/>. Pista 3: invocas, guardas el resultado en una variable y comprueba longitud, tipo y contenido de cada posición.
 
-**Paso 7 (T6).** Pista 1: un proceso hijo no hereda el `pythonpath` de pytest. Pista 2: busca `subprocess.run` (`capture_output`, `cwd`, `env`) y la variable de entorno `PYTHONPATH` en <https://docs.python.org/3/library/subprocess.html>. Pista 3: ejecutas el intérprete con `-c` y un script corto que importa el módulo y escribe a la salida si algún nombre en `sys.modules` empieza por los prefijos prohibidos; tu prueba mira código de salida y salida.
+**Paso 7 (T6).** Pista 1: un proceso hijo no hereda el `pythonpath` de pytest. Pista 2: busca `subprocess.run` (`capture_output`, `text`) en <https://docs.python.org/3/library/subprocess.html>; si el hijo no encuentra `agents`, comprueba con `python -c "import agents"` dentro del venv que el Paso 1 (`pip install -e`) quedó bien. Pista 3: ¿qué argumento de `python` permite ejecutar un texto corto, y qué atributo de `sys` lista los módulos cargados?
 
 **Paso 8 (T7).** Pista 1: `print` escribe en la salida estándar, que se puede capturar. Pista 2: busca la fixture `capsys` en <https://docs.pytest.org/en/stable/how-to/capture-stdout-stderr.html>. Pista 3: llamas a `main`, lees lo capturado con `capsys.readouterr()` y comparas con la línea esperada más salto de línea.
 
 **Paso 8 (T8).** Pista 1: `argparse` sale con error cuando falta un argumento obligatorio y lo hace lanzando una excepción. Pista 2: busca `pytest.raises` y el atributo `code` de la excepción. Pista 3: abres el bloque de `raises(SystemExit)`, llamas `main([])` y luego comparas el código con `2`.
 
-**Paso 9 (grafo).** Pista 1: un grafo se arma declarando el estado, registrando nodos, conectando aristas y compilando. Pista 2: busca `StateGraph`, `add_node`, `add_edge`, `START`, `END`, `compile` en <https://langchain-ai.github.io/langgraph/concepts/low_level/>. Pista 3: creas `StateGraph(AgentState)`, registras `echo`, conectas `START → echo → END`, compilas y devuelves el resultado; el nodo lee el texto del último mensaje y devuelve el dict con las 3 claves de R2.
+**Paso 9 (grafo).** Pista 1: un grafo se arma declarando el estado, registrando nodos, conectando aristas y compilando. Pista 2: busca `StateGraph`, `add_node`, `add_edge`, `START`, `END`, `compile` en <https://langchain-ai.github.io/langgraph/concepts/low_level/>. Pista 3: ¿qué recibe `StateGraph` al crearlo, qué dos aristas necesitas y qué método te da el grafo ejecutable? Para el nodo: ¿de dónde sale el texto (R1) y qué 3 claves exige R2?
 
-**Paso 9 (CLI).** Pista 1: `argparse` convierte `sys.argv` en un objeto con atributos. Pista 2: busca `ArgumentParser`, `add_argument` (opciones con `--` y posicional) y `parse_args(argv)` en <https://docs.python.org/3/library/argparse.html>. Pista 3: defines el parser, lees los tres valores, armas la entrada de 5 claves, invocas una vez, imprimes el contenido del último mensaje y devuelves `0`.
+**Paso 9 (CLI).** Pista 1: `argparse` convierte `sys.argv` en un objeto con atributos. Pista 2: busca `ArgumentParser`, `add_argument` (opciones con `--` y posicional) y `parse_args(argv)` en <https://docs.python.org/3/library/argparse.html>. Pista 3: ¿qué devuelve `parse_args`, qué valor por defecto lleva cada opción (sección 5c) y qué mensaje de la salida de `invoke` debes imprimir?
 
 Si sigues trabado después de la Pista 3: comenta en el Issue con el error pegado como texto.
 
@@ -192,7 +196,7 @@ Si sigues trabado después de la Pista 3: comenta en el Issue con el error pegad
 - [ ] Puedo explicar en voz alta, sin mirar, las 3 preguntas de comprensión del contrato (sección 11).
 - [ ] Mi `git diff --name-only main` coincide con la sección 4 del contrato (6 rutas).
 - [ ] Anoté en el PR cuántas interacciones usé con mi IA (máximo 12) y a quién consulté.
-- [ ] Pegué la captura de `python -m agents.cli --phone 51900000000 "hola"`.
+- [ ] Pegué en el PR el texto de la salida de `python -m agents.cli --phone 51900000000 "hola"`.
 
 ## Prompts sugeridos para tu IA (pequeños y verificables)
 

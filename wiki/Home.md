@@ -1,6 +1,6 @@
 # Programa SENATI 2026 · ai-business-assistant
 
-Bienvenido/a. Aquí aprendemos **construyendo un producto real**: un asistente de WhatsApp multitenant (Hola Mujer y NeuraCode) con FastAPI + LangGraph + ChromaDB + Ollama. Esta wiki es el **mapa**: no copia el contenido del repo, lo **enlaza**, para que haya una sola fuente de verdad.
+Bienvenido/a. Aquí aprendemos **construyendo un producto real**: un asistente de WhatsApp para Hola Mujer (NeuraCode es un proyecto posterior) con FastAPI + LangGraph + ChromaDB + Ollama. Esta wiki es el **mapa**: no copia el contenido del repo, lo **enlaza**, para que haya una sola fuente de verdad.
 
 | Quiero… | Ve a |
 |---|---|

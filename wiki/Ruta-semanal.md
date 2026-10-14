@@ -19,7 +19,7 @@ El plan completo (16 semanas, 48 sesiones) vive en [`16_week_plan.md`](https://g
 | S6 | RAG + **HITO 1** (canal provisional + datos sintéticos; el canal real de WhatsApp lo configura el monitor más adelante). Aquí se retoman #3 webhook y #4 envío | `hola-mujer.md`, `agent-engineering-handbook.md` |
 | S7 | Tools con Pydantic + Agentes 1 y 2 | `langgraph.md`, `definitive-guide.md` |
 | S8 | Cierre de venta + telemetría | `observabilidad-costos.md`, docs Langfuse, `roi_metrics.md` |
-| S9–S12 | Safety, HITL/harness (HITO 2), multitenant, NeuraCode, voz, seguridad y evals (HITO 3) | ADR-009, ADR-010, harness engineering |
+| S9–S12 | Safety, HITL/harness (HITO 2), evals de Hola Mujer, voz, seguridad y evals (HITO 3) | ADR-009, ADR-010, harness engineering |
 | S13–S16 | Proactivo, producción (Postgres + Docker), E2E + FinOps, capstone y defensa | Docker, `meta-pricing.md`, `rubric.md` |
 
 ## Cola «Pull»

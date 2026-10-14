@@ -1,4 +1,6 @@
-# Dominio: NeuraCode (tenant 2)
+# Dominio: NeuraCode (proyecto posterior — fuera del alcance actual)
+
+> Decisión del monitor, 2026-10-14: NeuraCode es otro proyecto. Se adapta recién cuando Hola Mujer esté terminado, validado y evaluado con su ciclo completo de evals. Este archivo se conserva como contexto, no como trabajo del programa actual.
 
 > Segundo tenant sobre el mismo núcleo. Completar los `TODO` con el negocio; no inventar datos.
 

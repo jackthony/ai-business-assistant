@@ -29,7 +29,7 @@
 |---|---|---|---|
 | 1. Fundamentos | S1–S3 | Git, tests, HTTP/REST, contratos | (hecho) |
 | 2. Agente único | S4–S8 | FastAPI + webhook + LangGraph + RAG + citas + cierre | **HITO 1** (bot respondiendo, fin de S6) |
-| 3. Multiagente | S9–S12 | Seguridad, HITL, OCR, supervisor, 2.º negocio (NeuraCode), voz | **HITO 2** (S9) · **HITO 3** (S12) |
+| 3. Multiagente | S9–S12 | Seguridad, HITL, OCR, supervisor, evals de Hola Mujer, voz | **HITO 2** (S9) · **HITO 3** (S12) |
 | 4. Producción | S13–S16 | Proactivo, Postgres, Docker, deploy, E2E | **Demo final** (S16) |
 
 **La visión en una frase:** un asistente de IA empresarial **multitenant** y **canal-agnóstico** (hoy WhatsApp, mañana TikTok u otro canal) que atiende como una persona, no alucina y deja trazabilidad. **La capa de agentes es el producto; el canal es un adaptador.**
@@ -60,7 +60,7 @@
 - **Contrato interno** (`InboundEvent` / `OutboundReply`): los agentes **nunca** conocen el canal. Si cambia Meta, se cambia un adaptador, no el agente.
 - **Un agente único primero** (ADR-007): se complica solo cuando hay evidencia de que hace falta (supervisor en S10).
 - **Núcleo sin efectos secundarios ocultos:** lo que escribe en el mundo real (agendar, registrar, validar un pago) pasa por un **gate de confirmación** (ADR-009).
-- **Monolito modular multitenant:** un solo servicio, con configuraciones separadas por negocio (Hola Mujer y NeuraCode). Los patrones de arquitectura que sí aplican están en `program/02_REFERENCE/ejemplos/patrones-arquitectura.md`.
+- **Monolito modular multitenant:** un solo servicio, con configuración por negocio (hoy solo Hola Mujer; NeuraCode es un proyecto posterior). Los patrones de arquitectura que sí aplican están en `program/02_REFERENCE/ejemplos/patrones-arquitectura.md`.
 
 **Actividad (10 min):** sin mirar el diagrama, redibújalo y explica en voz alta qué pasa si Meta reenvía el mismo mensaje dos veces (pista: idempotencia).
 

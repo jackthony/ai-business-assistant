@@ -1,0 +1,25 @@
+title: "[Lectura] "
+body:
+  - type: markdown
+    attributes:
+      value: "Responde con **tus palabras** y cita la fuente. No pegues respuestas de una IA sin verificarlas."
+  - type: input
+    id: fuente
+    attributes:
+      label: Fuente leída (archivo, doc oficial o URL)
+    validations:
+      required: true
+  - type: textarea
+    id: resumen
+    attributes:
+      label: Qué entendí
+    validations:
+      required: true
+  - type: textarea
+    id: ejemplo
+    attributes:
+      label: Un ejemplo propio (que no sea del repo)
+  - type: textarea
+    id: duda
+    attributes:
+      label: Qué duda me queda

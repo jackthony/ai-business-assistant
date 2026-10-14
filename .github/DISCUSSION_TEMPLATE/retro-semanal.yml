@@ -1,0 +1,22 @@
+title: "[Retro] Semana "
+body:
+  - type: textarea
+    id: logre
+    attributes:
+      label: Qué logré esta semana (con enlace a PR/Issue)
+    validations:
+      required: true
+  - type: textarea
+    id: atasco
+    attributes:
+      label: Dónde me atasqué y cómo lo resolví (o no)
+    validations:
+      required: true
+  - type: textarea
+    id: cambio
+    attributes:
+      label: Qué haría distinto
+  - type: textarea
+    id: necesito
+    attributes:
+      label: Qué necesito del monitor o de un compañero

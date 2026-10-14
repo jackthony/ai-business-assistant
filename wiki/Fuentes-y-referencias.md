@@ -11,15 +11,18 @@ Orden de autoridad: **doc oficial/spec > código reproducible > libro/curso > pa
 ## 1 · Con las que nació el proyecto (materiales del monitor)
 | Fuente | Qué es | Dónde se usa |
 |---|---|---|
+| ⭐ [AI Agents: The Definitive Guide](https://github.com/Nicolepcx/ai-agents-the-definitive-guide) (Nicolepcx) | **Inspiración directa.** Eje conceptual del programa por capítulos (CH01–CH12); lectura guiada, no verdad | todas ([definitive-guide](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/definitive-guide.md)) |
 | Curso *LangChain, LangGraph y Agentes IA* — Santiago Hernández (Udemy, ES) | Columna vertebral desde S5: checkpointer, interrupt, supervisor, RAG; ejercicios y proyecto SOC multiagente como referencia | S5–S10 ([veredicto y mapeo](https://github.com/jackthony/ai-business-assistant/blob/main/program/01_CURRICULUM/cursos_de_refuerzo.md)) |
 | Cursos *AI Engineer Bootcamp* e *Intro to AI Agents* — 365 Careers | Nivelación y panorama conceptual | S1–S4, apoyo |
 | Video *WhatsApp AI Support Agent with RAG & Memory* — Dani Fuyà (YouTube) | Stack casi idéntico al del proyecto | S4 (webhook y envío) |
 | Video *Domina la IA Local* — MoureDev (YouTube, ES) y docs de Ollama | Modelos locales con Ollama | S4+ ([deepseek-local](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/deepseek-local.md)) |
-| [jackthony/IA-local](https://github.com/jackthony/IA-local) | Lab propio del monitor: decisiones tipadas con confianza calibrada (Jev) y CI zero-trust | S10+ ([jev-pattern](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/jev-pattern.md)) |
+| ⭐ [jackthony/IA-local](https://github.com/jackthony/IA-local) | **Inspiración directa.** Lab propio del monitor: decisiones tipadas con confianza calibrada (Jev) y CI zero-trust | S10+ ([jev-pattern](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/jev-pattern.md)) |
 | Materiales del negocio Hola Mujer: catálogo y reglas (Excel operativo) y conversaciones de la era ManyChat/n8n (corpus anonimizado, Ley 29733) | El negocio real que el bot debe atender; de ahí salen precios, tono y corpus | [hola-mujer.md](https://github.com/jackthony/ai-business-assistant/blob/main/program/04_DOMAIN/hola-mujer.md) · [corpus sintético](https://github.com/jackthony/ai-business-assistant/blob/main/data/conversaciones/INDICE.md) |
 | Kapso y n8n (comparativa) | Canal de WhatsApp (plan B) y glue operativo | [kapso-n8n.md](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/kapso-n8n.md) |
 | Plan Maestro SENATI 2026 e Informe FPE (CNIU-108) | Evaluación y formato institucional | [plan](https://github.com/jackthony/ai-business-assistant/blob/main/program/01_CURRICULUM/16_week_plan.md) |
 
+> ⭐ = inspiración directa, indicada también en el [README](https://github.com/jackthony/ai-business-assistant#inspiración-y-créditos) y en el [source_map](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/source_map.md).
+>
 > ¿Usaste otra fuente para crear el proyecto y no la ves aquí? Se agrega con su «cuándo consultar», según la regla del `source_map`.
 
 ## 2 · Referencias técnicas del programa
@@ -30,12 +33,10 @@ Orden de autoridad: **doc oficial/spec > código reproducible > libro/curso > pa
 | [Cosmic Python](https://www.cosmicpython.com/) — *Architecture Patterns with Python* | Puertos y adaptadores: núcleo de agentes limpio de canales y servicios (base de [`estandares.md`](https://github.com/jackthony/ai-business-assistant/blob/main/program/03_ARCHITECTURE/estandares.md)) | todas las semanas de código |
 | [OWASP GenAI Security Project](https://genai.owasp.org/) | Top 10 LLM, Top 10 Agentic Applications: seguridad de agentes | S9, S12 |
 | [LangGraph (docs)](https://langchain-ai.github.io/langgraph/) y [código](https://github.com/langchain-ai/langgraph) | Estado, grafo, checkpointers, interrupt | S5+ |
-| [AI Agents: The Definitive Guide](https://github.com/Nicolepcx/ai-agents-the-definitive-guide) | Eje conceptual por capítulos (ver [`definitive-guide.md`](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/definitive-guide.md)); lectura guiada, no verdad | todas |
 | «Comprehensive Guide to AI Agent Engineering» (Vasilyev) | Loops, context rot, memoria, tools, HITL, seguridad, evals, costos (ver [handbook](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/agent-engineering-handbook.md)) | por parte, según tu Issue |
 | [Learn Harness Engineering](https://github.com/walkinglabs/learn-harness-engineering) (en español) | Por qué fallan agentes capaces; Definition of Done verificable | S9, S12, S14 |
 | [fastapi-best-practices](https://github.com/zhanymkanov/fastapi-best-practices) | Estructura y convenciones FastAPI | S4–S5 |
 | [Microservices Patterns](https://microservices.io/) | Patrones traducibles al monolito modular multitenant | S10 |
-| [jackthony/IA-local](https://github.com/jackthony/IA-local) | Lab del monitor: decisiones tipadas con confianza calibrada (Jev), CI zero-trust ([`jev-pattern.md`](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/jev-pattern.md)) | S10+ |
 | [Trunk-Based Development](https://trunkbaseddevelopment.com/) | El flujo git del programa ([ADR-006](https://github.com/jackthony/ai-business-assistant/blob/main/program/03_ARCHITECTURE/decisions/)) | desde S2 |
 
 ## Fundamentos (para el *porqué*)

@@ -26,6 +26,10 @@
         {
           "nombre": "Curso de Santiago Hernández (LangGraph: checkpointer y estado) — mapeo en cursos_de_refuerzo.md",
           "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/01_CURRICULUM/cursos_de_refuerzo.md"
+        },
+        {
+          "nombre": "AI Agents: The Definitive Guide — matriz semanal en definitive-guide.md",
+          "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/definitive-guide.md"
         }
       ],
       "preguntas": [

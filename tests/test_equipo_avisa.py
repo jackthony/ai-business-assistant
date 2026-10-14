@@ -67,3 +67,23 @@ def test_lecturas_json_has_sources_and_questions_per_week() -> None:
         assert entry["fuentes"] and entry["preguntas"]
         assert semana in ls.render_title(semana, entry)
         assert entry["preguntas"][0] in ls.render_body(semana, entry)
+
+
+da = _load("discusion_avisa")
+
+
+def test_discussion_message_mentions_team_without_author() -> None:
+    team = da.team_mentions("jackthony", ["josue", "pilar", "allan"], "pilar")
+    msg = da.build_message("pilar", "Q&A", "[Duda] reducer", team)
+    assert "@josue @allan @jackthony" in msg
+    assert "@pilar abrió" in msg
+
+
+def test_reading_body_mentions_roster_when_given() -> None:
+    entry = {
+        "titulo": "T",
+        "fuentes": [{"nombre": "A", "url": "https://x"}],
+        "preguntas": ["P1"],
+    }
+    assert "cc @a @b" in ls.render_body("S05", entry, "@a @b")
+    assert "cc @" not in ls.render_body("S05", entry)

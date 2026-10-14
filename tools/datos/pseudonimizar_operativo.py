@@ -101,7 +101,9 @@ def construir(wb: Any) -> dict[str, list[dict[str, Any]]]:
                 f.get(col), float
             ):  # serial de Excel guardado como número (defecto real)
                 f[col] = (
-                    datetime(1899, 12, 30, tzinfo=UTC) + timedelta(days=f[col])
+                    (
+                        datetime(1899, 12, 30, tzinfo=UTC) + timedelta(days=f[col])
+                    ).replace(tzinfo=None)
                 ).isoformat(timespec="seconds")
         citas.append(f)
     eventos = []

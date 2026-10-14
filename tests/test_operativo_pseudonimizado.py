@@ -67,3 +67,23 @@ def test_inbox_sample_is_previews_only() -> None:
     assert len(muestra) == 220
     assert {m["alcance_fuente"] for m in muestra} == {"VISTA_PREVIA_SIN_HISTORIAL"}
     assert sum(1 for m in muestra if m["preview_util"]) == 82
+
+
+def test_timestamps_are_naive_iso_so_the_etl_adds_no_timezone_noise() -> None:
+    for c in _items("citas"):
+        for col in ("created_at", "updated_at"):
+            v = c.get(col)
+            assert v is None or not str(v).endswith(("+00:00", "Z")), (col, v)
+
+
+def test_free_text_fields_only_hold_known_phrases() -> None:
+    # Si una regeneración trae una frase nueva, este test obliga a revisarla a mano antes de subirla.
+    conocidas = {
+        "Reprogramada por el cliente",
+        '"Sin motivo especificado"',
+        "As",
+        None,
+    }
+    assert {c.get("motivo_cambio") for c in _items("citas")} <= conocidas
+    notas = {e.get("notes_nonclinical") for e in _items("eventos")}
+    assert all(n is None or re.fullmatch(r"[^\d@]{1,80}", str(n)) for n in notas)

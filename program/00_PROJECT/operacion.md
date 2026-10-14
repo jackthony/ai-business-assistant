@@ -58,7 +58,7 @@
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
 | `ci.yml` | cada PR | 4 puertas: ruff, mypy, pytest, bandit + 5.º chequeo determinista: el núcleo no importa canales/servicios/HTTP (`estandares.md` §2) |
-| `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits convencionales (cantidad libre) |
+| `tbd-guardian.yml` | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits estrictos `tipo(alcance): verbo` (≤72 caracteres; >6 commits solo avisa; exime a Dependabot) |
 | `ficha-pr.yml` | cada PR | ficha de revisión automática (Issue que cierra, archivos, tests, criterios) + checkbox mecánico de estándares (capas, secretos, src sin tests) |
 | `release.yml` | push de tag (`v*`/`hito-*`/`q*`) | publica el Release con notas generadas — tags del plan: `hito-1` (S6), `q4` (S8), `hito-2` (S9), `q5` (S10), `hito-3` (S12), `q6` (S12), `v1.0` (S16) |
 | `issue-on-create.yml` | cada Issue nuevo | lo agrega al board con `Semana` (del título `[S## D#]`) y `Alumno` (del assignee) — soporta el flujo pull |
@@ -68,6 +68,14 @@
 | `digest-semanal.yml` | viernes | Issue resumen semanal por alumno (✅ probado) |
 | `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador FPE por alumno desde commits/PRs/Issues (✅ #11–#13 creados; se refresca solo) |
 | `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea el **tracker semanal** `[S##]` + los Issues del día `[S## D#]` (lecturas + detalle + pack + estándares), los enlaza como **sub-issues** del tracker, les pone **milestone** por hito (S4–6→HITO 1, S7–9→HITO 2, S10–12→HITO 3, S13–16→Demo) y el board los sincroniza solo |
+| `pr-borrador.yml` | push de una rama `issue-N-*` de un alumno | abre un PR en **borrador** con `Closes #N` para que la revisión guiada empiece desde el primer push |
+| `revision-guiada.yml` | cada push de un PR de alumno (también en borrador) | tutor (DeepSeek): un comentario que se actualiza con archivos del contrato trabajados y faltantes, desvíos, siguiente paso y pistas; no da la solución |
+| `revisor-contrato.yml` | cada PR de alumno | compuerta del contrato: check determinista (`contrato_check.py`) + revisor Claude (`revisor_agente.py`, `ANTHROPIC_API_KEY`) con el PR listo; scripts y contratos salen de `main`. Aún no es check requerido del ruleset |
+| `issue-orden.yml` | cada Issue nuevo o con etiquetas nuevas | lo deja completo: hito, tracker padre y bloqueos (manual: rellena todos los abiertos) |
+| `lectura-semanal.yml` | domingo 22:30 Lima + manual | publica la «Lectura guiada» de la semana en Discussions |
+| `equipo-avisa.yml` | un alumno abre, termina o mergea un PR | avisa al equipo con @menciones y, al mergear, desbloquea los Issues que dependían de ese |
+| `discusion-avisa.yml` | discusión nueva | menciona al resto del equipo para que le llegue la notificación |
+| `wiki-sync.yml` | push a `main` | publica `wiki/` en la wiki del repo |
 
 ## Coach automático y board sincronizado
 

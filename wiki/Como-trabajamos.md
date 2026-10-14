@@ -23,6 +23,9 @@ Los Issues nuevos salen completos solos; los viejos se rellenan con *Actions →
 ## Revisión automática de tu avance
 Al hacer `git push` de tu rama, el robot abre un **PR en borrador** y deja **un comentario «🧭 Revisión guiada»** que se actualiza en cada push: archivos del contrato trabajados y faltantes, desvíos y siguiente paso (con pistas, sin solución). Haz push **al terminar cada paso en verde**. Cuando acabes: *Ready for review*.
 
+## Compuerta del contrato
+Al marcar el PR como listo corre el check **`revisor-contrato`** (solo para practicantes): primero una parte determinista, sin IA, que compara tu diff con tu contrato (archivos fuera de la sección 4, prohibiciones de la sección 9, dependencias nuevas, archivos y pruebas que faltan); si pasa, un revisor de IA deja hallazgos que citan la sección del contrato que rompes. Si marca un error, corrige y haz push. El script y el contrato se leen de `main`, no de tu rama.
+
 ## Las 4 puertas antes de pushear
 `ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && bandit -r src -x tests -ll`. El CI estricto corre las mismas.
 

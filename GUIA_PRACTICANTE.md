@@ -10,9 +10,9 @@
 |---|---|
 | Repo (público) | https://github.com/jackthony/ai-business-assistant |
 | **Tus asignaciones** | Board https://github.com/users/jackthony/projects/3 (solo lectura, campo `Alumno`) + pestaña Issues → **Assigned to me** |
-| Tu Issue del día | asignado a ti (#2/#3/#4 esta semana) — los **criterios de aceptación son lo que se evalúa** |
+| Tu Issue del día | asignado a ti: el `[S## D#]` de la semana (el tracker `[S##]` los lista) y su contrato en `program/01_CURRICULUM/asignaciones/` — los **criterios de aceptación son lo que se evalúa** |
 | Tu expediente | `program/05_EVALUATION/students/<tu-nombre>.md` (lo llena el monitor) |
-| Tu progreso automático | Issue "Digest semanal — …" (viernes) + "📄 Borrador de informe quincenal — …" (#11–#13, se refresca cada noche mar–vie) |
+| Tu progreso automático | Issue "Digest semanal — …" (viernes) + "📄 Borrador de informe quincenal — …" (uno por quincena; se refresca cada noche dom–vie) |
 
 ## 2. Primer día: descargar y preparar
 
@@ -30,7 +30,7 @@
 1. `program/00_PROJECT/current_status.md` — dónde está el proyecto HOY.
 2. Tu Issue del día y sus criterios de aceptación.
 3. Tus fuentes: tabla **"Materiales por semana"** en `program/01_CURRICULUM/16_week_plan.md` + mapa `program/02_REFERENCE/source_map.md`. Lee, revisa, investiga; si contradicen algo, gana la doc oficial.
-4. Si usas IA (DeepSeek web, ChatGPT o un agente): pégale **solo** `AGENTS.md` + `GUIA_AGENTE.md` + tu Issue + la guía de tu semana. Nunca el repo completo. En S4 (#2/#3/#4) la IA es para dudas y revisar tu código, no para que te haga el Issue entero: las preguntas de comprensión del Issue y del PR demuestran que lo entiendes tú.
+4. Si usas IA (DeepSeek web, ChatGPT o un agente): pégale **solo** `AGENTS.md` + `GUIA_AGENTE.md` + tu Issue + la guía de tu semana. Nunca el repo completo. En S4 y S5 la IA es para dudas y revisar tu código, no para que te haga el Issue entero: las preguntas de comprensión del Issue y del PR demuestran que lo entiendes tú.
 5. **Trabajo en equipo (orden de consulta):** 1) tu Issue + docs oficiales → 2) un compañero (mira sus PRs, comenta constructivo, usa `apoyo`) → 3) el grupo → 4) el monitor. Anota en el PR a quién consultaste o ayudaste.
 6. **La puerta de comprensión:** antes de subir o completar tu semana, responde las preguntas de comprensión **con tus palabras** y prepárate para explicarle al LT qué hiciste, por qué y qué probaste. Si no puedes explicarlo, no está listo: vuelve a leer.
 
@@ -60,7 +60,7 @@ tipo(alcance): verbo en imperativo, sin punto final, ≤72 caracteres
 4. Tests que cubran los **criterios del Issue** (casos borde incluidos). Antes de pushear corre las 4 puertas:
    `ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && bandit -r src -x tests -ll`
 5. `git push -u origin issue-N-<slug>` **cuantas veces quieras** (cada push corre el CI y queda respaldado) y abre el PR con la plantilla: sección "Cómo se probó", checklist, evidencia (captura/video) y **`Closes #N` en el cuerpo**. ¿Aún no está listo? Ábrelo como **Draft** y conviértelo cuando termines.
-6. Espera CI verde (4 puertas + chequeo de capas de `estandares.md`) y el review del monitor. **Ambos checks son obligatorios para mergear**: `guardian-tbd / reglas-tbd` y `CI estricto / calidad`. Si el repo tiene `DEEPSEEK_API_KEY`, DeepSeek deja un primer pase de review automático en tu PR (y la ficha del PR muestra un chequeo automático de estándares); la nota final la pone el monitor. El merge es **squash** a `main`; la rama muere y el Issue se cierra solo.
+6. Espera CI verde (4 puertas + chequeo de capas de `estandares.md`) y el review del monitor. **Ambos checks son obligatorios para mergear**: `guardian-tbd / reglas-tbd` y `CI estricto / calidad`. Si el repo tiene `DEEPSEEK_API_KEY`, DeepSeek deja un primer pase de review automático en tu PR (y la ficha del PR muestra un chequeo automático de estándares); la nota final la pone el monitor. Al marcar el PR como listo corre también **`revisor-contrato`**: compara tu diff con tu contrato (archivos fuera de la sección 4, cosas que la sección 9 prohíbe, dependencias nuevas, archivos o pruebas que faltan) y un revisor de IA deja hallazgos que citan la sección que rompes. Si el check sale en rojo, corrige y haz push; el script y el contrato que te evalúan se leen de `main`, no de tu rama. Hoy ese check no impide el merge por sí solo, pero el monitor lo revisa. El merge es **squash** a `main`; la rama muere y el Issue se cierra solo.
 
 **Qué NO hacer (lo vigila `tbd-enforcer` automáticamente):**
 - Push directo a `main` → **se revierte** y se te avisa.

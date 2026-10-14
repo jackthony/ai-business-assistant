@@ -71,6 +71,41 @@ def _limpiar_texto(texto: Any, alias: Alias) -> Any:
     return re.sub(r"\d{9,}", "[ID]", alias.reemplazar(texto))
 
 
+# Lista blanca por hoja: una columna nueva en el Excel (p. ej. email) hace fallar el ETL
+# en vez de colarse al repo público. Hay que revisarla y agregarla aquí a propósito.
+COLUMNAS = {
+    "01_CONTACTOS": {
+        "contact_id", "created_at", "updated_at", "nombre", "telefono_e164", "canal",
+        "cliente_tipo", "intencion", "service_id", "etapa", "responsable",
+        "ultima_interaccion_at", "requiere_humano", "motivo_handoff",
+        "permiso_marketing", "notas_no_clinicas",
+    },
+    "02_CITAS": {
+        "cita_id", "contact_id", "created_at", "updated_at", "service_id", "sesiones",
+        "inicio", "fin", "timezone", "estado_cita", "calendar_event_id",
+        "recordatorio_24h", "recordatorio_2h", "responsable", "motivo_cambio",
+        "sync_status", "last_error",
+    },
+    "03_EVENTOS": {
+        "event_id", "contact_id", "cita_id", "occurred_at", "canal", "event_type",
+        "automation_flow", "outcome", "human_handoff", "owner", "notes_nonclinical",
+    },
+    "09_MUESTRA_INBOX_11D": {
+        "sample_id", "antiguedad_relativa", "preview_util", "servicio_clasificado",
+        "senales", "direccion_probable", "tipo_cliente_probable", "etapa_probable",
+        "alcance_fuente",
+    },
+}  # fmt: skip
+
+
+def _hoja(wb: Any, nombre: str) -> list[dict[str, Any]]:
+    filas = _filas(wb[nombre])
+    desconocidas = {k for f in filas for k in f} - COLUMNAS[nombre]
+    if desconocidas:
+        raise ValueError(f"{nombre}: columnas no revisadas {sorted(desconocidas)}")
+    return filas
+
+
 def construir(wb: Any) -> dict[str, list[dict[str, Any]]]:
     alias = Alias()
     contactos = [
@@ -84,13 +119,13 @@ def construir(wb: Any) -> dict[str, list[dict[str, Any]]]:
             "tiene_nombre": f.get("nombre") is not None,
             "tiene_telefono": f.get("telefono_e164") is not None,
         }
-        for f in _filas(wb["01_CONTACTOS"])
+        for f in _hoja(wb, "01_CONTACTOS")
     ]
     citas = []
     alias_cita = Alias(
         "A"
     )  # el cita_id de la hoja es un uid de reserva de la plataforma
-    for f in _filas(wb["02_CITAS"]):
+    for f in _hoja(wb, "02_CITAS"):
         f = {
             **f,
             "cita_id": alias_cita(f["cita_id"]) if f.get("cita_id") else None,
@@ -107,7 +142,7 @@ def construir(wb: Any) -> dict[str, list[dict[str, Any]]]:
                 ).isoformat(timespec="seconds")
         citas.append(f)
     eventos = []
-    for f in _filas(wb["03_EVENTOS"]):
+    for f in _hoja(wb, "03_EVENTOS"):
         f = {
             **f,
             "contact_id": alias(f["contact_id"]),
@@ -119,7 +154,7 @@ def construir(wb: Any) -> dict[str, list[dict[str, Any]]]:
     for e in eventos:
         e["event_id"] = _limpiar_texto(e["event_id"], alias)
         e["cita_id"] = _limpiar_texto(e["cita_id"], alias)
-    muestra = _filas(wb["09_MUESTRA_INBOX_11D"])
+    muestra = _hoja(wb, "09_MUESTRA_INBOX_11D")
     return {
         "contactos": contactos,
         "citas": citas,

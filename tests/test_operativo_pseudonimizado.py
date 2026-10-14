@@ -5,6 +5,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "hola_mujer" / "operativo"
 _spec = importlib.util.spec_from_file_location(
@@ -87,3 +89,12 @@ def test_free_text_fields_only_hold_known_phrases() -> None:
     assert {c.get("motivo_cambio") for c in _items("citas")} <= conocidas
     notas = {e.get("notes_nonclinical") for e in _items("eventos")}
     assert all(n is None or re.fullmatch(r"[^\d@]{1,80}", str(n)) for n in notas)
+
+
+def test_unreviewed_column_makes_the_etl_fail_instead_of_leaking() -> None:
+    class Hoja:
+        def iter_rows(self, values_only: bool = True) -> object:
+            return iter([("contact_id", "email"), ("x", "a@b.c")])
+
+    with pytest.raises(ValueError, match="email"):
+        ps._hoja({"01_CONTACTOS": Hoja()}, "01_CONTACTOS")

@@ -25,4 +25,4 @@
 Las preguntas repetidas (señal de que falta un mini-concepto en un paso a paso), la comprensión lectora en las lecturas guiadas, los bloqueos que no se resuelven y lo que responden sus agentes. Con eso se ajustan contratos, guías y fuentes.
 
 ## Cómo enterarte
-Pon el repo en **Watch → Custom → Discussions** ([Avisos y dependencias](Avisos-y-dependencias#configura-tus-notificaciones)): cada discusión nueva te llega como notificación.
+Cada discusión nueva y cada lectura semanal **te llegan por correo** porque el robot te menciona (@). Para enterarte además de todos los comentarios, pon el repo en **Watch → Custom → Discussions** ([Avisos y dependencias](Avisos-y-dependencias#configura-tus-notificaciones)). Si comentas en una discusión, GitHub te avisa de lo que sigue en ella.

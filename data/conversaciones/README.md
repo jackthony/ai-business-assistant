@@ -14,6 +14,10 @@
 - `canal`: `manychat` o `n8n` — así medimos qué falló en cada era y demostramos la mejora.
 - Incluir solo las conversaciones que el negocio autorice; el resto se usa en local sin commitear.
 
+## Corpus sintético v2 (generado)
+
+`sinteticas_v2.jsonl` (100 conversaciones) lo produce `tools/corpus/generar_sinteticas.py` con semilla fija; su composición y la fuente de cada parámetro (medido o supuesto) están en `INDICE_v2.md`. Son conversaciones inventadas que reproducen patrones agregados del Excel operativo; sirven para pruebas de comportamiento y evals, no para estimar conversión real. No se editan a mano: se regeneran. Se versiona también la salida (no solo el script) para que los alumnos y el CI la usen sin correr nada; es determinista, así que regenerar da el mismo archivo. Sirve como casos de **comportamiento**, no como verdad de negocio: no usarlo para estimar conversión ni como ground truth de métricas.
+
 ## Cómo se usa en el programa
 
 | Semana | Uso |

@@ -37,7 +37,7 @@ Consecuencias directas en el diseño (todas ya en el plan):
 
 - **47 servicios** en 13 categorías: Estética facial (8) · Prevención y tamizaje (7) · Estética corporal (5) · Salud íntima y ginecológica (4) · Dermatocosmética (4) · Planificación familiar (4) · Obstetricia (3) · Prevención y salud femenina (3) · Terapias complementarias (3) · Capilar (2) · Academy (2) · Postquirúrgico (1) · Clínico-estéticos (1).
 - Precios: **S/ 24.99 – 449.99**. Campos: `service_id` (HM-CAP-*, HM-CORP-*, …), `precio_pen`, `reserva_pen`, `duracion_min`, `permite_sesiones`, `activo`, `requiere_evaluacion`, `cta`.
-- El ETL de S6 (#08) lee esta hoja → JSON → ChromaDB.
+- **Normalizado en el repo:** `data/hola_mujer/` (servicios, promociones, negocio, vocabularios) con su auditoría de calidad. El ETL de S6 (#08) parte de esos JSON → ChromaDB.
 
 ## Promociones (06_PROMOCIONES)
 

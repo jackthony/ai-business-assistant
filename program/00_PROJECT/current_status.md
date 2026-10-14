@@ -61,7 +61,7 @@ Issues del monitor: **#5** colaboradores · **#6** mapear códigos PEA (SINFO) �
 
 - **#52 bloquea la semana:** Josue tiene 6 archivos y 8 pruebas por delante; sin su merge, #53 y #54 no pueden empezar.
 - **Informe quincenal del 2026-10-17:** los borradores dependen de la evidencia real de cada alumno (commits, PRs, Issues). Al 2026-10-14 Pilar y Allan tienen 0 commits, PRs e Issues cerrados en la quincena: su trabajo de estudio (#34–#38, #43, #44) no deja rastro en GitHub y sus borradores salen vacíos.
-- **Canal de WhatsApp real para Hola Mujer sin decidir:** `proveedores-whatsapp.md` propone NeuraCode como primer tenant real (Hola Mujer no tiene documentos para verificar el negocio en Meta); con NeuraCode fuera de alcance falta definir la vía de Hola Mujer.
+- **Canal de WhatsApp real para Hola Mujer sin decidir:** con NeuraCode fuera de alcance, `proveedores-whatsapp.md` plantea A (provisional), B (verificar) o C (reusar el número que ya opera en ManyChat). Falta que Jack revise el Centro de seguridad de Meta (verificación, límite de mensajería, BSP) para elegir; hasta entonces el HITO 1 corre en Telegram + chat web.
 - **Datos del Excel por confirmar con Jioysi:** duraciones (todas 60 min, parece valor por defecto), vigencia de las 3 promociones y la lista de servicios sensibles; las hojas `00_EMPEZAR` y la oculta tienen datos de personas.
 - `revisor-contrato` no ha corrido sobre un PR real de alumno: sus capas están probadas por tests y con la API real, no con un caso de punta a punta.
 - PEA SINFO pendiente (bloquea columnas del seguimiento quincenal).

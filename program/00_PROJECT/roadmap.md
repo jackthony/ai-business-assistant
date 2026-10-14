@@ -46,7 +46,7 @@ Construir un **asistente de IA empresarial multitenant para WhatsApp** (Hola Muj
 | Fase | Semanas | Foco | Entregable |
 |---|---|---|---|
 | 1. Fundamentos | S1–S3 | Java/POO, Git, tests, HTTP/REST y contratos (exigencia SENATI) | 3 apps consola + repos profesionales + mapa de integraciones |
-| 2. Agente único | S4–S8 | FastAPI, webhook Meta, LangGraph, RAG Chroma, citas, cierre | HITO 1: bot respondiendo por WhatsApp (S6) |
+| 2. Agente único | S4–S8 | FastAPI, webhook Meta, LangGraph, RAG Chroma, citas, cierre | HITO 1: bot respondiendo por canal provisional (Telegram/web; WhatsApp cuando el monitor lo active) (S6) |
 | 3. Multiagente | S9–S12 | Safety/HITL, OCR, supervisor router, evals de Hola Mujer, voz, seguridad y evaluación | HITO 2 (S9) y HITO 3 (S12) |
 | 4. Producción | S13–S16 | Proactivo, Postgres, Docker, deploy, fallbacks, E2E | Demo final + transferencia (S16) |
 

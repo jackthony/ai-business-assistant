@@ -7,13 +7,14 @@
 
 ## 1. Resumen y recomendación
 
-- **Restricción del dueño (aplicada):** Hola Mujer **no tiene documentos** para la verificación de negocio de Meta y se quiere evitarla. NeuraCode es verificable pero **no se usará para Hola Mujer**. Las vías no oficiales (Baileys / WhatsApp Web) se **descartan**: riesgo de baneo del número, y ADR-003 ya las rechaza.
+- **Restricción del dueño (aplicada):** Hola Mujer **no tiene documentos** para la verificación de negocio de Meta y se quiere evitarla. NeuraCode queda **fuera del alcance** (proyecto posterior, tras validar y evaluar Hola Mujer): no es una vía para Hola Mujer. Las vías no oficiales (Baileys / WhatsApp Web) se **descartan**: riesgo de baneo del número, y ADR-003 ya las rechaza.
 - **Hallazgo central:** la verificación no es un detalle de proveedor. Sin verificar, Meta parte de **250 conversaciones iniciadas por el negocio en 24 h** y no aprueba el nombre visible; según fuentes secundarias el tope puede escalar por calidad aun sin verificar, pero la verificación desbloquea nombre visible y límites mayores (sección 4). Esto aplica a **cualquier** ruta sobre la Cloud API, incluidos los BSP (Kapso, 360dialog, Twilio, Gupshup, Bird, Infobip, Chatwoot). Un BSP **no elimina** ese límite (no confirmado que alguno lo haga).
 - **Recomendación para Hola Mujer:**
   1. **Ahora (S6–S8):** canal provisional. Telegram Bot API para practicantes + chat web propio, ambos detrás de un adapter (ADR-011). Costo de Meta: cero.
   2. **Producción WhatsApp:** no hay ruta que cumpla "sin verificación" **y** "escala". Si el dueño mantiene la restricción, WhatsApp real para Hola Mujer queda limitado a pruebas con número de prueba y 250 conversaciones iniciadas/24 h. Esto es decisión de Jack (sección 7).
   3. **Proveedor si se activa WhatsApp:** Meta Cloud API directa (ADR-003 vigente) por costo y sin markup. **Kapso** como alternativa si se prioriza DX para practicantes; exige revisar ADR-003 ("directa").
-- **Alternativas que Jack debe decidir:** (A) canal provisional indefinido para Hola Mujer; (B) verificar Hola Mujer más adelante con documentos que hoy no existen; (C) usar WhatsApp real solo con NeuraCode (cumple la restricción) y mantener Hola Mujer en canal provisional.
+- **Alternativas que Jack debe decidir:** (A) canal provisional indefinido para Hola Mujer; (B) verificar Hola Mujer más adelante con documentos que hoy no existen; (C) **reutilizar el número y el WABA que Hola Mujer ya opera hoy en ManyChat** (inferencia, no confirmada: ManyChat WhatsApp funciona sobre una cuenta de WhatsApp Business Platform de Meta, así que ese número ya está dado de alta). La opción C reemplaza a la antigua «usar NeuraCode», que ya no aplica.
+- **Siguiente paso concreto (lo único que desbloquea la decisión, y solo lo puede hacer Jack):** abrir Meta Business Suite → Configuración del negocio → *Centro de seguridad* y anotar (1) si el portfolio de Hola Mujer figura como **verificado**, (2) el **límite de mensajería** que muestra WhatsApp Manager para ese número y (3) qué proveedor/BSP está conectado (ManyChat o directo). Con esas tres respuestas se elige entre A, B y C; sin ellas cualquier recomendación es una suposición. Mientras tanto no se cambia nada del número en producción.
 
 ## 2. Requisitos
 
@@ -22,7 +23,7 @@
 | Webhook HTTPS público al backend FastAPI (verificación GET + POST de eventos) | ADR-003; ADR-011 (`src/channels/`) |
 | Plantillas aprobadas por Meta para mensajes fuera de la ventana de 24 h | `program/02_REFERENCE/meta-pricing.md` (sección Templates) |
 | Costo por mensaje entregado, medible por canal (FinOps, S15) | ADR-011; `meta-pricing.md` |
-| Multitenant: Hola Mujer y NeuraCode aislados por tenant en el agente | ADR-011 (`InboundEvent.tenant`) |
+| Un solo negocio (Hola Mujer); el campo `tenant` de `InboundEvent` queda por diseño del contrato, sin segundo tenant | ADR-011 (`InboundEvent.tenant`) |
 | Datos de usuarios peruanos: Ley 29733 (tratamiento, transferencia, conservación) | Ley 29733 (ver sección 8: no verificado el texto aplicable) |
 | Sin datos reales de clientes en ejemplos | AGENTS.md (reglas duras) |
 | Salida de datos y lock-in controlables (migrar de proveedor sin reescribir agentes) | ADR-011 (contrato interno canónico) |
@@ -97,7 +98,7 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 
 **Trigger de paso:** cuando se cumpla una de estas condiciones, decide Jack:
 - (a) Hola Mujer completa verificación de negocio de Meta (hoy no tiene documentos); o
-- (b) NeuraCode (verificable, fuera de la restricción) se usa como primer tenant real de WhatsApp.
+- (b) la revisión del Centro de seguridad (arriba) muestra que el número y el WABA que ya operan en ManyChat sirven para el agente, sin migrar a otro número (opción C).
 
 **Implementación (cuando se active):**
 - Un adapter nuevo: `src/channels/whatsapp.py`, con verificación GET, parseo POST de eventos y envío. Solo este módulo importa SDK o HTTP de Meta/BSP (ADR-011).

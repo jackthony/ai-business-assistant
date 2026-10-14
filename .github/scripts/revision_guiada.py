@@ -140,6 +140,9 @@ def post(pr: str, body: str) -> None:
 
 def main() -> None:
     pr = os.environ["PR_NUM"]
+    if os.environ.get("PR_AUTHOR") in ("jackthony", "dependabot[bot]"):
+        print("PR del monitor o de un bot: la revisión guiada es para practicantes.")
+        return
     base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]
     n = issue_number(os.environ.get("PR_BODY", ""), os.environ.get("HEAD_REF", ""))
     contract = find_contract(n) if n else None

@@ -75,7 +75,7 @@
 | S8 | telemetría, trazas, métricas | N4 LLM Engineer's Handbook (observabilidad) + Langfuse (source_map) |
 | S9 | safety, HITL | N4 Huyen (seguridad) · OWASP GenAI/ASI (source_map N1) |
 | S10 | supervisor, routing, visión | N4 Anthropic patterns · N3 CS336 (opcional) · N1 fast.ai (visión) |
-| S11 | NeuraCode, multimodal | N1 fast.ai · docs Qwen-VL/Ollama (source_map) |
+| S11 | Evals base, multimodal | N1 fast.ai · docs Qwen-VL/Ollama (source_map) |
 | S12 | evals, inyección, jueces | N4 Huyen (evals) · OWASP ASI · Langfuse evals |
 | S13–S16 | FinOps, operación, venta | N4 Huyen (costos) · LLM Engineer's (deploy) |
 

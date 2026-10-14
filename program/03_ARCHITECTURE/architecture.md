@@ -1,4 +1,4 @@
-# Arquitectura objetivo — AI Business Assistant (multitenant)
+# Arquitectura objetivo — AI Business Assistant
 
 > Estado: v2 — alineada con `program/01_CURRICULUM/16_week_plan.md` (S4–S16).
 
@@ -35,7 +35,9 @@ class AgentState(TypedDict):
     status: Literal["active", "handoff_requested", "waiting_payment"]
 ```
 
-## Multitenant
+## Preparado para varios negocios (alcance actual: solo Hola Mujer)
+
+> Se construye y entrega únicamente Hola Mujer. NeuraCode es un proyecto posterior, que se adapta cuando Hola Mujer esté validado y evaluado (decisión 2026-10-14). El diseño no lo impide: cambiar de negocio es cambiar de `configs/<negocio>/`.
 
 - `configs/hola_mujer/` y `configs/neuracode/`: system prompt, RAG namespace, reglas y tools permitidas.
 - El tenant se resuelve por el número receptor (phone_number_id) del webhook.

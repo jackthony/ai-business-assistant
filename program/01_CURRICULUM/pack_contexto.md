@@ -110,20 +110,20 @@
 - **Lee antes (repo):** tus Issues (`#16`/`#17`/`#18`) · `ADR-009` · `program/02_REFERENCE/agent-engineering-handbook.md` (HITL/seguridad) · `program/04_DOMAIN/hola-mujer.md` (protocolo de seguridad clínica).
 - **Fuentes externas:** documentación oficial de LangGraph (*Interrupts*) · patrones `input_guardrails` y `human_in_the_loop` de `openai/openai-agents-python` (solo leer el patrón; no se adopta el SDK).
 - **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/s9-guardrail-y-gate/` (guardrail con duda→humano + gate `borrador → interrupt → aplicar`). Pregúntate siempre: ¿hay algún efecto antes del `interrupt`?
-- **No cargues:** OCR, supervisor y multitenant (S10): fuera de fase.
+- **No cargues:** OCR, supervisor y evals (S10): fuera de fase.
 - **Con tu IA:** un prompt = un nodo con su test; el clasificador de riesgo se **inyecta** (en tests, un doble). Pide los 15 casos (10 normales, 5 de riesgo) como tabla antes de calibrar el umbral.
 - **Listo cuando:** 5/5 casos de riesgo congelados, 0/10 falsos positivos, reanudación con `Command(resume=)` sin duplicar el efecto, y las preguntas de comprensión respondidas.
 - **Fundamentos si te trabas:** OWASP Agentic (ASI) y GenAI Top 10 2026 en `source_map.md`; Nivel 4 Anthropic (tool-use).
 
-## Semana 10 — OCR + supervisor + multitenant: un núcleo, varios negocios
+## Semana 10 — OCR + supervisor + evals: un solo negocio, bien medido
 
-- **Negocio en foco:** leer el comprobante Yape/Plin sin humano cuando es el caso feliz, rutear cada mensaje al agente correcto y que NeuraCode viva en el mismo núcleo sin mezclar datos con Hola Mujer.
+- **Negocio en foco:** leer el comprobante Yape/Plin sin humano cuando es el caso feliz, rutear cada mensaje al agente correcto y medir con un corpus sintético si el bot de Hola Mujer atiende como debe.
 - **Lee antes (repo):** tus Issues (`#15`/`#19`/`#20`) · `ADR-010` · `ADR-011` · `program/02_REFERENCE/ejemplos/patrones-arquitectura.md` (qué patrones de microservicios aplican y cuáles no).
-- **Fuentes externas:** `microservices.io` (Saga, Tenant isolation) · `routing.py` y `deterministic.py` de `openai/openai-agents-python` solo para comparar con LangGraph.
-- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/s10-router-saga-tenant/` (router reglas→LLM con seguridad primero, saga con compensación, aislamiento por tenant).
+- **Fuentes externas:** `microservices.io` (Saga) · `routing.py` y `deterministic.py` de `openai/openai-agents-python` solo para comparar con LangGraph.
+- **Ejemplo guiado:** `program/02_REFERENCE/ejemplos/s10-router-saga-tenant/` (router reglas→LLM con seguridad primero, saga con compensación; el tramo de aislamiento por tenant es solo lectura: no se construye).
 - **No cargues:** el Excel completo del negocio ni datos reales de comprobantes; los 8 casos de OCR son capturas de prueba anonimizadas.
 - **Con tu IA:** pide primero la tabla de 15 mensajes con su ruta esperada, luego el router; el fallback LLM se inyecta y tiene su test con un doble.
-- **Listo cuando:** ≥13/15 ruteos correctos con traza, dudas del comprobante → humano, tenant desconocido = error, y la nota de comparativa de frameworks entregada.
+- **Listo cuando:** ≥13/15 ruteos correctos con traza, dudas del comprobante → humano, y la nota de comparativa de frameworks entregada.
 - **Fundamentos si te trabas:** *Microservices Patterns* (Richardson) y la comparativa de Langfuse (`source_map.md`).
 
 ---

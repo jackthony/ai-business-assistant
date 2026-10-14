@@ -30,7 +30,7 @@ Nada del plan se duplica fuera de este repo: si un artefacto contradice a otro, 
 | Base | Qué es | Dónde vive | Quién la usa |
 |---|---|---|---|
 | **1. KB-P · Proyecto** | Currículo, arquitectura, ADRs, rúbrica, expedientes. Curada a mano. Fuente canónica. | **Este repo** | Monitor + practicantes + DeepSeek (2–3 archivos por tarea) |
-| **2. KB-A · Agentes** | Datos de negocio para RAG: 47 servicios, promociones, cursos. Un namespace por tenant. | Repo de código: `data/` + ChromaDB (`configs/hola_mujer`, `configs/neuracode`) | El bot en runtime — **nunca** se usa para gestionar el programa |
+| **2. KB-A · Agentes** | Datos de negocio para RAG: 47 servicios, promociones, cursos. Un namespace por tenant. | Repo de código: `data/` + ChromaDB (`configs/hola_mujer`) | El bot en runtime — **nunca** se usa para gestionar el programa |
 | **3. KB-T · Transitoria** | 2–3 archivos por tarea (current_status + Issue + módulo/documento). | Se arma al momento en DeepSeek/IDE | El monitor y los practicantes al programar o evaluar |
 
 Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios/listas reales de clientes** (eso va al Excel operativo — versionado en `data/` de este repo desde que GitHub sustituye a Google Drive); **KB-T nunca incluye el repo completo**. Mezclarlas rompe seguridad, calidad del RAG y la memoria de DeepSeek.
@@ -73,7 +73,7 @@ Destino de diseño: [`architecture.md`](program/03_ARCHITECTURE/architecture.md)
 | `program/01_CURRICULUM/` | Plan de 16 semanas, backlog de Issues, inducción S5, pack de contexto, ruta de fundamentos y **`asignaciones/`** (un contrato determinista `S##_D#.md` + guía paso a paso por cada Issue de producción) |
 | `program/02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate), `stack-versiones.md` y guías por tema; `ejemplos/` con bloques guiados y tests |
 | `program/03_ARCHITECTURE/` | Arquitectura objetivo, `estandares.md` + ADRs en `decisions/` |
-| `program/04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
+| `program/04_DOMAIN/` | Dominio de negocio: Hola Mujer (NeuraCode, proyecto posterior) |
 | `program/05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |
 | `src/` | Producto, por capas (`api`, `agents`, `channels`, `infrastructure`, `memory`, `models`, `rag`, `services`, `tools`). El núcleo no conoce canales ni HTTP (`estandares.md` §2) |
 | `tests/` | Pruebas del producto y de la automatización (`tests/ops/`) |

@@ -23,11 +23,11 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas segú
 | #17 | S9 D2 | Human-in-the-Loop (interrupt) + permisos N1/N2/N3 + alerta a Jioysi | todo |
 | #18 | S9 D3 | HITO 2: agente único completo (+ handoff) | todo |
 | #19 | S10 D2 | Supervisor router (orquestador) + clase de frameworks | todo |
-| #20 | S10 D3 | Arquitectura multitenant base | todo |
-| #21 | S11 D1 | Ingesta de cursos NeuraCode (tenant 2) | todo |
+| #20 | S10 D3 | Evals de Hola Mujer + cierre Q5 | todo |
+| #21 | S11 D1 | Rúbrica y dataset de evals de Hola Mujer | todo |
 | #22 | S11 D2 | Pre-procesador multimodal: Whisper (local) | todo |
 | #23 | S11 D3 | Normalización de audio y contexto | todo |
-| #24 | S12 D1 | HITO 3: bot NeuraCode + multimodal | todo |
+| #24 | S12 D1 | HITO 3: Hola Mujer multimodal | todo |
 | #25 | S8 D3 | Telemetría temprana (Langfuse self-host + OTel GenAI semconv) | todo |
 | #26 | S12 D2 | Seguridad OWASP (guardrails ASI01/ASI02) | todo |
 | #27 | S12 D3 | Evaluaciones offline (LLM-as-a-Judge + heurística de Lusser) | todo |

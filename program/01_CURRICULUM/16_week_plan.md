@@ -16,7 +16,7 @@
 
 ## Plan v2 (vigente desde 2026-10-06)
 
-Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR de pagos (#15 → S10) recién después del agente único; supervisor (#19) y multitenant (#20) en S10; NeuraCode (#21 → S11); HITO 3 (#24 → S12); seguridad + evals/Lusser en S12; FinOps en S15.
+Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR de pagos (#15 → S10) recién después del agente único; supervisor (#19) y evals de Hola Mujer sobre el corpus sintético (#20) en S10; evals base (#21 → S11); HITO 3 multimodal de Hola Mujer (#24 → S12); NeuraCode queda fuera (proyecto aparte tras validar Hola Mujer, decisión 2026-10-14); seguridad + evals/Lusser en S12; FinOps en S15.
 
 | Semana | Foco | Issues |
 |---|---|---|
@@ -26,8 +26,8 @@ Cambios clave vs v1: CI/CD desde S4 D1; telemetría temprana (#25 → S8); OCR d
 | 7 | Pydantic tools + citas | #10–#12 |
 | 8 | Cierre/lead + registro + telemetría temprana | #13, #14, #25 |
 | 9 | Safety + HITL/harness + **HITO 2: agente único completo** | #16–#18 |
-| 10 | OCR pagos + supervisor router + multitenant (clase de frameworks) | #15, #19, #20 |
-| 11 | Ingesta NeuraCode + Whisper local + normalización de audio | #21–#23 |
+| 10 | OCR pagos + supervisor router + evals de Hola Mujer (clase de frameworks) | #15, #19, #20 |
+| 11 | Evals base + Whisper local + normalización de audio | #21–#23 |
 | 12 | **HITO 3** + OWASP/inyección + evals (LLM-as-a-Judge + Lusser) | #24, #26, #27 |
 | 13 | Proactivo + follow-ups + analytics | #28–#30 |
 | 14 | PostgresSaver + Docker + deploy | #31–#33 |
@@ -47,7 +47,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 | S7 | `langgraph.md` (tools Pydantic) + matriz `definitive-guide.md` |
 | S8 | `observabilidad-costos.md` + docs Langfuse (telemetría) + `roi_metrics.md` |
 | S9 | ADR-009 + `agent-engineering-handbook.md` (HITL/seguridad) + harness lecture-01 (es) |
-| S10 | ADR-010 + comparativa Langfuse + microservices.io (multitenant) + Anthropic (routing/orchestrator) |
+| S10 | ADR-010 + comparativa Langfuse + microservices.io (modularidad) + Anthropic (routing/orchestrator) |
 | S11 | docs Ollama/faster-whisper + `deepseek-local.md` |
 | S12 | harness-engineering lectures 10–12 (es) + Anthropic (evaluator-optimizer) + ADR-009 |
 | S13 | `agent-engineering-handbook.md` (proactivo/contexto) + `meta-pricing.md` (costo de templates proactivos) |
@@ -286,7 +286,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 - Evidencia: video + release + tabla de escenarios.
 - **HITO 2 ✅**
 
-### Semana 10 — OCR + supervisor + multitenant (Issues #15, #19, #20)
+### Semana 10 — OCR + supervisor + evals de Hola Mujer (Issues #15, #19, #20)
 
 **D1 — Issue #15: OCR de pagos (Yape/Plin)**
 - Objetivo: leer comprobantes y validar el caso feliz sin humano.
@@ -302,19 +302,19 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 - Evidencia: PR + tabla de ruteo + nota.
 - Foco de evaluación: comprensión, criterio.
 
-**D3 — Issue #20: Multitenant base + cierre Q5**
-- Objetivo: NeuraCode vive en el mismo núcleo.
-- Actividades: resolver tenant por `phone_number_id`; `configs/{hola_mujer,neuracode}` con prompt, namespace RAG y tools permitidas; cargar tenant `neuracode` con prompt v0; demo quincenal + informe SENATI Q5; Excel S9–S10.
-- Criterios: [ ] mismo grafo atiende 2 números con prompts distintos; [ ] sin fugas de datos entre tenants; [ ] informe Q5 subido; [ ] release `q5`.
+**D3 — Issue #20: Evals de Hola Mujer + cierre Q5**
+- Objetivo: medir el bot de Hola Mujer con datos antes de crecer (ciclo de evals completo, requisito para pensar en otro negocio).
+- Actividades: correr el agente sobre el corpus sintético (`data/conversaciones/`, split natural y de cobertura) y tabularlo contra el baseline ManyChat/n8n; escenarios por flujo (info, ubicación, agenda, gestión de cita, handoff); demo quincenal + informe SENATI Q5; Excel S9–S10.
+- Criterios: [ ] ≥20 escenarios del corpus corren automáticos; [ ] tabla agente vs baseline por flujo; [ ] informe Q5 subido; [ ] release `q5`.
 - Evidencia: PR + demo + informe.
 - Foco de evaluación: calidad técnica, evidencia.
 
-### Semana 11 — NeuraCode + voz (Issues #21–#23)
+### Semana 11 — Evals base + voz (Issues #21–#23)
 
-**D1 — Issue #21: Ingesta de cursos NeuraCode**
-- Objetivo: el tenant 2 responde con datos reales.
-- Actividades: ETL de cursos/temarios/precios → JSON → ChromaDB namespace `neuracode`; prompt de negocio NeuraCode (tono academia); 10 preguntas verificadas.
-- Criterios: [ ] colección cargada; [ ] 10/10 verificadas contra fuente; [ ] aislamiento por namespace.
+**D1 — Issue #21: Rúbrica y dataset de evals de Hola Mujer**
+- Objetivo: que cada cambio de prompt o de grafo se compare contra un criterio fijo.
+- Actividades: rúbrica versionada (dato correcto según el catálogo aprobado, ≤3 líneas, 1 pregunta por turno, derivación clínica, ubicación); LLM-as-judge local calibrado con 10 casos puntuados por una persona; tabla antes/después del prompt.
+- Criterios: [ ] rúbrica versionada; [ ] acuerdo juez–humano medido en 10 casos; [ ] 0 respuestas clínicas en el set.
 - Evidencia: PR + dataset + resultados.
 
 **D2 — Issue #22: Whisper local (notas de voz)**
@@ -332,10 +332,10 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 ### Semana 12 — HITO 3 + seguridad + evals (Issues #24, #26, #27)
 
-**D1 — Issue #24: HITO 3 — NeuraCode + multimodal**
-- Objetivo: demostrar el segundo tenant con voz e imagen.
-- Actividades: demo NeuraCode (cursos) + nota de voz + comprobante; métricas del hito; release `hito-3`.
-- Criterios: [ ] NeuraCode responde con datos reales; [ ] audio y comprobante funcionan E2E; [ ] métricas registradas; [ ] release publicado.
+**D1 — Issue #24: HITO 3 — Hola Mujer multimodal**
+- Objetivo: demostrar el bot de Hola Mujer con voz e imagen.
+- Actividades: demo Hola Mujer (servicios y cita) + nota de voz + comprobante; métricas del hito; release `hito-3`.
+- Criterios: [ ] Hola Mujer responde con datos del catálogo aprobado; [ ] audio y comprobante funcionan E2E; [ ] métricas registradas; [ ] release publicado.
 - Evidencia: video + release.
 - **HITO 3 ✅**
 
@@ -444,7 +444,7 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **D3 — Issue #39: Demo final + transferencia + cierre Q8**
 - Objetivo: entregar el sistema funcionando y transferirlo.
-- Actividades: demo E2E ante Hola Mujer/NeuraCode; entrega del repo, accesos y runbook; **informe final SENATI (lo redacta cada alumno)** + acta en `program/05_EVALUATION/`; release `v1.0`; retrospectiva del programa.
+- Actividades: demo E2E ante Hola Mujer; entrega del repo, accesos y runbook; **informe final SENATI (lo redacta cada alumno)** + acta en `program/05_EVALUATION/`; release `v1.0`; retrospectiva del programa.
 - Criterios: [ ] demo en producción real; [ ] runbook y accesos entregados; [ ] release `v1.0` publicado; [ ] informes finales subidos por los alumnos; [ ] retrospectiva documentada.
 - Evidencia: release + runbook + informes.
 - **Demo final ✅**

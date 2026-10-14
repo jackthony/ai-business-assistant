@@ -38,8 +38,23 @@ El esquema (Pydantic v2) valida: IDs únicos con formato `HM-LINEA-NNN`, precio 
 2. **Datos del negocio (`04`)**: 11 de 17 seguían pendientes. Dirección, mapa y horario quedaron confirmados por el monitor el 2026-10-14. Siguen pendientes `CALENDAR_ID`, plantillas de WhatsApp, `PRIVACY_NOTICE_URL`, `EMERGENCY_PROTOCOL`, `DEFAULT_APPOINTMENT_MINUTES` y los dos campos de ManyChat de Jioysi.
 3. **Operación real (hojas `01`–`03`)**: la muestra es mínima: 6 contactos, 9 citas y 47 eventos entre el 27-ago y el 30-sep. Las 9 citas tienen recordatorios, sincronización e ID de calendario **vacíos**: la integración con calendario nunca corrió (coincide con los pasos 10–12 del plan en `TODO`). El flujo `HM_WA_35_RESULTADO_CALCOM` sugiere que se usó Cal.com para agendar (inferido del nombre; confirmar).
 4. **Integridad entre hojas**: 2 eventos apuntan a un `contact_id` que no existe en contactos, 8 a un `cita_id` que no existe y 3 citas a un contacto inexistente. Hay valores fuera de lista (`CANCELADO` en vez de `CANCELLED`, `Whatsapp` en vez de `WHATSAPP`, el evento `CANCELLED_MISMATCH` que la lista no incluye), teléfonos con formatos mezclados y fechas de cita como texto (`07/09 09:30`). Todo esto debe validarse en el esquema del agente, no asumirse.
-5. **Las dos hojas con riesgo de datos personales** no se llevan al repo: `00_EMPEZAR` (trae nombres y apellidos de personas con estado «Cliente» y enlaces a documentos de Google) y la hoja oculta `MANYCHAT_SERVICE_SHEET` (borrador de 930 fórmulas `QUERY` rotas con algunos nombres y teléfonos). Conviene limpiarlas en el Excel.
+5. **Datos operativos: sí están en el repo, pseudonimizados** (`operativo/`; ver sección siguiente). Solo quedan fuera `00_EMPEZAR` y la hoja oculta, que no tienen valor de dominio: `00_EMPEZAR` (trae nombres y apellidos de personas con estado «Cliente» y enlaces a documentos de Google) y la hoja oculta `MANYCHAT_SERVICE_SHEET` (borrador de 930 fórmulas `QUERY` rotas con algunos nombres y teléfonos). Conviene limpiarlas en el Excel.
 
 ## Qué no entra y por qué
 
 `01_CONTACTOS`, `02_CITAS`, `03_EVENTOS`, `09_MUESTRA_INBOX_11D`, `00_EMPEZAR` y `MANYCHAT_SERVICE_SHEET`: contienen o pueden contener datos de personas (Ley 29733 sin validar; el repo es público). Sus **patrones agregados** ya alimentan el corpus sintético (`data/conversaciones/INDICE_v2.md`).
+
+## Datos operativos pseudonimizados (`operativo/`)
+
+El repo es **público**, así que las hojas con personas entran **sin** nombres, teléfonos, ids de plataforma ni enlaces, y con todo lo demás intacto (fechas, etapas, flujos, estados, notas, vacíos y defectos), para que se trabaje con la forma real de los datos.
+
+| Archivo | Hoja origen | Filas | Qué cambia |
+|---|---|---|---|
+| `contactos.json` | 01_CONTACTOS | 5 | `contact_id` → `C001…`; sin `nombre`/`telefono` (solo `tiene_nombre`, `tiene_telefono`) |
+| `citas.json` | 02_CITAS | 9 | `contact_id` → alias; fechas serial de Excel pasadas a ISO |
+| `eventos.json` | 03_EVENTOS | 46 | `contact_id`, `event_id`, `cita_id` → alias (mismo alias para el mismo contacto) |
+| `muestra_inbox.json` | 09_MUESTRA_INBOX_11D | 220 | nada: ya eran clasificaciones sin texto (82 con vista previa útil) |
+
+Defectos reales conservados a propósito (los alumnos deben tratarlos, no esconderlos): citas sin `contact_id`, estado `CANCELADO` fuera del vocabulario, `inicio` como texto `"07/09 09:30"`, eventos duplicados con el mismo `event_id`, `canal` con distinta capitalización, contactos sin teléfono.
+
+Regenerar: `python tools/datos/pseudonimizar_operativo.py RUTA.xlsx`. El Excel original sigue fuera del repo. Si el dueño decide hacer el repo privado, se puede volver a subir el dato crudo en otro PR; en un repo público no se debe, porque el historial de git es permanente.

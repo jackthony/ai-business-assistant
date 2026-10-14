@@ -3,7 +3,7 @@ name: probar-clave-claude
 # TEMPORAL (Issue #91): confirma que ANTHROPIC_API_KEY existe y responde. No mergear.
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
 
 permissions:
   contents: read

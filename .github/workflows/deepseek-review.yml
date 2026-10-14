@@ -34,6 +34,12 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
+          # PR con contrato en el README de asignaciones: lo revisa revision-guiada (evita doble comentario)
+          N=$(printf '%s' "$PR_BODY" | grep -oiE '(closes|fixes|resolves) +#[0-9]+' | head -1 | grep -oE '[0-9]+' || true)
+          if [ -n "$N" ] && grep -qE "^\| *#$N *\|" program/01_CURRICULUM/asignaciones/README.md; then
+            echo "PR con contrato: lo revisa revision-guiada"
+            exit 0
+          fi
           if [ -z "$KEY" ]; then
             gh pr comment "$PR_NUM" --body "> 🔎 **DeepSeek reviewer:** sin `DEEPSEEK_API_KEY` en los secrets del repo — este primer pase está desactivado. El monitor hará el review local (Ollama) como siempre."
             echo "sin clave — skip"

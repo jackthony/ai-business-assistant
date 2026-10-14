@@ -1,0 +1,36 @@
+name: probar-clave-claude
+
+# TEMPORAL (Issue #91): confirma que ANTHROPIC_API_KEY existe y responde. No mergear.
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  contents: read
+
+jobs:
+  probar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Llamar a la API con el secreto
+        env:
+          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import importlib.util, os, urllib.error
+          key = os.environ.get("KEY", "")
+          print("clave presente:", bool(key), "· longitud:", len(key))
+          if not key:
+              raise SystemExit("Sin ANTHROPIC_API_KEY: revisa nombre y alcance del secreto")
+          spec = importlib.util.spec_from_file_location("ra", ".github/scripts/revisor_agente.py")
+          ra = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(ra)
+          try:
+              print("respuesta:", ra.ask_claude("Responde solo: OK", key)[:80])
+          except urllib.error.HTTPError as e:
+              raise SystemExit(f"HTTP {e.code}: {e.read()[:300]!r}")
+          PY

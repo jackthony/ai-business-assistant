@@ -27,11 +27,11 @@ Consecuencias directas en el diseño (todas ya en el plan):
 | REMINDER_24H / REMINDER_2H | activos | PROPOSED (sujeto a plantillas aprobadas) |
 | ADDRESS | Urb. Nicolás Garatea, Nuevo Chimbote — local de Oral Imagen, **segundo piso** (referencia: Av. Agraria G-9, dirección de Oral Imagen en Google Maps) | CONFIRMED (monitor, 2026-10-14) |
 | MAP_URL | https://maps.app.goo.gl/hFWGtDwK8dhwxQHE7 | CONFIRMED (monitor, 2026-10-14) |
-| OPENING_HOURS | Tardes **15:00–19:00** (America/Lima); mañanas **sin atención** por ahora. Días de la semana: por confirmar | PARCIAL (monitor, 2026-10-14) |
+| OPENING_HOURS | Todos los días, tardes **15:00–19:00** (America/Lima); mañanas sin atención por ahora. **Domingo previa coordinación.** Toda cita es **previa coordinación**: no hay una persona fija en el consultorio | CONFIRMED (monitor, 2026-10-14) |
 | CALENDAR_ID · WA_TEMPLATE_* · PRIVACY_NOTICE_URL | POR_CONFIRMAR | ⛔ PENDIENTE (aviso de privacidad #7 ya aprobado por el dueño; falta publicar el URL) |
 | EMERGENCY_PROTOCOL | pendiente de aprobación | ⛔ PENDIENTE (Jioysi) |
 
-**Bloqueantes del negocio** (los resuelve el negocio, no el equipo): días de atención (el horario por franja ya está; guardrail de ubicación y S3), `CALENDAR_ID` (Agente 2, #12), plantillas WA aprobadas (recordatorios S13), aviso de privacidad (Issue #7) y protocolo de emergencia (seguridad clínica).
+**Bloqueantes del negocio** (los resuelve el negocio, no el equipo): `CALENDAR_ID` (Agente 2, #12), plantillas WA aprobadas (recordatorios S13), aviso de privacidad (Issue #7) y protocolo de emergencia (seguridad clínica).
 
 ## Catálogo (05_SERVICIOS)
 

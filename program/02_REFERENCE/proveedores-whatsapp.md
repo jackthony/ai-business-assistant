@@ -6,7 +6,7 @@
 ## 1. Resumen y recomendación
 
 - **Restricción del dueño (aplicada):** Hola Mujer **no tiene documentos** para la verificación de negocio de Meta y se quiere evitarla. NeuraCode es verificable pero **no se usará para Hola Mujer**. Las vías no oficiales (Baileys / WhatsApp Web) se **descartan**: riesgo de baneo del número, y ADR-003 ya las rechaza.
-- **Hallazgo central:** la verificación no es un detalle de proveedor. Sin verificar, Meta limita a **250 conversaciones iniciadas por el negocio en 24 h** y no aprueba el nombre visible (fuentes secundarias, sección 4). Esto aplica a **cualquier** ruta sobre la Cloud API, incluidos los BSP (Kapso, 360dialog, Twilio, Gupshup, Bird, Infobip, Chatwoot). Un BSP **no elimina** ese límite (no confirmado que alguno lo haga).
+- **Hallazgo central:** la verificación no es un detalle de proveedor. Sin verificar, Meta parte de **250 conversaciones iniciadas por el negocio en 24 h** y no aprueba el nombre visible; según fuentes secundarias el tope puede escalar por calidad aun sin verificar, pero la verificación desbloquea nombre visible y límites mayores (sección 4). Esto aplica a **cualquier** ruta sobre la Cloud API, incluidos los BSP (Kapso, 360dialog, Twilio, Gupshup, Bird, Infobip, Chatwoot). Un BSP **no elimina** ese límite (no confirmado que alguno lo haga).
 - **Recomendación para Hola Mujer:**
   1. **Ahora (S6–S8):** canal provisional. Telegram Bot API para practicantes + chat web propio, ambos detrás de un adapter (ADR-011). Costo de Meta: cero.
   2. **Producción WhatsApp:** no hay ruta que cumpla "sin verificación" **y** "escala". Si el dueño mantiene la restricción, WhatsApp real para Hola Mujer queda limitado a pruebas con número de prueba y 250 conversaciones iniciadas/24 h. Esto es decisión de Jack (sección 7).
@@ -32,10 +32,10 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 | Proveedor | Markup sobre tarifa Meta | Tier gratis / plan mínimo | Webhook a FastAPI propio | Templates | Multitenant | Exige verificación Meta | Privacidad / retención | Lock-in |
 |---|---|---|---|---|---|---|---|---|
 | **Meta Cloud API directa** | 0 (es la tarifa) — C | 1.000 service/mes/número tras 1-oct-2026 (C, secundaria) | Sí, webhooks de la Cloud API — C (doc de Meta no abierta: NC en detalle) | Aprobación en WhatsApp Manager, <24 h típico — C (secundaria) | Varios números/WABA bajo un portfolio — NC | **Sí para producción** (límite 250 BI/24 h sin verificar) — C (secundaria) | Relación directa con Meta; DPA y retención — NC | Bajo en API estándar; plantillas y WABA atados a Meta |
-| **Kapso** | "Sin markup" en modo créditos: se descuenta la tarifa publicada de Meta — C (docs.kapso.ai, FAQ, vía búsqueda) | Free: 2.000 msgs/mes, 1 número, 1 GB — C (docs.kapso.ai). Pro $25/mes (100k msgs, 3 números); Platform $299/mes (1M msgs, 50 números) — C (kapso.ai, su propio blog; verificar en su pricing page) | Sí; el plan Platform incluye webhooks — C | Sí — NC en detalle | Plan Platform pensado para "onboardear clientes" — C; aislamiento por tenant — NC | NC (Kapso no lo menciona en lo leído) | NC (no hay datos de retención en lo encontrado) | Medio: créditos y plataforma propia (API/CLI/MCP) |
-| **Twilio (WhatsApp Senders)** | +0,005 USD/mensaje sobre tarifa Meta; Meta sin markup — C (fuente secundaria: landbot/zernio) | Sandbox — NC | Sí — NC en detalle | Sí — NC | Subcuentas — NC | Sí para sender de producción — NC | NC (Twilio es EE. UU.; transferencia internacional) | Medio |
-| **360dialog** | 0 sobre tarifas de conversación de Meta — C (docs.360dialog.com, snippet oficial) | Licencia mensual por número: $25–49 según fuente (**conflicto**, NC oficial) | Sí — NC en detalle | Sí — NC | Modelo de partner con facturación por cliente — C (docs) | NC | NC | Bajo-medio |
-| **Gupshup** | Markup de **+6 %** sobre la tarifa de **marketing** en Cloud API desde 1-ene-2026 — C (support.gupshup.io, aviso oficial) + fee de plataforma ~0,001 USD — NC | NC | Sí — NC | Sí — NC | Sí — NC | NC | NC | Medio |
+| **Kapso** | Modo créditos: tarifa de lista de Meta sin recargo según docs actuales; un FAQ antiguo dice que Meta se cobra directo a la tarjeta del WABA — C parcial (docs.kapso.ai, vía búsqueda). Condiciones: todo el WABA en un proyecto Kapso; los envíos se pausan al agotar créditos; el uso de IA cuesta 4,4 % + 0,30 USD | Free: 2.000 msgs/mes, 1 número, 1 GB — C (docs.kapso.ai). Pro $25/mes (100k msgs, 3 números); Platform $299/mes (1M msgs, 50 números) — C (kapso.ai, su propio blog; verificar en su pricing page) | Sí; el plan Platform incluye webhooks — C | Sí — NC en detalle | Plan Platform pensado para "onboardear clientes" — C; aislamiento por tenant — NC | NC (Kapso no lo menciona en lo leído) | NC (no hay datos de retención en lo encontrado) | Medio: créditos y plataforma propia (API/CLI/MCP) |
+| **Twilio (WhatsApp Senders)** | +0,005 USD por mensaje (cargo fijo, no %), sobre tarifa Meta; según Zoko y Landbot aplica también a mensajes entrantes (el cálculo de la sección 5 solo cuenta salientes y puede subestimar) — C (fuentes secundarias) | Sandbox — NC | Sí — NC en detalle | Sí — NC | Subcuentas — NC | Sí para sender de producción — NC | NC (Twilio es EE. UU.; transferencia internacional) | Medio |
+| **360dialog** | 0 sobre tarifas de conversación de Meta — C (docs.360dialog.com, snippet oficial) | Licencia mensual por número; sin cifra oficial (docs piden contactar); terceros $15–49, se usa 49 como escenario conservador — NC | Sí — NC en detalle | Sí — NC | Modelo de partner con facturación por cliente — C (docs) | NC | NC | Bajo-medio |
+| **Gupshup** | Markup de **+6 %** sobre la tarifa de **marketing** en Cloud API desde 1-ene-2026, solo para remitentes que no aceptaron MM Lite (evitable si es elegible) — C (support.gupshup.io, aviso oficial) + fee de plataforma ~0,001 USD — NC | NC | Sí — NC | Sí — NC | Sí — NC | NC | NC | Medio |
 | **Bird** | NC (modelo: cargo de plataforma + markup por mensaje según terceros) | NC (pricing sin cifras publicadas) | NC | NC | NC | Tiene guía de verificación Meta — C (docs.bird.com, título de la página; contenido no leído) | NC | NC |
 | **Infobip** | NC (sin datos de Perú) | NC | NC | NC | NC | NC | NC | NC |
 | **Chatwoot sobre Cloud API** | No cobra Meta: se paga directo a Meta (si no hay BSP) — C (chatwoot.com docs, vía búsqueda) | Software: licencia NC; self-host en nuestra infraestructura | Chatwoot recibe el webhook de Meta; reenvío al backend propio — NC | Gestión de plantillas en Chatwoot — NC | Inboxes por cuenta — NC | Igual que Meta directa (usa su WABA) — C (lógica) | **Datos en nuestra infraestructura si es self-host** (ventaja para Ley 29733) — NC legal | Bajo (OSS), pero depende de la Cloud API |
@@ -46,7 +46,7 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 
 | Concepto | Sin verificación de negocio | Con verificación |
 |---|---|---|
-| Conversaciones iniciadas por el negocio | **250 por 24 h** (rolling); el conteo es por portfolio o por número según fuente — **conflicto NC** | Límite sube (cifras de 1.000–2.000 según fuente, NC oficial) |
+| Conversaciones iniciadas por el negocio | **250 por 24 h** (rolling); el conteo es por portfolio según 360dialog (cambio de oct-2025, fuente secundaria) y por número según Clickatell; sin doc oficial — **NC** | Límite sube (el tier 1 difiere entre fuentes; la cifra exacta es NC oficial). También escala por calidad aun sin verificar (fuentes secundarias, NC oficial) |
 | Nombre visible del número | No se aprueba (C, secundaria) | Aprobación posible |
 | Números por cuenta | Limitados (C, secundaria: "más de 2 números" requiere verificación) | Más números |
 | Número de prueba | Límites relajados, sin cifra publicada — C (docs de Meta, vía búsqueda) | No aplica |
@@ -58,7 +58,7 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 ## 5. Costos (USD/mes)
 
 **Supuestos (de la función `tools/asignaciones/cost_scenarios.py`):**
-- Tarifas Perú de `program/02_REFERENCE/meta-pricing.md`: service 0,033 (tras 1.000 gratis/número/mes); utility 0,033; marketing 0,07733. **Pendientes de confirmar en panel Billing del WABA.**
+- Tarifas Perú de `program/02_REFERENCE/meta-pricing.md`: service 0,033 (tras 1.000 gratis/número/mes); utility 0,033; marketing 0,07733. **Pendientes de confirmar en panel Billing del WABA.** Una verificación independiente (2026-10-14) **no pudo reproducir** estas cifras: terceros dan marketing 0,08–0,084 y utility 0,02–0,024 para Perú (Edna, Chatalog; la tabla de Salesforce no trae unidad). Tómalas como orden de magnitud. La cita de `meta-pricing.md` a `plivo.com/whatsapp/pricing/pe` no se reprodujo y debe revisarse.
 - Un solo número. Escenarios: 500 / 3.000 / 10.000 mensajes service, con y sin 150 utility + 50 marketing.
 - Fees de BSP: Kapso Pro $25 (markup 0 supuesto), Twilio +0,005/msg, 360dialog $49/número (cifra de fuente con conflicto), Gupshup +0,001/msg (NC). El +6 % de Gupshup no entra en la columna: sobre 50 marketing equivale a ~0,23 USD/mes (50 × 0,07733 × 6 %).
 
@@ -112,7 +112,7 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 | 2 | Cobro de service tras 1.000 gratis desde 1-oct-2026 | Cambia el costo a partir de 1.000 msgs/mes | Doc oficial de pricing de Meta (no accesible en esta sesión); `meta-pricing.md` lo atribuye a respond.io (secundaria) |
 | 3 | Utility dentro de la ventana de 24 h cobrado desde 1-oct-2026 | Cambia el diseño de respuestas | Igual que #2. Las fuentes de Twilio y de `meta-pricing.md` coinciden, pero ninguna es oficial |
 | 4 | Límite de 250 conversaciones iniciadas/24 h sin verificar, y si es por portfolio o por número | Define si el piloto de Hola Mujer es viable | Doc oficial de límites de mensajería de Meta |
-| 5 | Si Kapso, 360dialog u otro BSP elimina el límite de 250 con verificación compartida | Podría cambiar la decisión de la sección 1 | Preguntar al proveedor por escrito; NC |
+| 5 | Si Kapso, 360dialog u otro BSP elimina el límite de 250 con verificación compartida | Podría cambiar la decisión de la sección 1 | Preguntar al proveedor por escrito. Fuentes secundarias indican que el 250 es de Meta y ningún BSP lo evita; sin evidencia en contra |
 | 6 | Licencia de 360dialog ($25 / $49 / €49) | Conflicto entre fuentes | Pricing page oficial de 360dialog |
 | 7 | Markup de Kapso sobre tarifas Meta en modo créditos (cero según docs.kapso.ai; no leído en página completa) | Afecta el ranking de BSP | docs.kapso.ai, página completa de pricing-faq |
 | 8 | Retención, ubicación de datos y DPA de cada proveedor (Meta, Kapso, Twilio, 360dialog, Gupshup, Bird, Infobip, Chatwoot) | Ley 29733; transferencia internacional | Términos y DPA de cada proveedor |
@@ -122,6 +122,8 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 | 12 | Coexistencia de WhatsApp Business App con Cloud API (para practicantes) | Podría evitar un número nuevo | docs de Meta sobre coexistencia (NC) |
 | 13 | Costo y límites de Telegram Bot API | Canal provisional | core.telegram.org/bots/api (no accesible en esta sesión) |
 | 14 | Unidad de la tabla de Salesforce (86,8 / 24,7 / 24,7) | Fuente de tarifa, no usada en cálculos | Descartada hasta confirmar la unidad |
+
+**Verificación independiente (2026-10-14, solo fuentes secundarias; ningún dominio oficial fue accesible):** confirmó 250 inicial, 1.000 service gratis/número desde 1-oct-2026, Kapso Free (2.000 msgs) y Pro ($25), y el +6 % de Gupshup; no reprodujo las tarifas de Perú ni el plan Platform de Kapso ($299) ni el fee de Gupshup (~0,001); corrigió el alcance de «sin markup» de Kapso y la licencia de 360dialog.
 
 **Cifras más frágiles (en orden):** cargo de service tras 1.000 gratis (#2), límite de 250 y su alcance (#4), tarifa de marketing Perú (#1: fuentes de 2025 dan 0,08 y 0,0703; la de 2026 usada es 0,07733), y licencias de BSP (#6).
 

@@ -3,6 +3,8 @@
 > **Estado:** borrador para decisión de Jack (dueño). Captura: **2026-10-14**.
 > **Limitación de esta investigación:** el egress de la sesión bloqueó (HTTP 403 en CONNECT) los dominios oficiales de Meta, Kapso, Twilio, 360dialog, Gupshup, Bird, Infobip, Chatwoot, Telegram y gob.pe. Por eso **no se leyó ninguna página oficial de proveedor**. Lo que sigue sale de: (a) fragmentos de resultados de búsqueda, que citan la fuente original; (b) `meta-pricing.md` del repo (ya tenía tarifas de Meta, fuente secundaria). Todo lo no hallado está marcado **no confirmado**. Antes de decidir, repetir la verificación de las cifras marcadas en la sección 8.
 
+> **Hechos confirmados por el dueño (2026-10-14, Centro de seguridad de Meta):** Hola Mujer **no es negocio verificado**; el límite de mensajería es el **estándar**; **no hay ningún proveedor/BSP conectado** y hoy atiende con la **app WhatsApp Business** (no con la API). Esto descarta la opción C tal como estaba redactada («reusar el número que ya opera en ManyChat»): ese número no está en la API. Lo que queda es A (provisional) o llevar el número a la API, y para eso la pieza clave es la **coexistencia** (sección 7).
+
 > **Decisión del dueño (2026-10-14):** por ahora los practicantes trabajan con **datos sintéticos y fixtures**. El monitor configurará el proveedor/canal real de WhatsApp más adelante, cuando tenga tiempo.
 
 ## 1. Resumen y recomendación
@@ -13,8 +15,8 @@
   1. **Ahora (S6–S8):** canal provisional. Telegram Bot API para practicantes + chat web propio, ambos detrás de un adapter (ADR-011). Costo de Meta: cero.
   2. **Producción WhatsApp:** no hay ruta que cumpla "sin verificación" **y** "escala". Si el dueño mantiene la restricción, WhatsApp real para Hola Mujer queda limitado a pruebas con número de prueba y 250 conversaciones iniciadas/24 h. Esto es decisión de Jack (sección 7).
   3. **Proveedor si se activa WhatsApp:** Meta Cloud API directa (ADR-003 vigente) por costo y sin markup. **Kapso** como alternativa si se prioriza DX para practicantes; exige revisar ADR-003 ("directa").
-- **Alternativas que Jack debe decidir:** (A) canal provisional indefinido para Hola Mujer; (B) verificar Hola Mujer más adelante con documentos que hoy no existen; (C) **reutilizar el número y el WABA que Hola Mujer ya opera hoy en ManyChat** (inferencia, no confirmada: ManyChat WhatsApp funciona sobre una cuenta de WhatsApp Business Platform de Meta, así que ese número ya está dado de alta). La opción C reemplaza a la antigua «usar NeuraCode», que ya no aplica.
-- **Siguiente paso concreto (lo único que desbloquea la decisión, y solo lo puede hacer Jack):** abrir Meta Business Suite → Configuración del negocio → *Centro de seguridad* y anotar (1) si el portfolio de Hola Mujer figura como **verificado**, (2) el **límite de mensajería** que muestra WhatsApp Manager para ese número y (3) qué proveedor/BSP está conectado (ManyChat o directo). Con esas tres respuestas se elige entre A, B y C; sin ellas cualquier recomendación es una suposición. Mientras tanto no se cambia nada del número en producción.
+- **Alternativas que Jack debe decidir:** (A) canal provisional indefinido para Hola Mujer; (B) verificar Hola Mujer más adelante con documentos que hoy no existen; (C) **llevar el número actual (app WhatsApp Business) a la Cloud API en modo coexistencia**, para que la app y el agente convivan en el mismo número. Reemplaza a la antigua «usar NeuraCode», que ya no aplica. Viabilidad sin verificar el negocio: **pendiente de verificación en WhatsApp Manager** (no es «no viable»; ver sección 7).
+- **Recomendación con los hechos de hoy:** seguir en **A** para S6–S8 (ya es el plan y no cuesta nada de Meta). La coexistencia (C) se evalúa **después**: primero se confirma en WhatsApp Manager que el número real es elegible y recién entonces se prueba el flujo técnico en un número de prueba; y solo si el requisito de verificación resulta no aplicar. No se toca el número en producción de Hola Mujer hasta entonces: conectarlo a la API sin coexistencia lo saca de la app WhatsApp Business.
 
 ## 2. Requisitos
 
@@ -98,7 +100,11 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 
 **Trigger de paso:** cuando se cumpla una de estas condiciones, decide Jack:
 - (a) Hola Mujer completa verificación de negocio de Meta (hoy no tiene documentos); o
-- (b) la revisión del Centro de seguridad (arriba) muestra que el número y el WABA que ya operan en ManyChat sirven para el agente, sin migrar a otro número (opción C).
+- (b) la coexistencia (opción C) resulta viable para un negocio **sin verificar** en Perú y el dueño acepta sus límites.
+
+**Coexistencia (app WhatsApp Business + Cloud API en el mismo número), solo fuentes secundarias leídas por resultados de búsqueda (fragmentos, no páginas abiertas); ninguna es doc oficial de Meta (egress bloqueado):** permite usar ambas a la vez; los chats 1 a 1 siguen en la app y la API automatiza; sincroniza ~6 meses de historial 1:1, sin grupos; el alta es por QR desde la app; la API queda con **20 msg/s** según Positus y Jelou (otras fuentes dicen 5 o 80→20: conflicto; **no usar estas cifras para dimensionar capacidad hasta confirmarlas con Meta**; la cifra de 20 msg/s, los ~6 meses de historial y la versión 2.24.17 de la app son **no confirmados** y Positus, que también cita los 20 msg/s, es otro proveedor comercial); no soporta en la API grupos, listas de difusión, estados ni llamadas. **Requisitos con conflicto:** Jelou exige app 2.24.17+, país soportado y **negocio verificado en Business Manager**; las demás no mencionan la verificación. Si la verificación es obligatoria, Hola Mujer no puede (restricción del dueño) y queda A. Consultadas el 2026-10-14; Jelou, Kapso, 360dialog y Chakra **venden** servicios sobre la Cloud API, así que pueden favorecer la opción de conectarse. Fuentes: https://docs.jelou.ai/en/coexistence · https://kapso.ai/blog/whatsapp-business-app-coexistence-cloud-api · https://docs.360dialog.com/docs/waba-management/embedded-signup/whatsapp-coexistence · https://chakrahq.com/article/whatsapp-coexistence-business-app-register-cloud-api/amp/
+
+**Para cerrar la duda (la responde Meta, no nosotros):** en WhatsApp Manager, ¿aparece la opción de conectar la app Business a una plataforma (coexistencia) para el número de Hola Mujer? Si el flujo de *Embedded Signup* o el proveedor rechaza el alta por falta de verificación, la respuesta es no. Ojo: una prueba con un número de prueba valida el **flujo técnico** (webhook, plantillas, sincronización), no que el **número real** de Hola Mujer sea elegible; la elegibilidad real solo la muestra WhatsApp Manager para ese número.
 
 **Implementación (cuando se active):**
 - Un adapter nuevo: `src/channels/whatsapp.py`, con verificación GET, parseo POST de eventos y envío. Solo este módulo importa SDK o HTTP de Meta/BSP (ADR-011).
@@ -122,7 +128,7 @@ Leyenda: **C** = confirmado en fuente consultada (secundaria salvo que se indiqu
 | 9 | Texto vigente de la Ley 29733 y su Reglamento (consentimiento para transferencia, plazos de conservación). Búsqueda no lo leyó; el reglamento vigente aparece citado como D.S. 016-2024-JUS (NC: no verificado) | Requisito legal para datos de usuarios | Texto oficial en gob.pe / ANPD |
 | 10 | Precios y markup de Bird, Infobip, Twilio para Perú | Sin cifras encontradas | Cotización formal o pricing page oficial |
 | 11 | Chatwoot: licencia y ruta de webhook al backend propio | Afecta si entra como inbox o como BSP | chatwoot.com docs (no accesible en esta sesión) |
-| 12 | Coexistencia de WhatsApp Business App con Cloud API (para practicantes) | Podría evitar un número nuevo | docs de Meta sobre coexistencia (NC) |
+| 12 | Coexistencia de WhatsApp Business App con Cloud API: ¿exige negocio verificado? ¿está disponible en Perú? ¿límites exactos de mensajes por segundo? | Decide si Hola Mujer puede tener agente en su número actual sin verificar | Doc oficial de Meta (no accesible) o prueba real en un número de prueba; hoy solo fuentes secundarias en conflicto (sección 7) |
 | 13 | Costo y límites de Telegram Bot API | Canal provisional | core.telegram.org/bots/api (no accesible en esta sesión) |
 | 14 | Unidad de la tabla de Salesforce (86,8 / 24,7 / 24,7) | Fuente de tarifa, no usada en cálculos | Descartada hasta confirmar la unidad |
 

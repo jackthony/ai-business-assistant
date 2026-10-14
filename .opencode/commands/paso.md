@@ -10,3 +10,5 @@ Abre el paso a paso de mi asignación (`program/01_CURRICULUM/asignaciones/S##_D
 - Cierra con su «Punto de control» como pregunta para mí y espera mi respuesta.
 
 No escribas el código que me toca escribir. Si me trabo, usa la «Escalera de pistas» de ese paso, un nivel a la vez.
+
+Si no viene el número de paso, pídelo antes de continuar.

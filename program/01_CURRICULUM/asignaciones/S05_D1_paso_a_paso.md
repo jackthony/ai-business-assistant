@@ -167,7 +167,7 @@ Hazlo **después del Paso 1** (ya tienes `.venv` y `langgraph` instalados). Crea
 
 **Paso 3 (T2).** Pista 1: lo que sale es el estado final, y `messages` debe tener la lista completa de la conversación. Pista 2: busca `HumanMessage`, `AIMessage` en <https://python.langchain.com/docs/concepts/messages/>. Pista 3: invocas, guardas el resultado en una variable y comprueba longitud, tipo y contenido de cada posición.
 
-**Paso 7 (T6).** Pista 1: un proceso hijo no hereda el `pythonpath` de pytest. Pista 2: busca `subprocess.run` (`capture_output`, `text`) en <https://docs.python.org/3/library/subprocess.html>; si el hijo no encuentra `agents`, comprueba con `python -c "import agents"` dentro del venv que el Paso 1 (`pip install -e`) quedó bien. Pista 3: ¿qué argumento de `python` permite ejecutar un texto corto, y qué atributo de `sys` lista los módulos cargados?
+**Paso 7 (T6).** Pista 1: un proceso hijo no hereda el `pythonpath` de pytest. Pista 2: busca `subprocess.run` (`capture_output`, `text`, y pasa `check=False` explícito: el `ruff` del CI lo exige y tu hook local no te avisa) en <https://docs.python.org/3/library/subprocess.html>; si el hijo no encuentra `agents`, comprueba con `python -c "import agents"` dentro del venv que el Paso 1 (`pip install -e`) quedó bien. Pista 3: ¿qué argumento de `python` permite ejecutar un texto corto, y qué atributo de `sys` lista los módulos cargados?
 
 **Paso 8 (T7).** Pista 1: `print` escribe en la salida estándar, que se puede capturar. Pista 2: busca la fixture `capsys` en <https://docs.pytest.org/en/stable/how-to/capture-stdout-stderr.html>. Pista 3: llamas a `main`, lees lo capturado con `capsys.readouterr()` y comparas con la línea esperada más salto de línea.
 

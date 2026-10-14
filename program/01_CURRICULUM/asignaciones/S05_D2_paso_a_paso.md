@@ -4,6 +4,8 @@
 >
 > **Reglas del juego:** no hay código de la solución aquí (si lo hubiera, no aprenderías). Hay explicación, pistas y puntos de control. Esta asignación es larga: los bloques de abajo suman unas 4 h 30 en total. Si a las 2 h 30 no estás en el Paso 19, comenta en el Issue y avisa al monitor, que decide qué pasa a la siguiente sesión. Los tiempos son una guía. Todos los comandos son para Windows (cmd), desde la raíz del repo.
 
+> **Revisión automática de tu avance:** desde tu primer commit haz `git push -u origin <tu-rama>`. El robot abre solo un **PR en borrador** y deja **un comentario que se actualiza en cada push**: cuántos archivos del contrato ya trabajaste, cuáles te faltan, si tocaste algo fuera de la sección 4 y cuál es tu siguiente paso, con pistas (no con la solución). Léelo antes de seguir con el paso siguiente; si no lo entiendes, usa `/pista`. Haz push **al terminar cada paso en verde**, no solo al final. Cuando acabes, marca el PR *Ready for review* y responde la sección 11.
+
 ## Mapa de la sesión
 
 | Bloque | Tiempo | Resultado que puedes comprobar |

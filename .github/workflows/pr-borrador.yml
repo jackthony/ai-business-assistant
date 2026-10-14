@@ -1,0 +1,60 @@
+name: pr-borrador
+
+# Cuando un practicante del roster sube su rama issue-N-* (o tbd-N-*), abre un PR en BORRADOR
+# con "Closes #N" para que el revisor guiado comente desde el primer push.
+on:
+  push:
+    branches: ["issue-*", "tbd-*"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  borrador:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Abrir PR en borrador si no existe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+
+          roster = {a["login"] for a in json.load(open(".github/coach.json"))["alumnos"]}
+          branch, actor = os.environ["BRANCH"], os.environ["ACTOR"]
+          if actor not in roster:
+              print(f"{actor} no está en el roster: no se abre PR automático.")
+              raise SystemExit(0)
+          m = re.match(r"(?:issue|tbd)-(\d+)-", branch)
+          if not m:
+              print("Rama sin número de Issue: no aplica.")
+              raise SystemExit(0)
+          n = m.group(1)
+
+          def gh(*a):
+              return subprocess.run(["gh", *a], capture_output=True, text=True)
+
+          abiertos = gh("pr", "list", "--head", branch, "--state", "open", "--json", "number").stdout
+          if json.loads(abiertos or "[]"):
+              print("Ya hay un PR abierto para esta rama.")
+              raise SystemExit(0)
+          body = (
+              f"Closes #{n}\n\n"
+              "PR en **borrador** abierto automáticamente. El revisor guiado comentará en cada push "
+              "cómo vas contra tu contrato. Cuando termines: *Ready for review*, completa la plantilla "
+              "y responde las preguntas de comprensión de la sección 11 del contrato."
+          )
+          r = gh("pr", "create", "--draft", "--base", "main", "--head", branch,
+                 "--title", f"WIP: avance del Issue #{n}", "--body", body)
+          print(r.stdout or r.stderr)
+          if r.returncode:
+              print("::warning::No se pudo abrir el PR en borrador (¿permiso de Actions para crear PRs?). Ábrelo a mano en borrador.")
+          PY

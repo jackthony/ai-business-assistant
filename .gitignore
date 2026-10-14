@@ -12,3 +12,6 @@ venv/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# La memoria del agente (SQLite) contiene conversaciones: nunca al repo.
+*.db

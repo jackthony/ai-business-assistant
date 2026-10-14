@@ -1,0 +1,114 @@
+"""Pruebas del revisor-agente (.github/scripts/revisor_agente.py): validación en código del LLM."""
+
+import importlib.util
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+_spec = importlib.util.spec_from_file_location(
+    "revisor_agente", ROOT / ".github" / "scripts" / "revisor_agente.py"
+)
+assert _spec is not None and _spec.loader is not None
+ra = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(ra)
+
+SECCIONES = {"4", "5", "5a", "5b", "6", "8", "9"}
+
+
+def raw(**kw) -> str:
+    base = {"veredicto": "CAMBIOS", "resumen": "r", "hallazgos": []}
+    base.update(kw)
+    return json.dumps(base)
+
+
+def hallazgo(nivel="BLOCKER", seccion="5b", **kw) -> dict:
+    h = {
+        "nivel": nivel,
+        "seccion": seccion,
+        "archivo": "src/agents/graph.py",
+        "problema": "p",
+        "pista": "mira la doc",
+    }
+    h.update(kw)
+    return h
+
+
+def test_parse_accepts_fenced_json() -> None:
+    v = ra.parse_verdict("```json\n" + raw() + "\n```", SECCIONES)
+    assert v is not None and v.veredicto == "CAMBIOS"
+
+
+def test_parse_rejects_garbage() -> None:
+    assert ra.parse_verdict("no soy json", SECCIONES) is None
+    assert ra.parse_verdict(raw(veredicto="TAL VEZ"), SECCIONES) is None
+
+
+def test_blocker_must_cite_a_real_contract_section() -> None:
+    v = ra.parse_verdict(raw(hallazgos=[hallazgo(seccion="99")]), SECCIONES)
+    assert v is not None and v.hallazgos[0].nivel == "MINOR"  # alucinación → degradado
+
+
+def test_blocker_with_valid_section_blocks() -> None:
+    v = ra.parse_verdict(raw(hallazgos=[hallazgo()]), SECCIONES)
+    assert v is not None and ra.blocks(v)
+
+
+def test_minor_only_does_not_block() -> None:
+    v = ra.parse_verdict(
+        raw(veredicto="APROBAR", hallazgos=[hallazgo("MINOR")]), SECCIONES
+    )
+    assert v is not None and not ra.blocks(v)
+
+
+def test_hint_with_code_block_is_stripped() -> None:
+    v = ra.parse_verdict(
+        raw(hallazgos=[hallazgo(pista="usa esto:\n```python\nx=1\n```")]), SECCIONES
+    )
+    assert v is not None and "```" not in v.hallazgos[0].pista
+
+
+def test_prompt_marks_diff_as_data_and_has_no_secrets() -> None:
+    p = ra.build_prompt({"4": "s4", "9": "s9"}, "DIFF-X", "det")
+    assert "DIFF-X" in p and "datos" in p.lower() and "JSON" in p
+
+
+def test_decide_skips_llm_when_deterministic_errors() -> None:
+    calls = []
+    out = ra.decide(
+        has_errors=True, draft=False, key="k", llm=lambda _: calls.append(1) or ""
+    )
+    assert out.failed and calls == []
+
+
+def test_decide_skips_llm_when_draft_or_no_key() -> None:
+    calls = []
+    for draft, key in ((True, "k"), (False, "")):
+        out = ra.decide(
+            has_errors=False, draft=draft, key=key, llm=lambda _: calls.append(1) or ""
+        )
+        assert not out.failed
+    assert calls == []
+
+
+def test_decide_fails_closed_when_llm_output_is_invalid() -> None:
+    out = ra.decide(
+        has_errors=False,
+        draft=False,
+        key="k",
+        llm=lambda _: "basura",
+        sections=SECCIONES,
+        prompt="p",
+    )
+    assert out.failed and "no válida" in out.note
+
+
+def test_decide_passes_on_clean_verdict() -> None:
+    out = ra.decide(
+        has_errors=False,
+        draft=False,
+        key="k",
+        llm=lambda _: raw(veredicto="APROBAR"),
+        sections=SECCIONES,
+        prompt="p",
+    )
+    assert not out.failed and out.verdict is not None

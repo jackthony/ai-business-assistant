@@ -24,6 +24,10 @@ Cada Issue de producción tiene aquí su **contrato de asignación** (`S05_D1.md
 
 Una asignación que depende de otra **no se empieza** hasta que la anterior esté mergeada en `main` (`git pull` y comprueba que existen sus archivos). Si ves a un compañero bloqueado por eso, ofrécele ayuda con `apoyo`.
 
+## Revisión automática del avance
+
+Subir el trabajo a medias es parte del método. Al hacer `git push` de tu rama `issue-N-*`, el robot `pr-borrador` abre un PR en borrador con `Closes #N` (solo para alumnos del roster, `.github/coach.json`). En cada push, `revision-guiada` compara tu diff con tu contrato y **actualiza un único comentario**: archivos de la sección 4 trabajados/faltantes y fuera de contrato (cálculo exacto, sin IA) y, si hay clave de DeepSeek, un tutor que dice qué va bien, qué corregir citando la sección, cuál es el siguiente paso y hace preguntas de comprensión. No escribe la solución y no pone nota: la nota la decide el monitor.
+
 ## Con OpenCode
 
 El repo encamina a tu asistente: `AGENTS.md` (se carga solo) trae el «Protocolo de asignación» y `.opencode/commands/` trae cinco comandos: `/asignacion` (carga tu contrato y por dónde empezar), `/paso N`, `/pista`, `/revisar` (tu `git diff` contra el contrato) y `/comprension` (ensayo de las preguntas del PR). Si OpenCode se cuelga: [guía de solución](../../02_REFERENCE/opencode-solucion-problemas.md).

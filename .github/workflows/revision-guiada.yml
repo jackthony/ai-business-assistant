@@ -1,0 +1,39 @@
+name: revision-guiada
+
+# Revisión guiada del avance: en cada push de un PR (también en borrador) compara el trabajo
+# con su contrato S##_D#.md y actualiza UN comentario con archivos, desvíos y siguiente paso.
+# La parte de archivos no necesita clave; la parte de tutor usa DEEPSEEK_API_KEY si existe.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: revision-guiada-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  revision:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Revisar el avance contra el contrato
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python3 .github/scripts/revision_guiada.py

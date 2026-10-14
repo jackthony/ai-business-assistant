@@ -14,7 +14,7 @@
 7. El embudo medido: 33 invitaciones → 2 horarios elegidos. El cuello está entre el CTA y la confirmación; el bot debe ofrecer 2–3 horarios reales.
 8. Varias promociones del Excel están inactivas o con fechas raras: se validan con el negocio antes de cargarlas.
 9. Regla de seguridad clínica: si el tema es médico/emergencia, pausar y derivar a Jioysi con resumen no clínico.
-10. El tenant se llama `hola_mujer` (pronto habrá un 2.º negocio: NeuraCode — por eso el diseño es multitenant).
+10. El tenant se llama `hola_mujer` (el diseño deja la configuración por negocio, pero hoy solo existe Hola Mujer; NeuraCode es un proyecto posterior).
 11. Tono de venta: un CTA concreto por mensaje, explicación breve, nunca bloques largos; un "gracias/ok" puede ser abandono silencioso.
 12. Todo se mide: `booking_rate`, `show_rate`, `sale_rate`, satisfacción. Si no se mide, no cuenta.
 

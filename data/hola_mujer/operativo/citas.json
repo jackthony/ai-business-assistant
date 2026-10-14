@@ -4,10 +4,10 @@
   "n": 9,
   "items": [
     {
-      "cita_id": "p9siNzSVUhQHNvn2cwHiku",
+      "cita_id": "A001",
       "contact_id": null,
       "created_at": null,
-      "updated_at": "2026-09-02T11:20:41",
+      "updated_at": "2026-09-02T11:20:41+00:00",
       "service_id": null,
       "sesiones": null,
       "inicio": "2026-09-03T15:00:00.000Z",
@@ -23,9 +23,9 @@
       "last_error": null
     },
     {
-      "cita_id": "baE5yhjUDQszQxYjBNgzEd",
+      "cita_id": "A002",
       "contact_id": "C003",
-      "created_at": "2026-09-05T16:37:56",
+      "created_at": "2026-09-05T16:37:56+00:00",
       "updated_at": "2026-09-05T16:37:56",
       "service_id": "GLUTEOS",
       "sesiones": null,
@@ -42,9 +42,9 @@
       "last_error": null
     },
     {
-      "cita_id": "fnJN4DDkTFfciWm9n3HdvT",
+      "cita_id": "A003",
       "contact_id": "C003",
-      "created_at": "2026-09-05T16:41:13",
+      "created_at": "2026-09-05T16:41:13+00:00",
       "updated_at": "2026-09-05T16:41:13",
       "service_id": null,
       "sesiones": null,
@@ -61,7 +61,7 @@
       "last_error": null
     },
     {
-      "cita_id": "6y7eB7iz6LzEVpiC7oxP4A",
+      "cita_id": "A004",
       "contact_id": null,
       "created_at": null,
       "updated_at": "2026-09-07T17:14:17",
@@ -99,9 +99,9 @@
       "last_error": null
     },
     {
-      "cita_id": "mFfwh753DLqd8KjdssWeWL",
+      "cita_id": "A005",
       "contact_id": "C001",
-      "created_at": "2026-09-11T19:18:24",
+      "created_at": "2026-09-11T19:18:24+00:00",
       "updated_at": "2026-09-11T19:18:24",
       "service_id": "HM-PF-001",
       "sesiones": 1,
@@ -118,9 +118,9 @@
       "last_error": null
     },
     {
-      "cita_id": "vPwGPKtquyv2kJbBtbBMAv",
+      "cita_id": "A006",
       "contact_id": "C001",
-      "created_at": "2026-09-12T10:27:04",
+      "created_at": "2026-09-12T10:27:04+00:00",
       "updated_at": "2026-09-12T10:27:04",
       "service_id": "HM-DERM-001",
       "sesiones": 1,
@@ -137,9 +137,9 @@
       "last_error": null
     },
     {
-      "cita_id": "1NcbE2fN5RvGugMYGXLw6r",
+      "cita_id": "A007",
       "contact_id": "C001",
-      "created_at": "2026-09-13T12:09:30",
+      "created_at": "2026-09-13T12:09:30+00:00",
       "updated_at": "2026-09-13T12:09:30",
       "service_id": "HM-CAP-001",
       "sesiones": 1,
@@ -156,9 +156,9 @@
       "last_error": null
     },
     {
-      "cita_id": "rUbdsiP71YA7XKNK1b6dnh",
+      "cita_id": "A008",
       "contact_id": "C002",
-      "created_at": "2026-09-19T19:47:39",
+      "created_at": "2026-09-19T19:47:39+00:00",
       "updated_at": "2026-09-19T19:47:39",
       "service_id": "HM-OBS-001",
       "sesiones": 1,

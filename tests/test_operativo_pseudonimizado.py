@@ -53,6 +53,9 @@ def test_events_keep_the_real_flow_and_reference_known_contacts() -> None:
 def test_appointments_keep_real_defects_instead_of_hiding_them() -> None:
     citas = _items("citas")
     assert len(citas) == 9
+    assert all(
+        re.fullmatch(r"A\d{3}", str(c["cita_id"])) for c in citas if c.get("cita_id")
+    )
     assert any(c.get("contact_id") is None for c in citas)  # filas huérfanas
     assert any(
         c.get("estado_cita") == "CANCELADO" for c in citas

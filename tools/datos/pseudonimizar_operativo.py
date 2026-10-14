@@ -17,8 +17,6 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-import openpyxl
-
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "data" / "hola_mujer" / "operativo"
 CAPTURA = "2026-10-14"
@@ -51,14 +49,15 @@ def _filas(ws: Any) -> list[dict[str, Any]]:
 class Alias:
     """id de plataforma -> C001, C002… en orden de aparición (estable para un mismo Excel)."""
 
-    def __init__(self) -> None:
+    def __init__(self, prefijo: str = "C") -> None:
         self._m: dict[str, str] = {}
+        self._p = prefijo
 
     def __call__(self, valor: Any) -> str:
         if valor is None:
             return SIN_ID
         clave = str(valor)
-        return self._m.setdefault(clave, f"C{len(self._m) + 1:03d}")
+        return self._m.setdefault(clave, f"{self._p}{len(self._m) + 1:03d}")
 
     def reemplazar(self, texto: str) -> str:
         for real, alias in self._m.items():
@@ -88,9 +87,13 @@ def construir(wb: Any) -> dict[str, list[dict[str, Any]]]:
         for f in _filas(wb["01_CONTACTOS"])
     ]
     citas = []
+    alias_cita = Alias(
+        "A"
+    )  # el cita_id de la hoja es un uid de reserva de la plataforma
     for f in _filas(wb["02_CITAS"]):
         f = {
             **f,
+            "cita_id": alias_cita(f["cita_id"]) if f.get("cita_id") else None,
             "contact_id": alias(f.get("contact_id")) if f.get("contact_id") else None,
         }
         for col in ("created_at", "updated_at"):
@@ -128,6 +131,8 @@ def main() -> None:
     ap.add_argument("excel", type=Path)
     ap.add_argument("--out", type=Path, default=OUT_DIR)
     args = ap.parse_args()
+    import openpyxl  # solo el ETL lo necesita; el CI no instala el extra [etl]
+
     wb = openpyxl.load_workbook(args.excel, data_only=True)
     args.out.mkdir(parents=True, exist_ok=True)
     for nombre, items in construir(wb).items():

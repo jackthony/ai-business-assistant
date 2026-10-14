@@ -51,10 +51,10 @@ El repo es **público**, así que las hojas con personas entran **sin** nombres,
 | Archivo | Hoja origen | Filas | Qué cambia |
 |---|---|---|---|
 | `contactos.json` | 01_CONTACTOS | 5 | `contact_id` → `C001…`; sin `nombre`/`telefono` (solo `tiene_nombre`, `tiene_telefono`) |
-| `citas.json` | 02_CITAS | 9 | `contact_id` → alias; fechas serial de Excel pasadas a ISO |
+| `citas.json` | 02_CITAS | 9 | `contact_id` → `C…`, `cita_id` (uid de reserva) → `A001…`; fechas serial de Excel pasadas a ISO |
 | `eventos.json` | 03_EVENTOS | 46 | `contact_id`, `event_id`, `cita_id` → alias (mismo alias para el mismo contacto) |
 | `muestra_inbox.json` | 09_MUESTRA_INBOX_11D | 220 | nada: ya eran clasificaciones sin texto (82 con vista previa útil) |
 
 Defectos reales conservados a propósito (los alumnos deben tratarlos, no esconderlos): citas sin `contact_id`, estado `CANCELADO` fuera del vocabulario, `inicio` como texto `"07/09 09:30"`, eventos duplicados con el mismo `event_id`, `canal` con distinta capitalización, contactos sin teléfono.
 
-Regenerar: `python tools/datos/pseudonimizar_operativo.py RUTA.xlsx`. El Excel original sigue fuera del repo. Si el dueño decide hacer el repo privado, se puede volver a subir el dato crudo en otro PR; en un repo público no se debe, porque el historial de git es permanente.
+Regenerar: `python tools/datos/pseudonimizar_operativo.py RUTA.xlsx`. El Excel original sigue fuera del repo. El dato crudo no se sube mientras el repo sea público: el historial de git es permanente. `motivo_cambio` y las notas son texto libre del operador y se revisaron a mano (solo contienen frases como «Reprogramada por el cliente»).

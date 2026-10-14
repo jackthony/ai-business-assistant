@@ -25,4 +25,4 @@ Opción 2. Primero un agente con RAG y tools confiables (S4–S8, HITO 1), con o
 
 - La re-secuencia v2 revisará las semanas de multiagente para que no llegue antes de tiempo.
 - Evalúa el costo/beneficio: más agentes = más latencia y puntos de fallo (CH11).
-- Fuentes y evidencia: README, sección «Alcance: de un agente a multiagente», y `program/02_REFERENCE/source_map.md`.
+- Fuentes: `program/02_REFERENCE/source_map.md` (Anthropic ×2, `langgraph-supervisor-py`).

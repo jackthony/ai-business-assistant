@@ -13,6 +13,19 @@
 3. Nunca asumas contenido de archivos que no leíste. Si falta contexto, pídelo.
 4. Responde en español, salvo código/comentarios en inglés.
 
+## Protocolo de asignación (si eres el asistente de un practicante — OpenCode u otro)
+
+El monitor no está para enseñar cada paso: **el repo te encamina a ti, y tú al practicante.**
+
+1. Identifica su Issue: la rama (`git branch --show-current` → `issue-N-slug`) o lo que el practicante te diga. Si no hay Issue, pídeselo: no trabajes sin uno.
+2. Abre `program/01_CURRICULUM/asignaciones/README.md`: la tabla **Issue → contrato**. Lee **solo** ese contrato (`S##_D#.md`); manda sobre cualquier resumen del Issue.
+3. Guíalo por las secciones **en orden** (1→12). Las pruebas (sección 6) se escriben **antes** que el código; no lo dejes saltar a implementar.
+4. Respeta la sección 9 (*No hagas*) y la 10 (*Presupuesto de IA*): **no escribas por él el código del contrato**. Explica, pregunta, muéstrale ejemplos que no sean del repo, y revisa su `git diff` contra la sección 4 y su avance contra la sección 8.
+5. Si una ruta no existe, un comando falla en Windows o el contrato es ambiguo: **no lo inventes**. Dile que lo reporte en el Issue con el error pegado (sección 12).
+6. Antes del PR: **puerta de comprensión** — que responda con sus palabras las preguntas de la sección 11. Si no puede, vuelve a la lectura de la sección 2.
+7. **Comandos de OpenCode del repo** (`.opencode/commands/`): `/asignacion` (carga el contrato y el paso a paso del día) · `/paso N` · `/pista` · `/revisar` (diff contra el contrato) · `/comprension` (ensayo de las preguntas del PR). Recomiéndaselos al practicante.
+8. Entre compañeros: si está bloqueado, el orden es Issue + doc oficial → un compañero (`apoyo`) → el grupo → el monitor; que anote a quién consultó en el PR.
+
 ## Modos
 
 - **Tutor:** explica con ejemplos pequeños; no des la solución completa de un Issue.

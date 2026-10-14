@@ -30,7 +30,7 @@ def render_title(semana: str, entry: dict) -> str:
     return f"📖 Lectura guiada {semana}: {entry['titulo']}"
 
 
-def render_body(semana: str, entry: dict) -> str:
+def render_body(semana: str, entry: dict, menciones: str = "") -> str:
     fuentes = "\n".join(f"- [{f['nombre']}]({f['url']})" for f in entry["fuentes"])
     preguntas = "\n".join(f"{i}. {q}" for i, q in enumerate(entry["preguntas"], 1))
     return (
@@ -42,7 +42,15 @@ def render_body(semana: str, entry: dict) -> str:
         "- Si usaste tu IA, cuenta **qué te respondió y cómo lo verificaste**: una IA no es autoridad.\n"
         "- Tu duda sin resolver también cuenta: es parte del aprendizaje.\n"
         "- Sin datos reales de clientes ni consejos clínicos.\n"
+        + (f"\ncc {menciones}\n" if menciones else "")
     )
+
+
+def roster_mentions() -> str:
+    with open(".github/coach.json", encoding="utf-8") as f:
+        cfg = json.load(f)
+    users = [a["login"] for a in cfg["alumnos"]] + [cfg["monitor"]]
+    return " ".join(f"@{u}" for u in dict.fromkeys(users))
 
 
 def graphql(query: str, **vars_: str) -> dict:
@@ -64,7 +72,10 @@ def main() -> None:
     if not entry:
         print(f"Sin lectura configurada para {semana}: nada que publicar.")
         return
-    title, body = render_title(semana, entry), render_body(semana, entry)
+    title, body = (
+        render_title(semana, entry),
+        render_body(semana, entry, roster_mentions()),
+    )
     if os.environ.get("DRY_RUN"):
         print(title, "\n\n", body)
         return

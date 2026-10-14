@@ -84,7 +84,7 @@ Otras referencias de ingeniería consultadas (se **leen**, no se copian; sin lic
 |---|---|---|
 | `pr-borrador.yml` | `git push` de una rama `issue-N-*` de un alumno | abre un PR en **borrador** con `Closes #N`, para que la revisión empiece desde el primer push |
 | `revision-guiada.yml` | cada push del PR (también en borrador) | **Tutor** (DeepSeek): un comentario que se actualiza con archivos del contrato trabajados y faltantes, desvíos, siguiente paso y pistas. No da la solución. Solo alumnos |
-| `revisor-contrato.yml` | cada PR de un alumno | **Compuerta del contrato**: (1) check determinista sin clave (archivos fuera de la sección 4, prohibiciones de la 9, dependencias nuevas, archivos y pruebas faltantes); (2) con el PR listo, un revisor **Claude** (`ANTHROPIC_API_KEY`) cuyo veredicto se valida en código. Scripts y contratos salen de `main`: el alumno no edita la regla que lo evalúa. No aplica al monitor ni a bots |
+| `revisor-contrato.yml` | cada PR de un alumno | **Compuerta del contrato**: (1) check determinista sin clave (archivos fuera de la sección 4, prohibiciones de la 9, dependencias nuevas, archivos y pruebas faltantes); (2) con el PR listo, un revisor **Claude** (`ANTHROPIC_API_KEY`) cuyo veredicto se valida en código. El script y los contratos se leen de `main`, no de la rama del PR. No aplica al monitor ni a bots |
 | `ficha-pr.yml` | cada PR | ficha de revisión para el monitor (Issue que cierra, archivos, tests, criterios) |
 | `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
 

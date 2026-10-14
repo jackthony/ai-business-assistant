@@ -2,6 +2,8 @@
 
 Fuente: `sinteticas_v1.jsonl` · 10 conversaciones · 88 mensajes. Una fila por conversación. Canal: `manychat` (7) o `n8n` (3).
 
+> **Datos ficticios, no clínicos:** son conversaciones inventadas a partir de patrones del negocio (no son chats reales de clientes; Ley 29733). Los temas de salud son solo contexto del servicio: el bot deriva a una persona y no da consejo clínico. Sin teléfonos, DNI ni enlaces.
+
 | id | servicio | canal | escenario | turnos | cómo termina |
 |---|---|---|---|---|---|
 | conv_0001 | Terapias complementarias (hierro intravenoso) | manychat | Consulta de precio de hierro intravenoso en texto libre y con nota de voz; el cliente no elige opción del menú. | 9 | El cliente se despide sin precio ni cita. |

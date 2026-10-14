@@ -132,7 +132,6 @@ def ask_claude(prompt: str, key: str) -> str:
     payload = {
         "model": os.environ.get("REVISOR_MODEL", "claude-haiku-5-5"),
         "max_tokens": 2000,
-        "temperature": 0,
         "messages": [{"role": "user", "content": prompt}],
     }
     req = urllib.request.Request(

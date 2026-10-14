@@ -112,3 +112,27 @@ def test_decide_passes_on_clean_verdict() -> None:
         prompt="p",
     )
     assert not out.failed and out.verdict is not None
+
+
+def test_ask_claude_payload_has_no_temperature(monkeypatch) -> None:
+    """La API de Anthropic rechaza `temperature` en el modelo por defecto (HTTP 400)."""
+    sent: dict = {}
+
+    class FakeResp:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def read(self) -> bytes:
+            return json.dumps({"content": [{"text": "OK"}]}).encode()
+
+    def fake_urlopen(req, timeout):
+        sent.update(json.loads(req.data))
+        return FakeResp()
+
+    monkeypatch.setattr(ra.urllib.request, "urlopen", fake_urlopen)
+    assert ra.ask_claude("hola", "k") == "OK"
+    assert "temperature" not in sent
+    assert sent["messages"][0]["content"] == "hola"

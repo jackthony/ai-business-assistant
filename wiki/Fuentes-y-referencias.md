@@ -35,6 +35,7 @@ Orden de autoridad: **doc oficial/spec > código reproducible > libro/curso > pa
 | [LangGraph (docs)](https://langchain-ai.github.io/langgraph/) y [código](https://github.com/langchain-ai/langgraph) | Estado, grafo, checkpointers, interrupt | S5+ |
 | «Comprehensive Guide to AI Agent Engineering» (Vasilyev) | Loops, context rot, memoria, tools, HITL, seguridad, evals, costos (ver [handbook](https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/agent-engineering-handbook.md)) | por parte, según tu Issue |
 | [Learn Harness Engineering](https://github.com/walkinglabs/learn-harness-engineering) (en español) | Por qué fallan agentes capaces; Definition of Done verificable | S9, S12, S14 |
+| [SwarmForge](https://github.com/unclebob/swarm-forge) (Robert C. Martin) | Agentes con roles para el SDLC (specs Gherkin → TDD → limpieza → mutation testing → arquitecto) y una constitución de prompts por proyecto. Verificado solo en reseñas; sin licencia confirmada: se lee, no se copia | S9, S12 (harness) |
 | [fastapi-best-practices](https://github.com/zhanymkanov/fastapi-best-practices) | Estructura y convenciones FastAPI | S4–S5 |
 | [Microservices Patterns](https://microservices.io/) | Patrones traducibles al monolito modular multitenant | S10 |
 | [Trunk-Based Development](https://trunkbaseddevelopment.com/) | El flujo git del programa ([ADR-006](https://github.com/jackthony/ai-business-assistant/blob/main/program/03_ARCHITECTURE/decisions/)) | desde S2 |

@@ -27,7 +27,7 @@ Desenlaces: abandono 11, cancelar 7, cita 11, ciudad_otra 12, handoff 4, handoff
 |---|---|---|---|
 | `escenarios` | `{"servicios": 15, "ubicacion": 7, "agenda": 6, "gestion_cita": 6, "ruido": 3}` | medido (menos «ruido») | 03_EVENTOS.automation_flow: HM_WA_20_SERVICIOS=15, HM_WA_10_UBICACION=7, HM_WA_30_AGENDA=6, HM_WA_40_GESTION_CITA=6. «ruido»=3 es supuesto: 07 dice que aparecen proveedores, auto-reply y pruebas, sin conteo. |
 | `servicio` | `{"vitaminas_hierro": 24, "moldeamiento": 7, "verrugas_lunares": 5, "glow": 3}` | medido | 07_APRENDIZAJES_INBOX «Servicios»: 39 vistas con servicio identificable. |
-| `canal_manychat` | `0.7` | supuesto | Proporción de sinteticas_v1 (7 ManyChat / 3 n8n); el Excel no la mide. |
+| `canal_manychat` | `0.7` | supuesto | Sin fuente: valor arbitrario (v1 usó 7/3, que tampoco está medido). El Excel no distingue canal por conversación. |
 | `p_horario_elegido` | `0.0606` | medido | 07 «Agendamiento»: 33 invitaciones a agendar, 2 horarios elegidos. |
 | `p_seguimiento` | `0.2424` | medido | 07 «Agendamiento»: 8 seguimientos sobre 33 invitaciones. |
 | `gestion_cita` | `{"reprogramar": 6, "cancelar": 6}` | medido | 03_EVENTOS.event_type: RESCHEDULED=6, CANCELLED=6. |

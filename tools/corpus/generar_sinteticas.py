@@ -51,7 +51,7 @@ PARAMS: dict[str, dict[str, object]] = {
     "canal_manychat": {
         "valor": 0.7,
         "tipo": "supuesto",
-        "fuente": "Proporción de sinteticas_v1 (7 ManyChat / 3 n8n); el Excel no la mide.",
+        "fuente": "Sin fuente: valor arbitrario (v1 usó 7/3, que tampoco está medido). El Excel no distingue canal por conversación.",
     },
     "p_horario_elegido": {
         "valor": round(2 / 33, 4),

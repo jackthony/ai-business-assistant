@@ -12,9 +12,9 @@
 |---|---|---|
 | Lectura + mini-conceptos | 20 min | Sabes explicar qué guarda un checkpointer y para qué sirve el `thread_id` |
 | Calentamiento | 15 min | Un dato guardado en un archivo SQLite sigue ahí tras cerrar y reabrir |
-| Pasos 0–3 (terreno, entorno, línea base) | 20 min | `N passed` antes de tocar código |
-| Pasos 4–10 (T1–T7, una prueba por paso) | 60 min | Las 7 pruebas escritas y en rojo |
-| Pasos 11–13 (código, modo estricto, orden) | 35 min | `N+7 passed` |
+| Pasos 0–3 (terreno, entorno, línea base; `pip install` puede tardar en PCs antiguas) | 30–35 min | `N passed` antes de tocar código |
+| Pasos 4–10 (T1–T7, una prueba por paso) | 70 min | Las 7 pruebas escritas; el rojo común se comprueba en el Paso 10 |
+| Pasos 11–13 (código, modo estricto, orden) | 45 min | `N+7 passed` |
 | Pasos 14–15 (4 puertas, commits y PR) | 30 min | PR abierto con `Closes #54` |
 
 ## Mini-conceptos (léelos antes del Paso 0)
@@ -85,7 +85,7 @@ dir src\agents\graph.py
 git log --oneline --grep=#52 main
 ```
 **Por qué:** esta asignación modifica `src\agents\graph.py`, que crea S05_D1 (#52). Si no está en `main`, tu rama no tiene sobre qué construir.
-**Debes ver:** `Already up to date.` o commits nuevos; `dir` lista `graph.py`; el `git log` muestra al menos una línea con #52.
+**Debes ver:** `Already up to date.` o commits nuevos; `dir` lista `graph.py`; el `git log` suele mostrar una línea con #52 (si el mensaje del merge es otro y no aparece, confía en el `dir` y anótalo en el Issue).
 **Si falla:** si `dir` no encuentra el archivo, **para**. Comenta en el Issue #54 con la salida pegada como texto (contrato, sección 12). No crees `graph.py` tú mismo para seguir.
 **Punto de control:** ¿qué Issue debe estar en `main` antes que el tuyo, y cómo lo comprobaste?
 
@@ -130,28 +130,28 @@ pytest tests -q
 ### Paso 4 — T1: dos mensajes del mismo teléfono, el historial crece
 **Haz esto:** escribe T1. Dentro de **un solo** `with open_checkpointer(db)`, invoca dos veces el grafo con el teléfono `51900000000`: primero `"hola"`, luego `"¿precios?"`. Comprueba la salida de la segunda invocación. La fila T1 de la sección 6 del contrato dice la salida exacta; la forma de la entrada está en la sección 5.4.
 **Por qué:** el checkpointer debe recordar el hilo dentro de la misma sesión, sin que tú pases el historial a mano.
-**Debes ver:** la prueba no puede correr todavía: `ModuleNotFoundError` al colectar (rojo correcto, porque aún no existen los módulos de `memory`).
+**Debes ver:** si corres el archivo ahora, error de colección `ModuleNotFoundError` (rojo correcto: aún no existen los módulos de `memory`). Recuerda escribir al inicio del archivo los tres imports de la sección 6 del contrato; sin ellos no hay esa causa.
 **Si falla:** si el error es `SyntaxError` o `NameError` en tu prueba, corrígela primero: un rojo por otra razón no vale.
 **Punto de control:** ¿cuántos mensajes debe tener la salida y cuáles son los dos primeros?
 
 ### Paso 5 — T2: el historial sobrevive a un reinicio
 **Haz esto:** escribe T2 con un archivo `.db` dentro de `tmp_path`. Simula dos «procesos»: el primero abre el `with`, invoca `"hola"` y sale del bloque; el segundo abre un `with` nuevo sobre el **mismo** archivo, arma el grafo otra vez e invoca `"¿precios?"` con el mismo teléfono. Comprueba ambas salidas (fila T2 de la sección 6).
 **Por qué:** es la prueba de persistencia real: el «reinicio» es cerrar la conexión y volver a abrir el archivo.
-**Debes ver:** el mismo `ModuleNotFoundError` al colectar.
+**Debes ver:** nada nuevo: el archivo entero sigue con el mismo error de colección. Escribe la función; el rojo se comprueba una vez en el Paso 10.
 **Si falla:** si tu prueba guarda el historial en una variable de Python en vez de en el archivo, no está probando un reinicio. Corrígela.
 **Punto de control:** ¿qué cambia entre el «proceso 1» y el «proceso 2» de tu prueba, y qué se mantiene igual?
 
 ### Paso 6 — T3: dos teléfonos no comparten hilo
-**Haz esto:** escribe T3 con el mismo archivo. El teléfono `51900000001` envía `"hola"`; después el `51900000002` envía `"buenas"`. Comprueba que la salida del segundo teléfono no contiene `"hola"` (fila T3 de la sección 6).
+**Haz esto:** escribe T3 con el mismo archivo. El teléfono `51900000001` envía `"hola"`; después el `51900000002` envía `"buenas"`. Comprueba que la lista de mensajes de la salida del segundo teléfono es **exactamente** la que indica la fila T3 de la sección 6 (no basta con «no contiene hola»).
 **Por qué:** dos personas no pueden ver la conversación de otra. Esa es la regla de aislamiento por `thread_id`.
-**Debes ver:** el mismo `ModuleNotFoundError` al colectar.
+**Debes ver:** nada nuevo: el archivo entero sigue con el mismo error de colección. Escribe la función; el rojo se comprueba una vez en el Paso 10.
 **Si falla:** si usas un teléfono distinto a los tres sintéticos (`51900000000`, `51900000001`, `51900000002`), cámbialo ahora. Nunca uses un número real.
 **Punto de control:** ¿por qué esta prueba fallaría si los dos teléfonos usaran el mismo hilo?
 
 ### Paso 7 — T4: teléfono vacío o solo espacios se rechaza
 **Haz esto:** escribe T4. Llama a la función de configuración con `""` y con `"   "`, y comprueba que en los dos casos se lanza `ValueError` (fila T4 de la sección 6).
 **Por qué:** un hilo sin identificador mezcla conversaciones de personas distintas. Es mejor fallar que mezclar.
-**Debes ver:** el mismo `ModuleNotFoundError` al colectar.
+**Debes ver:** nada nuevo: el archivo entero sigue con el mismo error de colección. Escribe la función; el rojo se comprueba una vez en el Paso 10.
 **Si falla:** si no recuerdas cómo esperar una excepción en pytest, mira la Escalera de pistas (Paso 7).
 **Punto de control:** ¿por qué un texto hecho solo de espacios cuenta como vacío?
 
@@ -228,7 +228,7 @@ ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && 
 **Punto de control:** si usaste `# type: ignore`, ¿está solo en esa línea y con un comentario que lo explique?
 
 ### Paso 15 — Commits pequeños, push y PR
-**Haz esto:** haz los seis commits de la sección 7, paso 11 del contrato, **uno por cambio**: para cada uno, `git add` solo de sus archivos y luego `git commit -m` con el mensaje indicado. Después:
+**Haz esto:** haz los seis commits de la sección 7, paso 11 del contrato, **uno por cambio**: para cada uno, `git add` solo de sus rutas (nunca `git add .`; el commit de pruebas queda en rojo a propósito y el PR se squashea) y luego `git commit -m` con el mensaje indicado. Después:
 ```bat
 git push -u origin issue-54-memoria-persistente
 ```
@@ -245,13 +245,13 @@ Abre el PR contra `main` con `Closes #54`, la plantilla completa y tus respuesta
 
 **Paso 7 (T4).** Pista 1: `strip()` quita espacios al principio y al final de un texto. Pista 2: busca cómo esperar una excepción en <https://docs.pytest.org/en/stable/how-to/assert.html#assertions-about-expected-exceptions> (`pytest.raises`). Pista 3: pruebas cada valor malo dentro de un bloque `with pytest.raises(ValueError):` y compruebas que la excepción aparece.
 
-**Paso 8 (T5).** Pista 1: `Path(__file__)` es la ruta de tu archivo de prueba. Pista 2: busca `resolve` y `parents` en <https://docs.python.org/3/library/pathlib.html>. Pista 3: desde `tests\` subes hasta la raíz del repo, abres `.env.example` como texto UTF-8 y buscas la línea exacta.
+**Paso 8 (T5).** Pista 1: `Path(__file__)` es la ruta de tu archivo de prueba. Pista 2: busca `resolve` y `parents` en <https://docs.python.org/3/library/pathlib.html>. 
 
 **Paso 10 (T7).** Pista 1: `tmp_path` se comporta como una carpeta y `/` une carpeta con nombre de archivo. Pista 2: revisa <https://docs.pytest.org/en/stable/how-to/tmp_path.html>. Pista 3: construyes la ruta del `.db` dentro de `tmp_path`, la pasas a `open_checkpointer`, haces una invocación y compruebas que el archivo existe.
 
-**Paso 11 (checkpointer).** Pista 1: el checkpointer es un objeto que la librería crea a partir de la ruta de un archivo; piensa en el `with` del mini-concepto 3. Pista 2: busca `SqliteSaver` y `from_conn_string` en <https://langchain-ai.github.io/langgraph/concepts/persistence/>. Pista 3: `open_checkpointer` solo envuelve esa creación con la ruta que recibe; `build_graph` solo pasa el saver a la compilación; `config_for_phone` valida el teléfono y devuelve la configuración que describe la sección 5.1 del contrato.
+**Paso 11 (checkpointer).** Pista 1: el checkpointer es un objeto que la librería crea a partir de la ruta de un archivo; piensa en el `with` del mini-concepto 3. Pista 2: busca `SqliteSaver` y `from_conn_string` en <https://langchain-ai.github.io/langgraph/concepts/persistence/>. Pista 3: ¿qué debe devolver `open_checkpointer` según la sección 5.2 y qué método de `SqliteSaver` lo entrega? ¿Qué argumento de la compilación recibe el saver? ¿Qué forma tiene la configuración de la sección 5.1?
 
-**Paso 12 (modo estricto).** Pista 1: Python lee las variables de entorno cuando un módulo se importa. Pista 2: revisa <https://docs.python.org/3/library/os.html#os.environ>. Pista 3: en la misma ventana de cmd, primero escribes `set` y después ejecutas Python; si cambias de ventana, empiezas de nuevo.
+**Paso 12 (modo estricto).** Pista 1: la librería `langgraph` lee la variable cuando se importa; debe existir en la ventana antes de ese import. Pista 2: revisa <https://docs.python.org/3/library/os.html#os.environ>. Pista 3: en la misma ventana de cmd, primero escribes `set` y después ejecutas Python; si cambias de ventana, empiezas de nuevo.
 
 Si sigues trabado después de la Pista 3: comenta en el Issue #54 con el error pegado como texto.
 

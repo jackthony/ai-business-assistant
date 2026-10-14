@@ -30,6 +30,11 @@ def run(*args: str, stdin: str | None = None) -> str:
     return r.stdout
 
 
+def is_skipped_author(author: str) -> bool:
+    """El monitor y cualquier bot no son practicantes: no se revisan."""
+    return author == "jackthony" or author.endswith("[bot]")
+
+
 def issue_number(body: str, head_ref: str) -> str | None:
     m = re.search(r"(?i)(?:closes|fixes|resolves)\s+#(\d+)", body or "")
     if m:
@@ -140,7 +145,7 @@ def post(pr: str, body: str) -> None:
 
 def main() -> None:
     pr = os.environ["PR_NUM"]
-    if os.environ.get("PR_AUTHOR") in ("jackthony", "dependabot[bot]"):
+    if is_skipped_author(os.environ.get("PR_AUTHOR", "")):
         print("PR del monitor o de un bot: la revisión guiada es para practicantes.")
         return
     base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]

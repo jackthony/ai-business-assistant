@@ -40,3 +40,11 @@ def test_report_marks_touched_existing_and_missing_and_extra() -> None:
     assert "`b.py` | ◻️" in report
     assert "`c.py` | ⬜ falta" in report
     assert "- `otro.md`" in report
+
+
+def test_skips_monitor_and_any_bot_but_not_students() -> None:
+    assert rg.is_skipped_author("jackthony")
+    assert rg.is_skipped_author("dependabot[bot]")
+    assert rg.is_skipped_author("renovate[bot]")
+    assert not rg.is_skipped_author("adbon-dm1")
+    assert not rg.is_skipped_author("")

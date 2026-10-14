@@ -33,6 +33,13 @@ jobs:
           head = os.environ["HEAD"]
           body = os.environ.get("BODY") or ""
           commits = int(os.environ["COMMITS"])
+          # Dependabot no puede cumplir rama issue-N, Closes #N ni la plantilla: solo se exige base main.
+          if os.environ.get("AUTHOR") == "dependabot[bot]" and head.startswith("dependabot/"):
+              if base != "main":
+                  print(f"::error::el PR de Dependabot apunta a '{base}', no a 'main'.")
+                  sys.exit(1)
+              print("TBD OK: PR de Dependabot (exento de rama issue-N, Closes #N y plantilla)")
+              sys.exit(0)
           if base != "main":
               errors.append(f"el PR apunta a '{base}', no a 'main' (TBD: no existen ramas long-lived).")
           if not re.fullmatch(r"(tbd|issue)-\d+(-[a-z0-9]+)*", head):

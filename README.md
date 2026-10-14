@@ -4,7 +4,7 @@ Repositorio único (**público** desde 2026-10-06): **programa de prácticas** (
 
 - **Board de seguimiento (público, solo lectura para practicantes):** https://github.com/users/jackthony/projects/3 (campos Status, Semana, Alumno, Area, Complejidad) — también en la pestaña Projects del repo
 - **Wiki (mapa del programa, fuentes y ruta):** https://github.com/jackthony/ai-business-assistant/wiki · **Discusiones (preguntas, lecturas guiadas, retro):** https://github.com/jackthony/ai-business-assistant/discussions
-- **Estado siempre vigente:** `program/00_PROJECT/current_status.md`
+- **Estado siempre vigente:** `program/00_PROJECT/current_status.md` (semana en curso, Issues, riesgos y próximo paso). Este README describe lo **estable** (cómo está armado el repo y cómo se trabaja); lo que cambia cada semana vive en ese archivo.
 
 ## Empieza aquí (practicantes) — antes de tocar nada
 
@@ -46,28 +46,68 @@ Otras referencias de ingeniería consultadas (se **leen**, no se copian; sin lic
 
 ## Estructura
 
-| Carpeta | Contenido |
+| Carpeta / archivo | Contenido |
 |---|---|
-| `program/00_PROJECT/` | **`current_status.md`** (leer siempre primero), `roadmap.md` (visión+alcance+fases), `operacion.md` (GitHub+ritmo) |
-| `program/01_CURRICULUM/` | Syllabus, plan de 16 semanas y backlog de Issues #01–#39 |
-| `program/02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate) y guías por tema |
-| `program/03_ARCHITECTURE/` | Arquitectura objetivo + ADRs en `decisions/` |
+| `program/00_PROJECT/` | **`current_status.md`** (leer siempre primero), `roadmap.md` (visión+alcance+fases), `operacion.md` (GitHub+ritmo), `roi_metrics.md` |
+| `program/01_CURRICULUM/` | Plan de 16 semanas, backlog de Issues, inducción S5, pack de contexto, ruta de fundamentos y **`asignaciones/`** (un contrato determinista `S##_D#.md` + guía paso a paso por cada Issue de producción) |
+| `program/02_REFERENCE/` | **`source_map.md`** (jerarquía de fuentes + kit de rescate), `stack-versiones.md` y guías por tema; `ejemplos/` con bloques guiados y tests |
+| `program/03_ARCHITECTURE/` | Arquitectura objetivo, `estandares.md` + ADRs en `decisions/` |
 | `program/04_DOMAIN/` | Dominio de negocio: Hola Mujer y NeuraCode |
 | `program/05_EVALUATION/` | Rúbrica y expedientes individuales de alumnos |
+| `src/` | Producto, por capas (`api`, `agents`, `channels`, `infrastructure`, `memory`, `models`, `rag`, `services`, `tools`). El núcleo no conoce canales ni HTTP (`estandares.md` §2) |
+| `tests/` | Pruebas del producto y de la automatización (`tests/ops/`) |
+| `configs/` | Configuración por negocio (tenant); ver `configs/README.md` |
+| `data/conversaciones/` | Corpus de conversaciones anonimizado para few-shot, RAG y evals (hoy `sinteticas_v1.jsonl`; ver su `README.md`) |
+| `tools/` | `onboarding/` (preparar tu carpeta y bitácora) y `asignaciones/` (verificadores de contratos) |
+| `docs/` | `ARCHITECTURE.md` y `CONTEXT.md` |
+| `wiki/` | Fuente de la wiki pública (se publica sola al llegar a `main`) |
+| `bitacora/` | Bitácoras de los practicantes |
+| `.github/` | Workflows, scripts de automatización (`scripts/`), roster del coach (`coach.json`) y plantillas |
+| `.opencode/commands/` | Comandos del asistente de IA del practicante (`/asignacion`, `/paso`, `/pista`, `/revisar`, `/comprension`) |
 | `AGENTS.md` (raíz) | Instrucciones para cualquier agente de IA (protocolo, coding, review, evaluación) |
+| `GUIA_PRACTICANTE.md` · `GUIA_AGENTE.md` (raíz) | Guía del practicante y de su asistente de IA |
 
 ## Flujo de trabajo automatizado
 
+**Calidad y reglas de rama (cada PR)**
+
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
-| `ci.yml` | cada PR | 4 puertas: `ruff` + `mypy` + `pytest` + `bandit` (job `calidad`) |
-| `tbd-guardian.yml` | cada PR | TBD de aprendizaje: base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N`, commits convencionales (cantidad libre) |
-| `ficha-pr.yml` | cada PR | ficha de revisión automática para el monitor (Issue que cierra, archivos, tests, criterios) |
-| `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek API si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
-| `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, avisa PRs >4 días y cierra >7 días, borra ramas muertas |
-| `crear-issues-semana.yml` | domingo noche (21:00 Lima) + manual | crea los Issues de la semana con lecturas + detalle de la sesión |
-| `digest-semanal.yml` | viernes | Issue resumen semanal por alumno |
-| `informe-quincenal.yml` | cada noche dom–vie (21:00 Lima) + manual | borrador del informe FPE por alumno desde commits/PRs/Issues reales (Issues #11–#13 ya creados; se refresca solo) |
+| `ci.yml` (job `calidad`) | cada PR | 4 puertas: `ruff` + `mypy` + `pytest` + `bandit`, más el chequeo de capas de `estandares.md`. `ruff` va con la misma versión que el hook local (`pyproject.toml` y `.pre-commit-config.yaml`) |
+| `tbd-guardian.yml` (job `reglas-tbd`) | cada PR | base=`main`, rama `(tbd\|issue)-N-<slug>`, `Closes #N` y commits estrictos `tipo(alcance): verbo` (≤72 caracteres; tipos `feat\|fix\|docs\|test\|refactor\|ci\|chore\|perf\|style`). Más de 6 commits solo avisa. Exime a Dependabot |
+| `tbd-enforcer.yml` | push + cada 6 h | revierte push directo a `main`, avisa PRs >4 días, cierra PRs >7 días y borra ramas muertas |
+| `release.yml` | push de tag (`v*`, `hito-*`, `q*`) | publica el Release con notas generadas |
+
+**Revisión del trabajo de los practicantes**
+
+| Workflow | Cuándo | Qué hace |
+|---|---|---|
+| `pr-borrador.yml` | `git push` de una rama `issue-N-*` de un alumno | abre un PR en **borrador** con `Closes #N`, para que la revisión empiece desde el primer push |
+| `revision-guiada.yml` | cada push del PR (también en borrador) | **Tutor** (DeepSeek): un comentario que se actualiza con archivos del contrato trabajados y faltantes, desvíos, siguiente paso y pistas. No da la solución. Solo alumnos |
+| `revisor-contrato.yml` | cada PR de un alumno | **Compuerta del contrato**: (1) check determinista sin clave (archivos fuera de la sección 4, prohibiciones de la 9, dependencias nuevas, archivos y pruebas faltantes); (2) con el PR listo, un revisor **Claude** (`ANTHROPIC_API_KEY`) cuyo veredicto se valida en código. Scripts y contratos salen de `main`: el alumno no edita la regla que lo evalúa. No aplica al monitor ni a bots |
+| `ficha-pr.yml` | cada PR | ficha de revisión para el monitor (Issue que cierra, archivos, tests, criterios) |
+| `deepseek-review.yml` | cada PR (opcional) | primer pase de review con DeepSeek si `DEEPSEEK_API_KEY` está definido; la nota final la decide el monitor |
+
+**Ciclo semanal y seguimiento**
+
+| Workflow | Cuándo | Qué hace |
+|---|---|---|
+| `crear-issues-semana.yml` | domingo 21:00 Lima + manual | crea el tracker y los Issues de la semana con lecturas y detalle de la sesión |
+| `lectura-semanal.yml` | domingo 22:30 Lima + manual | publica la «Lectura guiada» de la semana en Discussions |
+| `coach.yml` | lun–sáb: 08:00, 14:00 y 17:30 Lima | avisos que @mencionan al practicante en sus días de práctica: qué hacer y dónde mirar |
+| `board-sync.yml` | eventos + cada noche | sincroniza el board (Alumno, Semana, Área, Complejidad, Status) con labels, assignees y PRs |
+| `issue-on-create.yml` · `issue-orden.yml` | cada Issue nuevo | lo agregan al board y lo dejan completo: hito, tracker padre y bloqueos |
+| `issue-closed.yml` | cada Issue cerrado | reabre solo el Issue que se cierra sin PR mergeado ni justificación |
+| `digest-semanal.yml` | viernes 17:00 Lima | Issue resumen semanal por alumno, con commits por día |
+| `informe-quincenal.yml` | dom–vie 21:00 Lima + manual | borrador del informe FPE por alumno desde commits, PRs e Issues reales; se refresca solo |
+
+**Comunicación al equipo**
+
+| Workflow | Cuándo | Qué hace |
+|---|---|---|
+| `equipo-avisa.yml` | un alumno abre, termina o mergea un PR | avisa al equipo con @menciones y, al mergear, desbloquea los Issues que dependían de ese |
+| `discusion-avisa.yml` | discusión nueva | menciona al resto del equipo para que le llegue la notificación |
+| `wiki-sync.yml` | push a `main` | publica `wiki/` en la wiki del repo |
 
 `main` está protegido por el ruleset **`main protegido (TBD)`**: PR obligatorio, historial lineal (squash), sin force-push, checks requeridos `guardian-tbd / reglas-tbd` y `CI estricto / calidad` (sin PR se puede mergear solo si ambas están verdes) y push protection activo.
 
@@ -75,10 +115,12 @@ Otras referencias de ingeniería consultadas (se **leen**, no se copian; sin lic
 
 Lee **`GUIA_PRACTICANTE.md`** (raíz): descarga y preparación, TBD paso a paso, dónde ves tus asignaciones (board + Assigned to me), tus fuentes por semana y cómo se generan tus informes (digest viernes + borrador FPE que se refresca cada noche).
 
-Resumen: `clone` → `pre-commit install` → tu Issue → rama `issue-N-<slug>` → commits chicos con tests → PR con `Closes #N` → CI verde (4 puertas) → merge squash.
+Cada Issue de producción tiene un **contrato** en `program/01_CURRICULUM/asignaciones/` (`S##_D#.md`, con su guía paso a paso): fija el QUÉ (archivos, contrato, pruebas, criterio de «hecho»); el CÓMO es tuyo. Las pruebas se escriben **antes** que el código.
 
-## Cómo usarlo con DeepSeek local
+Resumen: `clone` → `pre-commit install` → tu Issue y su contrato → rama `issue-N-<slug>` → pruebas primero, commits chicos → `git push` (el robot abre tu PR en borrador y te deja la revisión guiada) → marca el PR como listo (corre la compuerta del contrato) → CI verde (4 puertas) → merge squash.
+
+## Cómo usarlo con un asistente de IA (DeepSeek local, OpenCode)
 
 1. Leer `program/00_PROJECT/current_status.md` **siempre**.
 2. Cargar solo 2–3 archivos de la tarea en curso (nunca el repo completo).
-3. El protocolo completo está en `AGENTS.md` (raíz del repo).
+3. El protocolo completo está en `AGENTS.md` (raíz del repo); el asistente de un practicante carga además `GUIA_AGENTE.md`. Con OpenCode, los comandos de `.opencode/commands/` lo encaminan por el contrato del día.

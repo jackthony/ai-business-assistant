@@ -1,0 +1,27 @@
+name: issue-orden
+
+# Cada Issue nuevo (o con etiquetas nuevas) sale completo: hito, tracker padre y bloqueos.
+# Manual: Run workflow rellena todos los Issues abiertos.
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  ordenar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Ordenar Issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUM: ${{ github.event.issue.number }}
+        run: python3 .github/scripts/issue_orden.py "${NUM:---all}"

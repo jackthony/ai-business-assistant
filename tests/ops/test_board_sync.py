@@ -72,4 +72,6 @@ def test_digests_no_entran_al_board():
     assert bs.debe_estar_en_board(
         {"title": "Gestión: algo", "labels": ["tipo:gestion"]}
     )
-    assert not bs.debe_estar_en_board({"title": "Sin labels", "labels": ["coach"]})
+    # Los hilos del coach sí entran al board (decisión del monitor: todo Issue en el Project).
+    assert bs.debe_estar_en_board({"title": "Coach — Pilar", "labels": ["coach"]})
+    assert not bs.debe_estar_en_board({"title": "Sin labels", "labels": []})

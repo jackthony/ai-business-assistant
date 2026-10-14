@@ -113,7 +113,7 @@ def debe_estar_en_board(issue: dict[str, Any]) -> bool:
     if es_digest(issue["title"]):
         return False
     return any(
-        label.startswith(("tipo:", "week:", "alumno:")) or label in {"hito", "senati"}
+        label.startswith(("tipo:", "week:", "alumno:")) or label in {"hito", "senati", "coach"}
         for label in issue["labels"]
     )
 

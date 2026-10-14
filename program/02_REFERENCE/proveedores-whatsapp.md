@@ -3,6 +3,8 @@
 > **Estado:** borrador para decisión de Jack (dueño). Captura: **2026-10-14**.
 > **Limitación de esta investigación:** el egress de la sesión bloqueó (HTTP 403 en CONNECT) los dominios oficiales de Meta, Kapso, Twilio, 360dialog, Gupshup, Bird, Infobip, Chatwoot, Telegram y gob.pe. Por eso **no se leyó ninguna página oficial de proveedor**. Lo que sigue sale de: (a) fragmentos de resultados de búsqueda, que citan la fuente original; (b) `meta-pricing.md` del repo (ya tenía tarifas de Meta, fuente secundaria). Todo lo no hallado está marcado **no confirmado**. Antes de decidir, repetir la verificación de las cifras marcadas en la sección 8.
 
+> **Decisión del dueño (2026-10-14):** por ahora los practicantes trabajan con **datos sintéticos y fixtures**. El monitor configurará el proveedor/canal real de WhatsApp más adelante, cuando tenga tiempo.
+
 ## 1. Resumen y recomendación
 
 - **Restricción del dueño (aplicada):** Hola Mujer **no tiene documentos** para la verificación de negocio de Meta y se quiere evitarla. NeuraCode es verificable pero **no se usará para Hola Mujer**. Las vías no oficiales (Baileys / WhatsApp Web) se **descartan**: riesgo de baneo del número, y ADR-003 ya las rechaza.

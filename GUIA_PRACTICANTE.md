@@ -108,3 +108,10 @@ Un coach automático te escribe **@mencionándote**, así que te llega una notif
 - Nunca datos reales de clientes (fixtures anonimizados). Nunca secretos en código.
 - No copies código sin licencia; cita la fuente. Orden de autoridad: doc oficial > código reproducible > libro/curso > paper > "lo dijo un LLM".
 - Los ADRs (`program/03_ARCHITECTURE/decisions/`) no se cambian en silencio: si propones algo distinto, justifícalo contra el ADR.
+
+## Notificaciones, Discusiones y wiki (hazlo el primer día)
+
+- **Notificaciones:** en el repo, *Watch → Custom* → marca **Issues, Pull requests y Discussions**. En github.com/settings/notifications deja **Email** activo. Así te enteras de lo que sube el equipo. Además, el robot te menciona (@) cuando algo te toca: asignación, revisión, merge o **desbloqueo** de un Issue que dependía de otro.
+- **Discusiones:** [las preguntas, lo que aprendes, las lecturas guiadas y tus bloqueos van aquí](https://github.com/jackthony/ai-business-assistant/discussions), siempre enlazando tu Issue (#N). Cuenta **qué te respondió tu IA y cómo lo verificaste**. Responde al menos una vez por semana a un compañero.
+- **Wiki:** el [mapa del programa, las fuentes que inspiraron el repo y la ruta semanal](https://github.com/jackthony/ai-business-assistant/wiki). No duplica nada: enlaza.
+- **Tu avance:** haz `git push` al terminar cada paso; el robot abre un PR en borrador y deja la «🧭 Revisión guiada».

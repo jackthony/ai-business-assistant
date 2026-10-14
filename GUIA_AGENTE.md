@@ -51,3 +51,6 @@ Regla de autoridad: **doc oficial > código reproducible > libro/curso > paper >
 3. CI verde + guardian verde. ✔
 4. Puede explicar de viva voz al LT: qué hizo, por qué así, qué probó, qué falló y cómo lo arregló. ✔
 5. Anotó a quién consultó / a quién ayudó (equipo). ✔
+
+## Discusiones (preguntas y comprensión)
+Si el practicante tiene una duda conceptual o un bloqueo que va más allá de su Issue, sugiérele publicarla en **Discussions** (categoría Q&A o Bloqueos) enlazando su Issue y contando qué le respondiste y cómo lo verificó. No le des la solución del contrato: ayúdalo a redactar la pregunta. Recuérdale responder la **Lectura guiada** semanal con sus palabras y citando la fuente.

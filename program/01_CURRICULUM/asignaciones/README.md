@@ -8,7 +8,7 @@ Cada Issue de producción tiene aquí su **contrato de asignación** (`S05_D1.md
 - Fijan el **QUÉ**: contrato público, tabla de pruebas, archivos a tocar, orden de pasos, preguntas de comprensión con su rúbrica.
 - No escriben el **CÓMO**: la implementación y las decisiones de diseño son del alumno. Si un contrato te dice la implementación línea por línea, está mal escrito: repórtalo en el Issue.
 
-**Cómo se usan.**
+**Cómo se usan.** (El *paso a paso* es la guía para trabajar sin perderte: mini-conceptos, un paso por prueba, escalera de pistas. No reemplaza al contrato.)
 1. El Issue del día enlaza su archivo `S##_D#.md`; ese archivo manda sobre cualquier resumen del Issue.
 2. Se lee en orden (secciones 1–12). Las pruebas (sección 6) se escriben primero.
 3. En el PR se responden las preguntas de la sección 11. El monitor revisa que cada respuesta cubra los puntos de «tu respuesta debe mencionar».
@@ -16,11 +16,11 @@ Cada Issue de producción tiene aquí su **contrato de asignación** (`S05_D1.md
 
 ## Issue → contrato
 
-| Issue | Contrato | Tema | Depende de |
-|---|---|---|---|
-| #52 | [`S05_D1.md`](S05_D1.md) | Grafo mínimo con estado explícito (`AgentState`, nodo eco, CLI) | — |
-| #53 | [`S05_D2.md`](S05_D2.md) | Prompt por componentes + LLM detrás de un puerto + verificación de respuesta + grafo de conversación (`START → respond → END`, archivo nuevo) | #52 en `main` (usa `src/agents/state.py`; no toca los archivos de #52) |
-| #54 | [`S05_D3.md`](S05_D3.md) | Memoria persistente por teléfono (`SqliteSaver`, `thread_id`) | #52 en `main` |
+| Issue | Contrato | Paso a paso | Tema | Depende de |
+|---|---|---|---|---|
+| #52 | [`S05_D1.md`](S05_D1.md) | [`S05_D1_paso_a_paso.md`](S05_D1_paso_a_paso.md) | Grafo mínimo con estado explícito (`AgentState`, nodo eco, CLI) | — |
+| #53 | [`S05_D2.md`](S05_D2.md) | [`S05_D2_paso_a_paso.md`](S05_D2_paso_a_paso.md) | Prompt por componentes + LLM detrás de un puerto + verificación de respuesta + grafo de conversación (`START → respond → END`, archivo nuevo) | #52 en `main` (usa `src/agents/state.py`; no toca los archivos de #52) |
+| #54 | [`S05_D3.md`](S05_D3.md) | [`S05_D3_paso_a_paso.md`](S05_D3_paso_a_paso.md) | Memoria persistente por teléfono (`SqliteSaver`, `thread_id`) | #52 en `main` |
 
 Una asignación que depende de otra **no se empieza** hasta que la anterior esté mergeada en `main` (`git pull` y comprueba que existen sus archivos). Si ves a un compañero bloqueado por eso, ofrécele ayuda con `apoyo`.
 

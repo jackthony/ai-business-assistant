@@ -52,8 +52,9 @@ El producto **será multiagente, pero no desde el inicio** ([ADR-007](program/03
 |---|---|---|---|
 | Agente único | S4–S9 | Webhook, grafo LangGraph, RAG, tools (citas), safety y handoff humano como nodos/tools del **mismo** grafo | **HITO 2** (S9): 12/12 escenarios E2E, handoff real, latencia y contención medidas |
 | Supervisor | S10 D2 del [plan](program/01_CURRICULUM/16_week_plan.md) | Router: clasificador por reglas primero, LLM solo para mensajes ambiguos; deriva a info / citas / checkout / safety | ≥13/15 mensajes ruteados bien, fallback a LLM, trazas del ruteo |
-| Multitenant | S10 D3 – S11 del plan | El mismo grafo atiende Hola Mujer y NeuraCode con prompt, namespace RAG y tools propios | 2 números, sin fugas de datos entre tenants |
 | Evals y costo | S12, S15 | Evals por escenario; costo por conversación (FinOps) | decisión de seguir, fusionar o dividir agentes con datos |
+
+**Alcance actual: solo Hola Mujer**, que es un negocio real. NeuraCode es otro proyecto: se adapta recién cuando Hola Mujer esté terminado, validado y evaluado con su ciclo completo de evals (decisión del monitor, 2026-10-14). Hasta entonces no se construye multitenant.
 
 Destino de diseño: [`architecture.md`](program/03_ARCHITECTURE/architecture.md) (supervisor → `info_agent`, `booking_agent`, `checkout_agent`, `safety_agent`).
 

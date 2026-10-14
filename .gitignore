@@ -12,3 +12,9 @@ venv/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# Datos crudos con personas: nunca al repo (publico). Ver data/hola_mujer/README.md
+*.xlsx
+*.xls
+*.xlsm
+data/**/crudo/

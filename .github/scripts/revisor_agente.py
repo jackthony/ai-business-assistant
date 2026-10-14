@@ -132,7 +132,6 @@ def ask_claude(prompt: str, key: str) -> str:
     payload = {
         "model": os.environ.get("REVISOR_MODEL", "claude-haiku-5-5"),
         "max_tokens": 2000,
-        "temperature": 0,
         "messages": [{"role": "user", "content": prompt}],
     }
     req = urllib.request.Request(
@@ -172,6 +171,20 @@ def decide(
         )
     try:
         raw = llm(prompt)
+    except urllib.error.HTTPError as e:
+        if 400 <= e.code < 500 and e.code != 429:
+            # Error nuestro (modelo, clave o parámetro): se nombra para que no pase por una caída.
+            print(
+                f"::warning::revisor-agente: HTTP {e.code} de la API de Anthropic (configuración)"
+            )
+            return Outcome(
+                False,
+                f"El revisor-agente falló por un error de configuración (HTTP {e.code}); avisa al monitor. No se bloquea.",
+            )
+        return Outcome(
+            False,
+            "El revisor-agente no respondió (API caída o saturada); no se bloquea por eso.",
+        )
     except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as e:
         return Outcome(
             False,

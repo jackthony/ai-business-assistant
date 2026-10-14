@@ -112,3 +112,48 @@ def test_decide_passes_on_clean_verdict() -> None:
         prompt="p",
     )
     assert not out.failed and out.verdict is not None
+
+
+def test_ask_claude_payload_has_no_temperature(monkeypatch) -> None:
+    """La API de Anthropic rechaza `temperature` en el modelo por defecto (HTTP 400)."""
+    sent: dict = {}
+
+    class FakeResp:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def read(self) -> bytes:
+            return json.dumps({"content": [{"text": "OK"}]}).encode()
+
+    def fake_urlopen(req, timeout):
+        sent.update(json.loads(req.data))
+        return FakeResp()
+
+    monkeypatch.setattr(ra.urllib.request, "urlopen", fake_urlopen)
+    assert ra.ask_claude("hola", "k") == "OK"
+    assert "temperature" not in sent
+    assert sent["messages"][0]["content"] == "hola"
+
+
+def test_decide_http_config_error_is_named_but_does_not_block() -> None:
+    """Un 4xx es un error nuestro (modelo, clave, parámetro): se nombra el código, no bloquea."""
+
+    def boom(_: str) -> str:
+        raise ra.urllib.error.HTTPError("u", 400, "Bad Request", None, None)  # type: ignore[arg-type]
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False
+    assert "HTTP 400" in o.note
+    assert "configuración" in o.note
+
+
+def test_decide_server_outage_keeps_generic_note() -> None:
+    def boom(_: str) -> str:
+        raise ra.urllib.error.HTTPError("u", 503, "Unavailable", None, None)  # type: ignore[arg-type]
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False
+    assert "HTTP 503" not in o.note

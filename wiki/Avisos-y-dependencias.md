@@ -13,9 +13,11 @@ Por eso hay **dos capas**:
 | Se mergea un PR de un alumno | Comentario: «mergeado, hagan `git pull origin main`» | el resto del equipo |
 | Se mergea un Issue del que otros dependían | Comentario **🔓 «ya puedes empezar»** en el Issue dependiente y se quita la etiqueta `bloqueado` | quien tiene asignado el Issue desbloqueado |
 | Cada push | Comentario «🧭 Revisión guiada» actualizado | autor del PR |
-| Cada domingo por la noche | Aparece la **Lectura guiada** en Discussions | quien vigile Discussions |
+| Cada domingo por la noche | Aparece la **Lectura guiada** en Discussions, mencionando a todo el equipo | todos (por la mención) |
+| Alguien abre una discusión | El robot comenta mencionando al resto del equipo | el resto de alumnos y el monitor |
+| Alguien comenta en una discusión | GitHub te avisa **si ya participaste** en ella (comentar te suscribe) o te mencionan | quienes participan en esa discusión |
 
-Mencionar con @ es lo que garantiza el correo/notificación: no depende de tu configuración de *Watch*.
+Mencionar con @ es lo que garantiza el correo/notificación: no depende de tu configuración de *Watch*. **Lo que no se automatiza:** los comentarios nuevos en discusiones donde no participas. Para verlos todos, pon el repo en *Watch → Custom → Discussions* (Capa 2). El monitor conviene que use **All Activity**.
 
 ### Capa 2 · Configura tus notificaciones
 1. Abre el repo → **Watch → Custom** y marca **Issues**, **Pull requests** y **Discussions**. (O **All Activity** si quieres todo.)

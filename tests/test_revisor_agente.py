@@ -136,3 +136,24 @@ def test_ask_claude_payload_has_no_temperature(monkeypatch) -> None:
     assert ra.ask_claude("hola", "k") == "OK"
     assert "temperature" not in sent
     assert sent["messages"][0]["content"] == "hola"
+
+
+def test_decide_http_config_error_is_named_but_does_not_block() -> None:
+    """Un 4xx es un error nuestro (modelo, clave, parámetro): se nombra el código, no bloquea."""
+
+    def boom(_: str) -> str:
+        raise ra.urllib.error.HTTPError("u", 400, "Bad Request", None, None)  # type: ignore[arg-type]
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False
+    assert "HTTP 400" in o.note
+    assert "configuración" in o.note
+
+
+def test_decide_server_outage_keeps_generic_note() -> None:
+    def boom(_: str) -> str:
+        raise ra.urllib.error.HTTPError("u", 503, "Unavailable", None, None)  # type: ignore[arg-type]
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False
+    assert "HTTP 503" not in o.note

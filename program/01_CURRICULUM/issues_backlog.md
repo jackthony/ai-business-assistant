@@ -11,7 +11,7 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas segú
 | #05 | S5 D2 | System Prompt inicial Hola Mujer | todo |
 | #06 | S5 D3 | Memoria persistente (SqliteSaver, thread_id = teléfono) | todo |
 | #07 | S6 D1 | Reglas de formateo + few-shot para objeciones | todo |
-| #08 | S6 D2 | Ingesta Excel 05_SERVICIOS → JSON → ChromaDB | todo |
+| #08 | S6 D2 | Ingesta `data/hola_mujer/servicios.json` → ChromaDB (la hoja→JSON ya está hecha) | todo |
 | #09 | S6 D3 | HITO 1: bot Hola Mujer respondiendo | todo |
 | #10 | S7 D1 | Agente 1: Info & RAG especializado + guardrail Chimbote | todo |
 | #11 | S7 D2 | Pydantic tools para servicios | todo |

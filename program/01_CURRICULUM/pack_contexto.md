@@ -75,9 +75,9 @@
 ## Semana 6 — RAG + HITO 1: el bot conoce el negocio
 
 - **Negocio en foco:** el bot responde con los **47 servicios reales y sus precios** (S/ 24.99–449.99) sacados de la fuente, jamás inventados. El **corpus real** (`data/conversaciones/`) es la fuente prioritaria de ejemplos y objeciones.
-- **Lee antes (repo):** tus Issues (`#07`/`#08`/`#09`) · `ADR-004` · `data/conversaciones/README.md` · `program/04_DOMAIN/hola-mujer.md` (§Catálogo y §Promociones — validar cuáles están activas).
+- **Lee antes (repo):** tus Issues (`#07`/`#08`/`#09`) · `ADR-004` · `data/hola_mujer/README.md` (qué trae el JSON y sus límites) · `data/hola_mujer/servicios.json` · `data/conversaciones/README.md` · `program/04_DOMAIN/hola-mujer.md` (§Catálogo y §Promociones).
 - **Fuentes externas:** solo si falta corpus, dataset Bitext de customer support (licencia CDLA).
-- **No cargues:** features fuera del hito; el Excel completo (el ETL lee la hoja, no la pegues en chats).
+- **No cargues:** features fuera del hito; el Excel (no está en el repo: el ETL parte de `data/hola_mujer/servicios.json`; nunca pegues datos de personas en chats).
 - **Con tu IA:** pide que te explique el anti-caso `cofounder-agi` (vectores aleatorios por `hash()`) y cómo se delata un retrieval sin relevancia.
 - **Listo cuando:** 10/10 respuestas verificadas contra la fuente + demo en vivo (hito 1) + release `hito-1`.
 - **Fundamentos si te trabas:** Nivel 4 Huyen (RAG) + Nivel 2 HF Course (embeddings) + Nivel 1 d2l (vectores).

@@ -1,0 +1,49 @@
+name: revisor-contrato
+
+# Compuerta de calidad del PR de un practicante contra su contrato S##_D#.md. Check requerido
+# `revisor-contrato`: (1) check determinista sin clave (archivos fuera de la sección 4,
+# prohibiciones de la sección 9, dependencias nuevas, archivos/pruebas faltantes) y (2) un revisor
+# Claude con ANTHROPIC_API_KEY cuando el PR ya no es borrador. Sin la clave solo corre (1).
+# No aplica al monitor ni a los bots. Pull_request (no _target): usa el código de la rama del PR
+# solo para LEER; el script y el contrato se toman de `main` (ver checkout).
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: revisor-contrato-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  revisor-contrato:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Traer scripts y contratos desde main (el alumno no puede editar la regla que lo evalúa)
+        run: |
+          git fetch --no-tags origin main
+          git checkout origin/main -- .github/scripts .github/coach.json program/01_CURRICULUM/asignaciones
+      - name: Revisar contra el contrato
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python3 .github/scripts/revisor_agente.py

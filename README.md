@@ -35,6 +35,15 @@ Nada del plan se duplica fuera de este repo: si un artefacto contradice a otro, 
 
 Reglas: **KB-A nunca contiene docs del programa**; **KB-P nunca contiene precios/listas reales de clientes** (eso va al Excel operativo — versionado en `data/` de este repo desde que GitHub sustituye a Google Drive); **KB-T nunca incluye el repo completo**. Mezclarlas rompe seguridad, calidad del RAG y la memoria de DeepSeek.
 
+## Inspiración y créditos
+
+Este repo se construyó a partir de dos fuentes de inspiración directa del monitor, además de las referencias técnicas curadas en [`source_map.md`](program/02_REFERENCE/source_map.md) (orden de autoridad: doc oficial > código reproducible > libro/curso > paper > un LLM):
+
+- **[`jackthony/IA-local`](https://github.com/jackthony/IA-local)** (lab propio, MIT): decisiones tipadas de 1 token con confianza calibrada (**Jev**, ver [`jev-pattern.md`](program/02_REFERENCE/jev-pattern.md)) y CI zero-trust (acciones fijadas por SHA, escáner de secretos).
+- **[AI Agents: The Definitive Guide](https://github.com/Nicolepcx/ai-agents-the-definitive-guide)** (Nicolepcx, CH01–CH12): eje conceptual del programa ([`definitive-guide.md`](program/02_REFERENCE/definitive-guide.md)); se estudia como lectura guiada, no como verdad.
+
+Otras referencias de ingeniería consultadas (se **leen**, no se copian; sin licencia = no se copia código): Anthropic *Building Effective Agents*, *12-Factor Agents*, *Cosmic Python*, OWASP GenAI, LangGraph, `walkinglabs/learn-harness-engineering`, `zhanymkanov/fastapi-best-practices`, `david-lev/pywa`, entre otras. Lista completa, con licencia y «cuándo consultar», en [`source_map.md`](program/02_REFERENCE/source_map.md) y en la [wiki](https://github.com/jackthony/ai-business-assistant/wiki/Fuentes-y-referencias).
+
 ## Estructura
 
 | Carpeta | Contenido |

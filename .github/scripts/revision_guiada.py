@@ -134,8 +134,8 @@ def post(pr: str, body: str) -> None:
         check=False,
     )
     if r.returncode != 0:
-        print("::error::no pude publicar el comentario:", r.stderr[:300])
-        raise SystemExit(1)
+        # Aviso, no error: un fallo de red no debe poner en rojo el PR del alumno.
+        print("::warning::no pude publicar el comentario:", r.stderr[:300])
 
 
 def main() -> None:

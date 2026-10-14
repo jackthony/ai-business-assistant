@@ -1,0 +1,39 @@
+name: wiki-sync
+
+# La fuente de la wiki vive en wiki/ (revisada por PR). Al llegar a main se publica en la
+# wiki del repo. Requisito: la wiki debe estar inicializada (crear una primera página
+# «Home» desde la pestaña Wiki); si no, el job avisa y no falla.
+on:
+  push:
+    branches: [main]
+    paths: ["wiki/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Publicar en la wiki
+        env:
+          TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          if ! git clone "https://x-access-token:${TOKEN}@github.com/${REPO}.wiki.git" /tmp/wiki 2>/dev/null; then
+            echo "::warning::La wiki no está inicializada: crea la primera página (Home) en la pestaña Wiki y vuelve a ejecutar este workflow."
+            exit 0
+          fi
+          cp wiki/*.md /tmp/wiki/
+          cd /tmp/wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Wiki al día."; exit 0; fi
+          git commit -m "docs(wiki): sincronizar desde wiki/ del repo"
+          git push

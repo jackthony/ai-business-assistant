@@ -2,7 +2,7 @@
 
 > **Para quién:** practicante de 2.º año de AI Engineering, con Python básico y Git básico, que **no** conoce todavía `Protocol`, Pydantic, `LangGraph` como grafo de conversación ni las verificaciones por reglas. Este archivo te acompaña **mientras trabajas**; el contrato ([`S05_D2.md`](S05_D2.md)) dice **qué** debe quedar. Aquí aprendes **cómo abordarlo sin perderte**.
 >
-> **Reglas del juego:** no hay código de la solución aquí (si lo hubiera, no aprenderías). Hay explicación, pistas y puntos de control. Una sesión dura ~3 h; los tiempos son una guía. Todos los comandos son para Windows (cmd), desde la raíz del repo.
+> **Reglas del juego:** no hay código de la solución aquí (si lo hubiera, no aprenderías). Hay explicación, pistas y puntos de control. Esta asignación es larga: los bloques de abajo suman unas 4 h 30 en total. Si a las 2 h 30 no estás en el Paso 19, comenta en el Issue y avisa al monitor, que decide qué pasa a la siguiente sesión. Los tiempos son una guía. Todos los comandos son para Windows (cmd), desde la raíz del repo.
 
 ## Mapa de la sesión
 
@@ -25,7 +25,7 @@
 ```python
 from typing import Protocol
 class Cargable(Protocol):
-    ...
+    def cargar(self, watts: int) -> str: ...
 ```
 - **Profundiza:** <https://docs.python.org/3/library/typing.html#typing.Protocol>
 
@@ -103,7 +103,7 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Defin
 ### Paso 3 — P1: el archivo real se carga en cinco piezas
 **Haz esto:** crea `tests\conftest.py` con la clase `FakeLLM` y la fixture `fake_llm` de la sección 5 del contrato ("Pruebas de apoyo"). Crea `tests\test_prompt_pieces.py` y escribe P1: importa `load_prompt_pieces` desde `agents.prompt`, calcula la ruta a `configs\hola_mujer\prompt_v1.md` desde `__file__` y comprueba que el resultado tiene los 5 campos no vacíos. Corre el archivo.
 **Por qué:** la prueba fija el primer contrato del prompt: cinco piezas con nombre. Calcular la ruta desde `__file__` evita depender de desde dónde ejecutas pytest.
-**Debes ver:** rojo por `ModuleNotFoundError` que nombra `agents.prompt`.
+**Debes ver:** rojo por `ModuleNotFoundError` que nombra el primer módulo que falta (`agents.llm_port` o `agents.prompt`: tu `conftest.py` importa el puerto).
 **Si falla:** si el error es `SyntaxError` o `NameError` en tu prueba, corrígela primero.
 **Punto de control:** ¿por qué la ruta sale de `__file__` y no de un texto escrito a mano como `"configs/..."`?
 
@@ -146,7 +146,7 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Defin
 **Haz esto:** escribe V4 con `"¿Qué día? ¿A qué hora?"`. Espera `ok=False` y `reasons=["too_many_questions"]`. Corre el archivo.
 **Por qué:** la regla es «máximo 1 pregunta por turno»: dos preguntas juntas confunden a la clienta.
 **Debes ver:** rojo por `ModuleNotFoundError`.
-**Si falla:** ninguna; es el mismo rojo de siempre.
+**Si falla:** si el error no es `ModuleNotFoundError`, revisa tu prueba (`NameError`, un typo en el texto esperado) y luego la escalera de pistas.
 **Punto de control:** ¿el `¿` de apertura cuenta como pregunta según el contrato? (No: solo cuenta el `?`.)
 
 ### Paso 10 — V5: precio con `S/` (3 casos)
@@ -167,21 +167,21 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Defin
 **Haz esto:** escribe V7 parametrizada con `"   "`, `"\n\n"` y `"\t"`. En cada caso espera `ok=False` y `reasons=["empty"]`. Corre el archivo.
 **Por qué:** un texto que solo tiene espacios no es una respuesta; no debe enviarse a la clienta.
 **Debes ver:** rojo por `ModuleNotFoundError`.
-**Si falla:** ninguna; es el mismo rojo.
+**Si falla:** si el error no es `ModuleNotFoundError`, revisa tu prueba y luego la escalera de pistas.
 **Punto de control:** según el contrato, si `empty` aplica, ¿puede aparecer junto con otro motivo? (Léelo en la sección 5.)
 
 ### Paso 13 — V8: varios motivos en orden
 **Haz esto:** escribe V8 con `"a\nb\nc\nd ¿q?\n¿r?"`. Espera `ok=False` y `reasons=["too_many_lines","too_many_questions"]`, en ese orden. Corre el archivo.
 **Por qué:** el orden de los motivos es parte del contrato: quien lee el registro de revisión espera siempre el mismo orden.
 **Debes ver:** rojo por `ModuleNotFoundError`.
-**Si falla:** ninguna; el rojo es el esperado.
+**Si falla:** si el error no es `ModuleNotFoundError`, revisa tu prueba y luego la escalera de pistas.
 **Punto de control:** ¿tu prueba compara la lista completa o solo que contenga los dos códigos? Debe comparar la lista completa y en orden.
 
 ### Paso 14 — V9: números que no son precio no disparan la regla
 **Haz esto:** escribe V9 con `"Puedo el martes 13 a las 10.\n¿Te sirve?"`. Espera `ok=True`, `reasons=[]`. Corre el archivo.
 **Por qué:** una regla demasiado amplia rechaza horas y fechas; el bot no podría agendar nada.
 **Debes ver:** rojo por `ModuleNotFoundError`.
-**Si falla:** ninguna; es el mismo rojo.
+**Si falla:** si el error no es `ModuleNotFoundError`, revisa tu prueba y luego la escalera de pistas.
 **Punto de control:** ¿por qué `10.` no es un precio, aunque tenga un número y un punto?
 
 ### Paso 15 — S1: la respuesta válida se devuelve
@@ -195,20 +195,20 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Defin
 **Haz esto:** escribe S2 con `fake_llm.reply="a\nb\nc\nd"`. Espera `status="revision_humana"`, `text=None` y `reasons=["too_many_lines"]`. Corre el archivo.
 **Por qué:** cuando el texto no pasa, **no** se envía; la prueba fija que el servicio no lo deja pasar.
 **Debes ver:** rojo por `ModuleNotFoundError`.
-**Si falla:** ninguna.
+**Si falla:** si el error no es `ModuleNotFoundError`, revisa tu prueba y luego la escalera de pistas.
 **Punto de control:** ¿qué pasa con `text` cuando `status` es `revision_humana`? Debes decirlo de memoria.
 
 ### Paso 17 — S3: el sistema llega sin cambios al modelo
 **Haz esto:** escribe S3 con `ConversationService(llm=fake_llm, system="SYS")` y un turno. Espera `calls[0][0] == "SYS"`. Corre el archivo.
 **Por qué:** el servicio no debe reescribir el prompt; si lo hace, lo que revisas en el archivo no es lo que lee el modelo.
 **Debes ver:** rojo por `ModuleNotFoundError`.
-**Si falla:** ninguna.
+**Si falla:** si el error no es `ModuleNotFoundError`, revisa tu prueba y luego la escalera de pistas.
 **Punto de control:** ¿`calls` guarda la tupla `(system, messages)`? ¿En qué posición está el sistema?
 
 ### Paso 18 — T1 a T10: el primer mensaje de cada conversación del fixture
 **Haz esto:** escribe **una** prueba parametrizada que recorra el fixture `first_messages_v1.json` (conversaciones `conv_0001` a `conv_0010`). Cada caso, con su ID, hace lo mismo que T1: `fake_llm.reply="Hola, ¿en qué te puedo ayudar?"`, mensajes `[user <texto>]`, y espera `status="respondido"`, `text` igual al `reply`, y que el último mensaje enviado al modelo tenga el `texto` del fixture. Los IDs son: T1 (`conv_0001`), T2 (`conv_0002`), T3 (`conv_0003`), T4 (`conv_0004`), T5 (`conv_0005`), T6 (`conv_0006`), T7 (`conv_0007`), T8 (`conv_0008`), T9 (`conv_0009`) y T10 (`conv_0010`). Corre el archivo.
 **Por qué:** T1–T10 prueban con los mensajes reales del corpus; si el servicio cambia el texto del usuario, lo ves con diez casos.
-**Debes ver:** rojo por `ModuleNotFoundError`. Los diez casos aparecen en el total (`35` al final).
+**Debes ver:** rojo por `ModuleNotFoundError`. Los diez casos aparecen en el total (`35` al final). No confundas estos T1–T10 con los T1–T8 de S05 D1: son de otro archivo. El primer mensaje de `conv_0004` es solo «3» (una opción de menú): es correcto.
 **Si falla:** si el fixture no se encuentra, calcula la ruta desde `__file__` como en P1.
 **Punto de control:** ¿puedes decir qué ID es `conv_0004` y por qué su mensaje es de turno 2?
 
@@ -222,14 +222,14 @@ Crea `calentamiento.py` **fuera del repo** (por ejemplo en el Escritorio). Defin
 ### Paso 20 — Escribe el prompt v1 por componentes
 **Haz esto:** crea la carpeta con `mkdir configs\hola_mujer` y el archivo `configs\hola_mujer\prompt_v1.md`. Primera línea `# Prompt Hola Mujer v1`, luego las cinco secciones `##` en orden (`Identidad`, `Tono`, `Límites`, `Herramientas`, `Memoria`) con lo que pide la sección 5 del contrato. Guárdalo en UTF-8. Verifica con `findstr /B "##" configs\hola_mujer\prompt_v1.md`.
 **Por qué:** el prompt es texto que el modelo lee; cada sección tiene un trabajo: quién es, cómo habla, qué no hace.
-**Debes ver:** exactamente cinco líneas `##` en el orden del contrato. Ningún precio, horario ni cifra en el texto.
+**Debes ver:** exactamente cinco líneas `##` en el orden del contrato. Ningún precio, horario ni cifra de negocio en el texto (las reglas «máximo 3 líneas» y «máximo 1 pregunta» sí van escritas).
 **Si falla:** si las tildes se ven raras en cmd, es la consola; el archivo está bien si está en UTF-8.
 **Punto de control:** ¿hay algún número de precio en el prompt? Debe haber cero.
 
 ### Paso 21 — P1 a P3 en verde: `prompt.py`
 **Haz esto:** crea `src\agents\prompt.py` con `PromptPieces` (`BaseModel`), `load_prompt_pieces` y `compose_system_prompt`, según la sección 5 del contrato. Corre `pytest tests\test_prompt_pieces.py -q`.
 **Por qué:** P1–P3 son la primera pieza verde: prueba que lees y compones bien antes de seguir.
-**Debes ver:** `3 passed`.
+**Debes ver:** `3 passed` (si el error nombra `agents.llm_port`, crea antes ese archivo: es el Paso 22).
 **Si falla:** lee el error de abajo hacia arriba: la última línea suele nombrar la causa. Si P2 falla, mira el mensaje del `ValueError`.
 **Punto de control:** ¿`compose_system_prompt` une las piezas en el orden `identity`, `tone`, `limits`, `tools`, `memory`?
 

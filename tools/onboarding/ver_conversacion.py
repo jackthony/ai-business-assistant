@@ -3,19 +3,13 @@ r"""Muestra una conversación del corpus sintético de forma legible.
 Uso (Windows):  py -3.11 tools\onboarding\ver_conversacion.py conv_0001
 Sin argumento lista los ids disponibles. Solo librería estándar.
 """
-
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
-DATA = (
-    Path(__file__).resolve().parents[2]
-    / "data"
-    / "conversaciones"
-    / "sinteticas_v1.jsonl"
-)
+DATA = Path(__file__).resolve().parents[2] / "data" / "conversaciones" / "sinteticas_v1.jsonl"
 
 
 def load_rows(path: Path) -> list[dict]:
@@ -43,9 +37,7 @@ def main(argv: list[str]) -> int:
     if not turns:
         print(f"No existe {wanted}. Disponibles: {', '.join(ids)}")
         return 1
-    print(
-        f"{wanted} · canal {turns[0]['canal']} · {len(turns)} turnos · origen {turns[0]['origen']}"
-    )
+    print(f"{wanted} · canal {turns[0]['canal']} · {len(turns)} turnos · origen {turns[0]['origen']}")
     print("-" * 60)
     for r in turns:
         text = r["texto"]

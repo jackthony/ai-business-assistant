@@ -4,6 +4,15 @@
 >
 > **Orden de autoridad:** doc oficial/spec > código reproducible (repo real) > libro/curso > paper > afirmación de un LLM. Un LLM nunca es autoridad; toda afirmación técnica se verifica contra fuente primaria.
 
+## Inspiración directa del proyecto (indicada por el monitor)
+
+| Fuente | Qué inspiró | Licencia / uso |
+|---|---|---|
+| [`jackthony/IA-local`](https://github.com/jackthony/IA-local) (lab propio) | Patrón **Jev** (decisiones tipadas de 1 token con confianza calibrada), labs de 11 patrones, CI zero-trust (Actions por SHA, escáner de secretos) | MIT, del monitor — ver `jev-pattern.md` |
+| [`Nicolepcx/ai-agents-the-definitive-guide`](https://github.com/Nicolepcx/ai-agents-the-definitive-guide) (CH01–CH12) | Eje conceptual del programa: capítulos y matriz semanal en `definitive-guide.md` | Lectura guiada, no verdad; citar, no copiar |
+
+> Si el monitor agrega otra inspiración directa, se añade aquí con su licencia y se refleja en el README y en la wiki (regla de curación: ~20 fuentes activas).
+
 ## Nivel 0 — Materiales entregados por el monitor (referenciados, no copiados)
 
 | Material | Rol | Estado |

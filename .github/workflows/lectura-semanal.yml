@@ -1,0 +1,31 @@
+name: lectura-semanal
+
+# Publica en Discussions la «Lectura guiada» de la semana (categoría con slug lectura-guiada).
+# Domingo 22:30 Lima + manual (puedes indicar la semana, p. ej. S05). Es idempotente.
+on:
+  schedule:
+    - cron: "30 3 * * 1" # domingo 22:30 Lima
+  workflow_dispatch:
+    inputs:
+      semana:
+        description: "Semana a publicar (p. ej. S05). Vacío = la que toca por fecha"
+        required: false
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Publicar lectura guiada
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SEMANA: ${{ github.event.inputs.semana }}
+        run: python3 .github/scripts/lectura_semanal.py $SEMANA

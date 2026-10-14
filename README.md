@@ -3,6 +3,7 @@
 Repositorio único (**público** desde 2026-10-06): **programa de prácticas** (currículo, evaluación, gestión) **+ producto** (`src/` desde S4) — HealthTech Software & AI · SENATI 2026 · ciclo 3 (Allan, Pilar y Josue). Sin correos, secretos ni datos reales de clientes.
 
 - **Board de seguimiento (público, solo lectura para practicantes):** https://github.com/users/jackthony/projects/3 (campos Status, Semana, Alumno, Area, Complejidad) — también en la pestaña Projects del repo
+- **Wiki (mapa del programa, fuentes y ruta):** https://github.com/jackthony/ai-business-assistant/wiki · **Discusiones (preguntas, lecturas guiadas, retro):** https://github.com/jackthony/ai-business-assistant/discussions
 - **Estado siempre vigente:** `program/00_PROJECT/current_status.md`
 
 ## Empieza aquí (practicantes) — antes de tocar nada

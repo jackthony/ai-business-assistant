@@ -1,0 +1,28 @@
+title: "[Bloqueo] "
+body:
+  - type: markdown
+    attributes:
+      value: "Orden de ayuda: tu Issue + doc oficial → un compañero → el grupo → el monitor. Pega el error **como texto**."
+  - type: input
+    id: issue
+    attributes:
+      label: Issue relacionado
+      placeholder: "#53"
+    validations:
+      required: true
+  - type: textarea
+    id: bloqueo
+    attributes:
+      label: Qué intento hacer y dónde me detengo (paso del paso a paso)
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error o salida completa
+      render: text
+  - type: dropdown
+    id: pista
+    attributes:
+      label: Hasta qué pista de la escalera llegué
+      options: ["Ninguna", "Pista 1", "Pista 2", "Pista 3"]

@@ -1,0 +1,28 @@
+name: equipo-avisa
+
+# Cuando un alumno abre/termina/mergea un PR, el equipo recibe aviso (@menciones = correo y
+# notificación). Al mergearse un Issue, se avisa a quien dependía de él y se quita `bloqueado`.
+on:
+  pull_request:
+    types: [opened, ready_for_review, closed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  avisar:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.merged && github.event.pull_request.base.ref || github.sha }}
+          persist-credentials: false
+      - name: Avisar al equipo
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python3 .github/scripts/equipo_avisa.py pr

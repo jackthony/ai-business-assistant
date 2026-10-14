@@ -1,0 +1,28 @@
+title: "[Aprendí] "
+body:
+  - type: markdown
+    attributes:
+      value: "Cuenta lo que hiciste y lo que entendiste. Enseñar a otros es la mejor prueba de comprensión."
+  - type: input
+    id: evidencia
+    attributes:
+      label: Evidencia (PR, commit o Issue)
+      placeholder: "#52"
+    validations:
+      required: true
+  - type: textarea
+    id: hice
+    attributes:
+      label: Qué hice
+    validations:
+      required: true
+  - type: textarea
+    id: aprendi
+    attributes:
+      label: Qué aprendí (con tus palabras) y de qué fuente
+    validations:
+      required: true
+  - type: textarea
+    id: pregunta
+    attributes:
+      label: Una pregunta que le haría a un compañero

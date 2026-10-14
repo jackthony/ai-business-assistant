@@ -1,0 +1,33 @@
+title: "[Duda] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Publicar tu duda **ayuda a todo el equipo**. Antes: lee tu contrato/paso a paso y la documentación oficial. Sin datos reales de clientes ni consejos clínicos.
+  - type: input
+    id: issue
+    attributes:
+      label: Issue o PR relacionado
+      placeholder: "#52"
+    validations:
+      required: true
+  - type: textarea
+    id: intento
+    attributes:
+      label: Qué intenté y qué esperaba
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error o salida (pégalo como texto, no captura)
+      render: text
+  - type: textarea
+    id: ia
+    attributes:
+      label: Qué te respondió tu IA y cómo lo verificaste
+      description: Una IA no es autoridad. Cuenta qué fuente (doc oficial, código) lo confirma o lo contradice.
+  - type: input
+    id: fuente
+    attributes:
+      label: Fuente que ya consultaste (archivo, doc oficial o URL)

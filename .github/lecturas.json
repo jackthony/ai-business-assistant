@@ -1,0 +1,66 @@
+{
+  "calendario": {
+    "S05": "2026-10-12",
+    "S06": "2026-10-19"
+  },
+  "semanas": {
+    "S05": {
+      "titulo": "LangGraph core: estado, grafo y prompt",
+      "fuentes": [
+        {
+          "nombre": "Anthropic — Building Effective Agents",
+          "url": "https://www.anthropic.com/engineering/building-effective-agents"
+        },
+        {
+          "nombre": "LangGraph (docs oficiales)",
+          "url": "https://langchain-ai.github.io/langgraph/"
+        },
+        {
+          "nombre": "12-Factor Agents",
+          "url": "https://github.com/humanlayer/12-factor-agents"
+        },
+        {
+          "nombre": "Referencia del repo: langgraph.md",
+          "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/langgraph.md"
+        },
+        {
+          "nombre": "Curso de Santiago Hernández (LangGraph: checkpointer y estado) — mapeo en cursos_de_refuerzo.md",
+          "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/01_CURRICULUM/cursos_de_refuerzo.md"
+        }
+      ],
+      "preguntas": [
+        "Según Anthropic, ¿cuándo conviene un *workflow* en vez de un *agente*? ¿Qué parte de nuestro grafo eco es un workflow y por qué?",
+        "En LangGraph, ¿qué hace un *reducer* y qué le pasaría a `messages` sin él? Explícalo con un ejemplo tuyo, que no sea del repo.",
+        "12-Factor Agents propone que el prompt sea código propio y versionado. ¿Qué ventaja te da eso frente a una caja negra? Conéctalo con `configs/hola_mujer/prompt_v1.md`.",
+        "¿Qué duda te quedó que no pudiste resolver con la documentación oficial? Cuéntala para que la responda el equipo."
+      ]
+    },
+    "S06": {
+      "titulo": "RAG: que el bot conozca el negocio sin inventar",
+      "fuentes": [
+        {
+          "nombre": "Referencia del repo: hola-mujer.md (negocio)",
+          "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/04_DOMAIN/hola-mujer.md"
+        },
+        {
+          "nombre": "Referencia del repo: agent-engineering-handbook.md (RAG y memoria)",
+          "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/02_REFERENCE/agent-engineering-handbook.md"
+        },
+        {
+          "nombre": "Anthropic — Building Effective Agents (retrieval)",
+          "url": "https://www.anthropic.com/engineering/building-effective-agents"
+        },
+        {
+          "nombre": "Curso de Santiago Hernández (RAG con Chroma/FAISS) — mapeo en cursos_de_refuerzo.md",
+          "url": "https://github.com/jackthony/ai-business-assistant/blob/main/program/01_CURRICULUM/cursos_de_refuerzo.md"
+        }
+      ],
+      "preguntas": [
+        "¿Por qué el bot nunca debe inventar un precio y de dónde debe salir cada cifra que dice?",
+        "¿Qué problema resuelve recuperar información (RAG) frente a poner todo el catálogo dentro del prompt?",
+        "¿Cómo te darías cuenta de que la recuperación falló, antes de que lo note una clienta?",
+        "¿Qué duda te quedó que no pudiste resolver con la documentación oficial?"
+      ]
+    }
+  }
+}

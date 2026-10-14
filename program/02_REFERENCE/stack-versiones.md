@@ -46,7 +46,7 @@ ruff check src tests && mypy src --ignore-missing-imports && pytest tests -q && 
 | Ollama | Gratis, local | Modelos grandes SOLO en la M5 (runtime); en PC Windows solo 1.5b–3b para práctica |
 | DeepSeek web | Gratis (chat) | Dudas puntuales sin tocar código |
 | DeepSeek API | **Pagada** (cuenta del monitor) | Solo el reviewer del CI; jamás en la app |
-| OpenCode | Modelos gratis | Asistente de código con **presupuesto por sesión** (ver protocolo en `pack_contexto.md`) |
+| OpenCode | Modelos gratis | Asistente de código con **presupuesto por sesión** (ver protocolo en `pack_contexto.md`). Si no arranca o se cuelga: [guía de solución de problemas](opencode-solucion-problemas.md) |
 
 ## Sin decisión pendiente para el practicante
 

@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "fuente": "Hola Mujer · MVP WhatsApp ManyChat · Operativo.xlsx, hoja 04_CONFIG",
+    "captura": "2026-10-14",
+    "nota": "ADDRESS, MAP_URL y OPENING_HOURS confirmados por el monitor."
+  },
+  "items": [
+    {
+      "clave": "BUSINESS_NAME",
+      "valor": "Hola Mujer",
+      "estado": "CONFIRMED",
+      "responsable": "Hola Mujer",
+      "nota": "Nombre visible",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "TIMEZONE",
+      "valor": "America/Lima",
+      "estado": "CONFIRMED",
+      "responsable": "Tech",
+      "nota": "Usar en ManyChat, Calendar, API y Sheet",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "ADDRESS",
+      "valor": "Urb. Nicolás Garatea, Nuevo Chimbote, en el local de Oral Imagen, segundo piso",
+      "estado": "CONFIRMED",
+      "responsable": "Jioysi",
+      "nota": "Referencia en Google Maps: Av. Agraria G-9 (dirección de Oral Imagen).",
+      "fuente": "monitor, 2026-10-14"
+    },
+    {
+      "clave": "MAP_URL",
+      "valor": "https://maps.app.goo.gl/hFWGtDwK8dhwxQHE7",
+      "estado": "CONFIRMED",
+      "responsable": "Jioysi",
+      "nota": "Enlace entregado por el monitor.",
+      "fuente": "monitor, 2026-10-14"
+    },
+    {
+      "clave": "OPENING_HOURS",
+      "valor": "Todos los días 15:00-19:00 (America/Lima); mañanas sin atención; domingo y toda cita, previa coordinación",
+      "estado": "CONFIRMED",
+      "responsable": "Jioysi",
+      "nota": "No hay una persona fija en el consultorio.",
+      "fuente": "monitor, 2026-10-14"
+    },
+    {
+      "clave": "JIOYSI_MANYCHAT_OWNER",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Jioysi",
+      "nota": "Usuario/equipo para asignación",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "JIOYSI_ALERT_CHANNEL",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Jioysi",
+      "nota": "ManyChat, WhatsApp interno o email",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "HANDOFF_SLA_MINUTES",
+      "valor": "10.0",
+      "estado": "PROPOSED",
+      "responsable": "Hola Mujer",
+      "nota": "Tiempo objetivo de respuesta",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "CALENDAR_ID",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Tech",
+      "nota": "Calendario fuente de disponibilidad",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "DEFAULT_APPOINTMENT_MINUTES",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Jioysi",
+      "nota": "Puede variar por servicio",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "REMINDER_24H_ENABLED",
+      "valor": "TRUE",
+      "estado": "PROPOSED",
+      "responsable": "Hola Mujer",
+      "nota": "Sujeto a plantilla aprobada",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "REMINDER_2H_ENABLED",
+      "valor": "TRUE",
+      "estado": "PROPOSED",
+      "responsable": "Hola Mujer",
+      "nota": "Sujeto a plantilla aprobada",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "WA_TEMPLATE_CONFIRMATION",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Tech",
+      "nota": "Nombre exacto en WhatsApp",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "WA_TEMPLATE_REMINDER_24H",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Tech",
+      "nota": "Nombre exacto en WhatsApp",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "WA_TEMPLATE_REMINDER_2H",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Tech",
+      "nota": "Nombre exacto en WhatsApp",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "EMERGENCY_PROTOCOL",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Jioysi",
+      "nota": "Texto clínico no se redacta automáticamente",
+      "fuente": "04_CONFIG (2026-10-14)"
+    },
+    {
+      "clave": "PRIVACY_NOTICE_URL",
+      "valor": null,
+      "estado": "PENDING",
+      "responsable": "Hola Mujer",
+      "nota": "Aviso de privacidad",
+      "fuente": "04_CONFIG (2026-10-14)"
+    }
+  ]
+}

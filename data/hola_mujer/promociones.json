@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "fuente": "Hola Mujer · MVP WhatsApp ManyChat · Operativo.xlsx, hoja 06_PROMOCIONES",
+    "captura": "2026-10-14",
+    "nota": "Las 3 están activo=NO y con fechas ambiguas: no se usan en el RAG hasta que el negocio confirme."
+  },
+  "items": [
+    {
+      "promo_id": "LUNARES",
+      "nombre": "eliminacion de verrugas y lunares",
+      "descripcion": "Tratamiento estético y seguro para la remoción de verrugas y lunares sin dejar marcas. Ideal para tratar aquellas lesiones que aparecen por cambios hormonales",
+      "precio_pen": 49.99,
+      "duracion_min": 60,
+      "sesiones_totales": 1,
+      "reserva_pen": 20.0,
+      "fecha_inicio_raw": "2026-11-09",
+      "fecha_fin_raw": "13/09",
+      "fechas_ambiguas": true,
+      "activo": false,
+      "usable_en_rag": false
+    },
+    {
+      "promo_id": "MOLDEA",
+      "nombre": "plan moldea",
+      "descripcion": "Nuestro Plan Moldea es un protocolo personalizado para trabajar una zona específica como abdomen, cintura, espalda, brazos o muslos. Comenzamos con una evaluación y toma de medidas; luego combinamos aparatología, masajes de moldeamiento y drenaje, según lo que tu cuerpo necesite. La sesión está en promoción e incluye la evaluación sin costo adicional ✨",
+      "precio_pen": 59.99,
+      "duracion_min": 60,
+      "sesiones_totales": 1,
+      "reserva_pen": 20.0,
+      "fecha_inicio_raw": "2026-03-09",
+      "fecha_fin_raw": "2026-06-09",
+      "fechas_ambiguas": true,
+      "activo": false,
+      "usable_en_rag": false
+    },
+    {
+      "promo_id": "GLUTEOS",
+      "nombre": "peptonas",
+      "descripcion": "Aumento de gluteo, oferta unica paquete de 4 sesiones",
+      "precio_pen": 179.99,
+      "duracion_min": 60,
+      "sesiones_totales": 4,
+      "reserva_pen": 60.0,
+      "fecha_inicio_raw": "18/09",
+      "fecha_fin_raw": "20/09",
+      "fechas_ambiguas": false,
+      "activo": false,
+      "usable_en_rag": false
+    }
+  ]
+}

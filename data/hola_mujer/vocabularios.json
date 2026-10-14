@@ -1,0 +1,97 @@
+{
+  "etapas_contacto": [
+    "P00_NUEVO_LEAD",
+    "P10_CONTACTADO",
+    "P20_INTERES_IDENTIFICADO",
+    "P30_CALIFICADO",
+    "P40_OFERTA_PRESENTADA",
+    "P50_RESERVA_SOLICITADA",
+    "P70_RESERVADO",
+    "P80_ATENDIDO",
+    "P90_SEGUIMIENTO",
+    "P100_RECOMPRA",
+    "PERDIDO"
+  ],
+  "tipo_cliente": [
+    "NEW",
+    "RETURNING"
+  ],
+  "intenciones": [
+    "UBICACION",
+    "SERVICIOS",
+    "AGENDAR",
+    "GESTIONAR_CITA",
+    "HUMANO",
+    "OTRO"
+  ],
+  "canales": [
+    "WHATSAPP",
+    "INSTAGRAM",
+    "MESSENGER",
+    "OTRO"
+  ],
+  "estados_cita": [
+    "PENDING",
+    "CONFIRMED",
+    "RESCHEDULED",
+    "CANCELLED",
+    "ATTENDED",
+    "NO_SHOW"
+  ],
+  "estados_recordatorio": [
+    "PENDING",
+    "SENT",
+    "CANCELLED",
+    "ERROR",
+    "NOT_REQUIRED"
+  ],
+  "estados_sync": [
+    "PENDING",
+    "SYNCED",
+    "ERROR"
+  ],
+  "tipos_evento": [
+    "INBOUND_MESSAGE",
+    "LOCATION_SENT",
+    "SERVICE_INFO_SENT",
+    "AVAILABILITY_SHOWN",
+    "BOOKING_REQUESTED",
+    "BOOKING_CONFIRMED",
+    "REMINDER_SENT",
+    "RESCHEDULED",
+    "CANCELLED",
+    "HANDOFF_REQUESTED",
+    "HUMAN_RESOLVED",
+    "INTEGRATION_ERROR"
+  ],
+  "resultados_evento": [
+    "OPEN",
+    "COMPLETED",
+    "ERROR"
+  ],
+  "cta": [
+    "RESERVAR",
+    "AGENDAR",
+    "SEPARAR CUPO",
+    "HABLAR_CON_JIOYSI"
+  ],
+  "estados_config": [
+    "CONFIRMED",
+    "PROPOSED",
+    "PENDING"
+  ],
+  "observados_fuera_de_lista": {
+    "tipos_evento": [
+      "CANCELLED_MISMATCH"
+    ],
+    "estados_cita": [
+      "CANCELADO"
+    ],
+    "canales": [
+      "Whatsapp"
+    ],
+    "service_id_sin_catalogo": [
+      "GLUTEOS"
+    ]
+  }
+}

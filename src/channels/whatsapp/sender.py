@@ -72,25 +72,6 @@ class WhatsAppSender:
 
         return response.json()
 
-    async def send_template(
-        self, to_wa_id: str, template_name: str, language_code: str = "es"
-    ) -> dict:
-        """Envía un mensaje de plantilla preaprobado por Meta (Template Message).
-        Obligatorio para iniciar conversaciones o fuera de la ventana de 24 horas.
-        """
-        url = f"{BASE_URL}/{self.phone_number_id}/messages"
-        headers = {"Authorization": f"Bearer {self.access_token}"}
-
-        body = {
-            "messaging_product": "whatsapp",
-            "to": to_wa_id,
-            "type": "template",
-            "template": {
-                "name": template_name,
-                "language": {"code": language_code},
-            },
-        }
-
         async with httpx.AsyncClient(transport=self.transport) as client:
             response = await client.post(url, headers=headers, json=body)
             response.raise_for_status()

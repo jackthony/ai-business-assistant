@@ -16,11 +16,13 @@ Cada Issue de producción tiene aquí su **contrato de asignación** (`S05_D1.md
 
 ## Issue → contrato
 
-| Issue | Contrato | Paso a paso | Tema | Depende de |
-|---|---|---|---|---|
-| #52 | [`S05_D1.md`](S05_D1.md) | [`S05_D1_paso_a_paso.md`](S05_D1_paso_a_paso.md) | Grafo mínimo con estado explícito (`AgentState`, nodo eco, CLI) | — |
-| #53 | [`S05_D2.md`](S05_D2.md) | [`S05_D2_paso_a_paso.md`](S05_D2_paso_a_paso.md) | Prompt por componentes + LLM detrás de un puerto + verificación de respuesta + grafo de conversación (`START → respond → END`, archivo nuevo) | #52 en `main` (usa `src/agents/state.py`; no toca los archivos de #52) |
-| #54 | [`S05_D3.md`](S05_D3.md) | [`S05_D3_paso_a_paso.md`](S05_D3_paso_a_paso.md) | Memoria persistente por teléfono (`SqliteSaver`, `thread_id`) | #52 en `main` |
+| Issue | Contrato | Paso a paso | Tema | Alumno (GitHub) | Depende de |
+|---|---|---|---|---|---|
+| #52 | [`S05_D1.md`](S05_D1.md) | [`S05_D1_paso_a_paso.md`](S05_D1_paso_a_paso.md) | Grafo mínimo con estado explícito (`AgentState`, nodo eco, CLI) | Josue (`adbon-dm1`) | — |
+| #53 | [`S05_D2.md`](S05_D2.md) | [`S05_D2_paso_a_paso.md`](S05_D2_paso_a_paso.md) | Prompt por componentes + LLM detrás de un puerto + verificación de respuesta + grafo de conversación (`START → respond → END`, archivo nuevo) | Pilar (`estefanyP-hub`) | #52 en `main` (usa `src/agents/state.py`; no toca los archivos de #52) |
+| #54 | [`S05_D3.md`](S05_D3.md) | [`S05_D3_paso_a_paso.md`](S05_D3_paso_a_paso.md) | Memoria persistente por teléfono (`SqliteSaver`, `thread_id`) | Allan (`WhoAllan`) | #52 en `main` |
+
+**La asignación ya está hecha:** la columna *Alumno* es la fuente. Tu asistente no puede ver GitHub, así que no te pide «demostrarla»: si dices tu nombre o tu Issue, confía en ti y sigue con tu contrato. Nunca debe mandarte a pedir al monitor que te asigne el Issue; si de verdad no encuentras tu Issue en la tabla, repórtalo en el Issue o en el grupo.
 
 Una asignación que depende de otra **no se empieza** hasta que la anterior esté mergeada en `main` (`git pull` y comprueba que existen sus archivos). Si ves a un compañero bloqueado por eso, ofrécele ayuda con `apoyo`.
 

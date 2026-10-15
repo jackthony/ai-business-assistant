@@ -153,7 +153,7 @@ jobs:
                       "- Tests que cubran los **criterios de aceptación de arriba** (casos borde incluidos).\n"
                       "- Las 4 puertas verdes antes de mergear (obligatorias): `ruff` + `mypy` + `pytest` + `bandit`.\n"
                       "- Sin secretos ni datos reales de clientes (fixtures anonimizados).\n"
-                      "- Asignar el campo `Alumno` en el board (se asigna cuando aceptes la invitación de GitHub).\n\n"
+                      "- El Issue ya viene asignado a ti (assignee + label `alumno:*`); el campo `Alumno` del board se sincroniza solo. Si no lo ves, avisa en este Issue.\n\n"
                       "## Para tu informe FPE\n\n"
                       "Responde las **preguntas de comprensión** del PR (plantilla): explica con tus "
                       "palabras qué hiciste, qué probaste y qué decidiste — no 'lo hizo un agente'.")

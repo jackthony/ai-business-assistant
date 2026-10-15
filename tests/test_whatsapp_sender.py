@@ -1,4 +1,3 @@
-# tests/test_whatsapp_sender.py
 import json
 
 import httpx
@@ -62,3 +61,18 @@ async def test_loguea_latencia(caplog):
     with caplog.at_level("INFO"):
         await sender.send_text("51999999999", "hola")
     assert any("latency_ms" in r.message for r in caplog.records)
+
+
+@pytest.mark.asyncio
+async def test_no_reintenta_ante_error_4xx_de_meta():
+    llamadas = 0
+
+    def handler(request):
+        nonlocal llamadas
+        llamadas += 1
+        return httpx.Response(401, json={"error": {"message": "token invalido"}})
+
+    sender = make_sender(handler)
+    with pytest.raises(httpx.HTTPStatusError):
+        await sender.send_text("51999999999", "hola")
+    assert llamadas == 1

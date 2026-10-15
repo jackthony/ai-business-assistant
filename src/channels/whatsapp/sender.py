@@ -53,7 +53,7 @@ class WhatsAppSender:
         start = time.perf_counter()
 
         # 5. Enviamos con un reintento ante fallos de red (no ante errores de Meta)
-        async with httpx.AsyncClient(transport=self.transport) as client:
+        async with httpx.AsyncClient(transport=self.transport, timeout=10.0) as client:
             for attempt in (1, 2):
                 try:
                     response = await client.post(url, headers=headers, json=body)
@@ -71,8 +71,3 @@ class WhatsAppSender:
         logger.info("whatsapp_send ok latency_ms=%.1f", latency_ms)
 
         return response.json()
-
-        async with httpx.AsyncClient(transport=self.transport) as client:
-            response = await client.post(url, headers=headers, json=body)
-            response.raise_for_status()
-            return response.json()

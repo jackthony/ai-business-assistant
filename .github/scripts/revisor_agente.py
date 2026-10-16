@@ -136,6 +136,49 @@ def claude_model() -> str:
     return os.environ.get("REVISOR_MODEL", "").strip() or DEFAULT_MODEL
 
 
+class ClaudeResponseError(Exception):
+    """La API respondió 2xx pero sin un bloque de texto legible. El mensaje es solo estructura."""
+
+
+def describe_response(data: object) -> str:
+    """Resumen estructural de una respuesta de la API para diagnosticar (#150).
+
+    Solo claves, tipos de bloque y el motivo de parada: nunca el texto del modelo ni la clave,
+    porque el log de un repo público es público.
+    """
+    if not isinstance(data, dict):
+        return f"cuerpo de tipo {type(data).__name__}"
+    parts = [f"claves={sorted(str(k) for k in data)}"]
+    for k in ("type", "stop_reason", "model"):
+        if isinstance(data.get(k), str):
+            parts.append(f"{k}={data[k]}")
+    content = data.get("content")
+    if isinstance(content, list):
+        tipos = [
+            str(b.get("type", "?")) if isinstance(b, dict) else type(b).__name__
+            for b in content
+        ]
+        parts.append(f"bloques={tipos}")
+    err = data.get("error")
+    if isinstance(err, dict):
+        parts.append(f"error={err.get('type')}: {str(err.get('message', ''))[:200]}")
+    return "; ".join(parts)
+
+
+def extract_text(data: object) -> str:
+    """Primer bloque de texto de `content`. No asume que `content[0]` sea texto (puede ser `thinking`)."""
+    content = data.get("content") if isinstance(data, dict) else None
+    if isinstance(content, list):
+        for block in content:
+            if (
+                isinstance(block, dict)
+                and block.get("type", "text") == "text"
+                and isinstance(block.get("text"), str)
+            ):
+                return str(block["text"])
+    raise ClaudeResponseError(describe_response(data))
+
+
 def ask_claude(prompt: str, key: str) -> str:
     payload = {
         "model": claude_model(),
@@ -152,7 +195,7 @@ def ask_claude(prompt: str, key: str) -> str:
         },
     )
     with urllib.request.urlopen(req, timeout=120) as resp:
-        return str(json.loads(resp.read())["content"][0]["text"])
+        return extract_text(json.loads(resp.read()))
 
 
 def decide(
@@ -193,7 +236,15 @@ def decide(
             False,
             "El revisor-agente no respondió (API caída o saturada); no se bloquea por eso.",
         )
-    except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as e:
+    except ClaudeResponseError as e:
+        # Respuesta 2xx sin texto legible: error de formato nuestro o del modelo, no una caída (#150).
+        print(f"::warning::revisor-agente: respuesta ilegible de la API ({e})")
+        return Outcome(
+            False,
+            "El revisor-agente recibió una respuesta con un formato que no pudo leer; avisa al monitor. No se bloquea.",
+        )
+    except (urllib.error.URLError, TimeoutError, ValueError) as e:
+        print(f"::warning::revisor-agente: {type(e).__name__}: {e}")
         return Outcome(
             False,
             f"El revisor-agente no respondió ({type(e).__name__}); no se bloquea por una caída de la API.",

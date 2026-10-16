@@ -30,7 +30,7 @@
 
 | Fuente | Rol | Estado | Consultar cuando | Última verificación |
 |---|---|---|---|---|
-| LangGraph docs | Motor del grafo, checkpointers, interrupt | activo | diseño de estado, memoria, HITL (S5+) | 2026-10-08 · ejecutado (paquete 1.2.14 + ejemplos); texto de la doc sin releer |
+| [LangGraph docs](https://langchain-ai.github.io/langgraph/) | Motor del grafo, checkpointers, interrupt | activo | diseño de estado, memoria, HITL (S5+) | 2026-10-08 · ejecutado (paquete 1.2.14 + ejemplos); 2026-10-16 enlace responde (monitor), contenido sin releer; `docs.langchain.com/oss/python/langgraph/overview` sin confirmar |
 | [OpenAI Agents SDK (docs)](https://openai.github.io/openai-agents-python/) | Abstracciones agents/tools/handoffs | activo (0.x, MIT) | entender handoffs en S10 (no migrar: ADR-002/010) | 2026-10-06 · curaduría |
 | [MCP spec](https://modelcontextprotocol.io) (`modelcontextprotocol.io`) | Protocolo tools/context | activo | desacoplar herramientas (S10+, opcional) | 2026-10-06 · curaduría |
 | [FastAPI docs](https://fastapi.tiangolo.com/) | API async, BackgroundTasks, OpenAPI | activo | webhook y endpoints (S4+) | 2026-10-08 · ejecutado (paquete 0.143.0); texto de la doc sin releer |

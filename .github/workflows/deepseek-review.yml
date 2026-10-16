@@ -1,11 +1,12 @@
 name: deepseek-review
 
-# Primer pase de review automático con DeepSeek API (opcional: solo si el secreto
-# DEEPSEEK_API_KEY está definido; sin él, avisa y no bloquea). El ADR-008 mantiene el
-# DeepSeek local como motor principal: este job corre en GitHub y es solo un borrador
-# de feedback para el monitor, que decide la nota final.
+# Primer pase de review automático con DeepSeek API (borrador de feedback para el monitor, que
+# decide la nota final; el ADR-008 mantiene el DeepSeek local como motor principal).
+# pull_request_target: el workflow sale SIEMPRE de `main`; la rama del PR no se descarga al disco ni
+# se ejecuta (solo se leen sus commits con git). El job `review` corre en el environment
+# `revision-ia`: requiere aprobación del monitor y solo ahí vive DEEPSEEK_API_KEY.
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
 
 permissions:
@@ -13,18 +14,69 @@ permissions:
   pull-requests: write
   issues: write
 
+# Un solo run por PR: un push nuevo reemplaza al que aún espera aprobación.
+concurrency:
+  group: deepseek-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
+  # Sin secretos ni aprobación: decide si el PR necesita este pase, para no pedir una aprobación
+  # que no sirve (bots, forks y PRs con contrato, que ya revisa revision-guiada).
+  elegir:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      revisar: ${{ steps.contrato.outputs.revisar }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          persist-credentials: false
+      - name: PR con contrato lo revisa revision-guiada (evita doble comentario)
+        id: contrato
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          N=$(printf '%s' "$PR_BODY" | grep -oiE '(closes|fixes|resolves)[[:space:]]+#[0-9]+' | head -1 | grep -oE '[0-9]+' || true)
+          if [ -n "$N" ] && grep -qE "^\| *#$N *\|" program/01_CURRICULUM/asignaciones/README.md; then
+            echo "PR con contrato: lo revisa revision-guiada"
+            echo "revisar=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "revisar=true" >> "$GITHUB_OUTPUT"
+          fi
+
   review:
+    needs: elegir
+    if: needs.elegir.outputs.revisar == 'true'
+    # Aprobación obligatoria del monitor; las claves viven SOLO en este environment.
+    environment: revision-ia
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
     steps:
+      # Solo main al disco; el PR se trae como datos (commits para `git diff`), nunca como árbol de trabajo.
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          ref: main
           persist-credentials: false
           fetch-depth: 0
+      - name: Traer los commits del PR como datos (sin checkout)
+        env:
+          PR_NUM: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --no-tags origin "+refs/pull/${PR_NUM}/head:refs/remotes/pr/${PR_NUM}"
+          git cat-file -e "${HEAD_SHA}^{commit}" || {
+            echo "::error::El PR avanzó mientras esperaba aprobación; este run quedó viejo (el nuevo lo reemplaza)."
+            exit 1
+          }
       - name: Revisar con DeepSeek (o avisar que falta el secreto)
         env:
           KEY: ${{ secrets.DEEPSEEK_API_KEY }}
@@ -34,14 +86,8 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          # PR con contrato en el README de asignaciones: lo revisa revision-guiada (evita doble comentario)
-          N=$(printf '%s' "$PR_BODY" | grep -oiE '(closes|fixes|resolves)[[:space:]]+#[0-9]+' | head -1 | grep -oE '[0-9]+' || true)
-          if [ -n "$N" ] && grep -qE "^\| *#$N *\|" program/01_CURRICULUM/asignaciones/README.md; then
-            echo "PR con contrato: lo revisa revision-guiada"
-            exit 0
-          fi
           if [ -z "$KEY" ]; then
-            gh pr comment "$PR_NUM" --body "> 🔎 **DeepSeek reviewer:** sin `DEEPSEEK_API_KEY` en los secrets del repo — este primer pase está desactivado. El monitor hará el review local (Ollama) como siempre."
+            gh pr comment "$PR_NUM" --body "> 🔎 **DeepSeek reviewer:** sin DEEPSEEK_API_KEY en el environment revision-ia — este primer pase está desactivado. El monitor hará el review local (Ollama) como siempre."
             echo "sin clave — skip"
             exit 0
           fi

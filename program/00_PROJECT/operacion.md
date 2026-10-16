@@ -29,8 +29,9 @@
 ### Secretos, tokens y acceso (política)
 
 - **Environments (activados 2026-10-06):** `staging` (deploy desde ramas custom, libre) y `produccion` (solo `main`, **exige aprobación del monitor**) — los secrets `META_*` de producción van al environment `produccion` en S14.
+- **Environment `revision-ia` (claves de IA del CI):** `ANTHROPIC_API_KEY` y `DEEPSEEK_API_KEY` viven **solo aquí**, nunca como secrets del repo. Lo usan los jobs de `revisor-contrato`, `revision-guiada` y `deepseek-review`, que corren con `pull_request_target`: el workflow y los scripts salen siempre de `main` y la rama del PR no se descarga ni se ejecuta (solo se leen sus commits con git). Configuración: *Required reviewers* = el monitor, *Deployment branches* = solo `main`, y límite de gasto en cada consola (Anthropic y DeepSeek). Cada push espera la aprobación del monitor en la pestaña Actions del run. Rotar una clave = cambiar el secret del environment tras revocarla en su consola.
 
-- **Secrets del repo** (Settings → Secrets → Actions): `DEEPSEEK_API_KEY` (opcional, review en CI), `BOARD_PAT` (opcional, sync del board), `META_*` (desde que #16 esté listo). Nunca en código ni en docs: solo `.env.example` con los nombres.
+- **Secrets del repo** (Settings → Secrets → Actions): `BOARD_PAT` (opcional, sync del board), `META_*` (desde que #16 esté listo). Nunca en código ni en docs: solo `.env.example` con los nombres.
 - **GITHUB_TOKEN**: permisos mínimos declarados por workflow (`contents: read`, `pull-requests: write`, `issues: write` según necesita); nada más.
 - **Acceso humano**: monitor = Admin; practicantes = Write pero `main` protegido (todo entra por PR con checks). Dependabot/CodeQL = apps autorizadas.
 - **Datos reales del negocio (KB-A)**: por decisión del dueño (2026-10-06) **todo vive en GitHub** — el Excel operativo se versiona en `data/` de este repo (GitHub sustituye a Google Drive). Regla de higiene que se mantiene: en **código y tests** solo fixtures anonimizados; los nombres reales de clientes no se meten en datos de prueba.

@@ -1,7 +1,11 @@
-"""Grafo del agente único (ADR-007): router → info | booking(draft → commit con aprobación).
+"""Grafo del agente único (ADR-007), con la seguridad por delante de todo:
 
-Las siguientes capas (safety/handoff) se agregan como nodos del MISMO grafo. Sin `booking`, el
-agente solo informa (capa 1). Con `booking` hace falta un `checkpointer` para pausar y reanudar.
+    START ─ congelado ─────────────► END            (el bot calla hasta que una persona lo libere)
+          ─ salud / «una persona» ─► handoff ─► END (avisa, congela y responde con un puente)
+          ─ agendar ───────────────► draft ─► commit (aprobación humana antes de escribir)
+          ─ todo lo demás ─────────► info ─► END
+
+Sin `booking`, el agente solo informa. Con `booking` hace falta un `checkpointer` para pausar.
 """
 
 from collections.abc import Hashable
@@ -18,13 +22,19 @@ from agents.booking import (
     make_draft_node,
     wants_booking,
 )
-from agents.info import make_info_node
-from agents.ports import ChatModel, Retriever
+from agents.handoff import is_frozen, make_handoff_node
+from agents.info import last_user_text, make_info_node
+from agents.ports import ChatModel, Notifier, Retriever
+from agents.safety import classify
 from agents.state import AgentState
 
 
 def _route(booking: BookingDeps | None) -> Any:
     def route(state: AgentState) -> str:
+        if is_frozen(state):
+            return "frozen"
+        if classify(last_user_text(state["messages"])) is not None:
+            return "handoff"
         return "draft" if booking is not None and wants_booking(state) else "info"
 
     return route
@@ -34,6 +44,7 @@ def build_graph(
     retriever: Retriever,
     model: ChatModel,
     system_prompt: str,
+    notifier: Notifier,
     booking: BookingDeps | None = None,
     checkpointer: BaseCheckpointSaver[Any] | None = None,
 ) -> CompiledStateGraph:
@@ -43,7 +54,13 @@ def build_graph(
         )
     grafo = StateGraph(AgentState)
     grafo.add_node("info", make_info_node(retriever, model, system_prompt))  # type: ignore[call-overload]
-    destinos: dict[Hashable, str] = {"info": "info"}
+    grafo.add_node("handoff", make_handoff_node(notifier))  # type: ignore[call-overload]
+    grafo.add_edge("handoff", END)
+    destinos: dict[Hashable, str] = {
+        "info": "info",
+        "handoff": "handoff",
+        "frozen": END,
+    }
     if booking:
         destinos["draft"] = "draft"
     grafo.add_conditional_edges(START, _route(booking), destinos)

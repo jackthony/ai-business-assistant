@@ -15,6 +15,7 @@ from rag.catalog import ServiceCatalog
 from rag.documents import load_documents
 from rag.store import ChromaStore
 from services.calendar_memory import InMemoryCalendar
+from services.notifier_memory import InMemoryNotifier
 from tools.agendar import make_agendar_tool
 from tools.schedule import LIMA
 
@@ -44,4 +45,6 @@ def build_default_graph(tenant: str = "hola_mujer") -> CompiledStateGraph:
         clock=clock,
     )
     # InMemorySaver: la pausa vive mientras viva el proceso; SqliteSaver/Postgres llegan con ADR-005.
-    return build_graph(store, model, cfg.prompt, booking, InMemorySaver())
+    # El canal de alerta real (JIOYSI_ALERT_CHANNEL) sigue PENDING: por ahora solo queda en el log.
+    notifier = InMemoryNotifier()
+    return build_graph(store, model, cfg.prompt, notifier, booking, InMemorySaver())

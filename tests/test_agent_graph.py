@@ -7,11 +7,12 @@ from langchain_core.messages import HumanMessage
 
 from agents.graph import build_graph
 from agents.state import AgentState
+from services.notifier_memory import InMemoryNotifier
 
 
 def run(store, texto="hola", phone="51900000000"):
     model = ScriptedModel("Cuesta S/ 149.99 [1].")
-    return build_graph(store, model, "SISTEMA").invoke(
+    return build_graph(store, model, "SISTEMA", InMemoryNotifier()).invoke(
         {
             "messages": [HumanMessage(texto)],
             "phone": phone,

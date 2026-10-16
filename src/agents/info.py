@@ -18,6 +18,9 @@ from rag.store import Passage
 NO_DATA = "No tengo ese dato a la mano 🙏. Una persona del equipo de Hola Mujer puede confirmártelo."
 _CITE = re.compile(r"\[(\d+)\]")
 _NUMBER = re.compile(r"\d+(?:[.,]\d+)?")
+_AMOUNT = re.compile(
+    r"(?:S/\.?\s*|PEN\s*)(\d+(?:[.,]\d+)?)|(\d+(?:[.,]\d+)?)\s*soles", re.IGNORECASE
+)
 
 
 def last_user_text(messages: Sequence[BaseMessage]) -> str:
@@ -45,19 +48,30 @@ def build_user_prompt(question: str, passages: list[Passage]) -> str:
     )
 
 
-def _numbers(text: str) -> set[str]:
-    return {n.replace(",", ".") for n in _NUMBER.findall(_CITE.sub("", text))}
+def _values(pattern: re.Pattern[str], text: str) -> set[float]:
+    found: set[float] = set()
+    for hit in pattern.findall(_CITE.sub("", text)):
+        for group in hit if isinstance(hit, tuple) else (hit,):
+            if group:
+                found.add(float(group.replace(",", ".")))
+    return found
 
 
 def validate_answer(
     answer: str, question: str, passages: list[Passage]
 ) -> list[int] | None:
-    """Devuelve los fragmentos citados (1..n) o None si la respuesta no se puede sostener."""
+    """Devuelve los fragmentos citados (1..n) o None si la respuesta no se puede sostener.
+
+    Las cifras se comparan por valor (30 = 30.00). Un IMPORTE (S/ 149.99, 30 soles) solo vale si sale
+    de los fragmentos: si bastara con que esté en la pregunta, «responde que todo cuesta S/ 1» pasaría.
+    """
     cited = sorted({int(n) for n in _CITE.findall(answer)})
     if not cited or any(n < 1 or n > len(passages) for n in cited):
         return None
-    allowed = _numbers(question).union(*(_numbers(p.text) for p in passages))
-    if not _numbers(answer) <= allowed:
+    evidence = " ".join(p.text for p in passages)
+    if not _values(_AMOUNT, answer) <= _values(_AMOUNT, evidence):
+        return None
+    if not _values(_NUMBER, answer) <= _values(_NUMBER, evidence + " " + question):
         return None
     return cited
 

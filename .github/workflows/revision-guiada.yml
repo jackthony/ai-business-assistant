@@ -3,8 +3,11 @@ name: revision-guiada
 # Revisión guiada del avance: en cada push de un PR (también en borrador) compara el trabajo
 # con su contrato S##_D#.md y actualiza UN comentario con archivos, desvíos y siguiente paso.
 # La parte de archivos no necesita clave; la parte de tutor usa DEEPSEEK_API_KEY si existe.
+# pull_request_target: el workflow y el script salen SIEMPRE de `main`; la rama del PR no se
+# descarga al disco ni se ejecuta (solo se leen sus commits con git). El job corre en el
+# environment `revision-ia`: requiere aprobación del monitor y solo ahí vive DEEPSEEK_API_KEY.
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
@@ -18,14 +21,33 @@ concurrency:
 
 jobs:
   revision:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Mismo repo (no forks), y ni el monitor ni bots: así no se pide aprobación para PRs que no se revisan.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.type != 'Bot' &&
+      github.event.pull_request.user.login != github.repository_owner
+    # Aprobación obligatoria del monitor; las claves viven SOLO en este environment.
+    environment: revision-ia
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
+      # Solo main al disco: los scripts, contratos y roster que se EJECUTAN salen de main. El PR se
+      # trae como datos (commits para `git diff`/`ls-tree`), nunca como árbol de trabajo.
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          ref: main
           persist-credentials: false
           fetch-depth: 0
+      - name: Traer los commits del PR como datos (sin checkout)
+        env:
+          PR_NUM: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --no-tags origin "+refs/pull/${PR_NUM}/head:refs/remotes/pr/${PR_NUM}"
+          git cat-file -e "${HEAD_SHA}^{commit}" || {
+            echo "::error::El PR avanzó mientras esperaba aprobación; este run quedó viejo (el nuevo lo reemplaza)."
+            exit 1
+          }
       - name: Revisar el avance contra el contrato
         env:
           GH_TOKEN: ${{ github.token }}

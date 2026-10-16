@@ -7,6 +7,8 @@ import argparse
 import sys
 
 from langchain_core.messages import HumanMessage
+from langchain_core.runnables import RunnableConfig
+from langgraph.types import Command
 
 from infrastructure.wiring import build_default_graph
 
@@ -25,8 +27,18 @@ def main(argv: list[str] | None = None) -> int:
         "intent": None,
         "status": "nuevo",
     }
-    salida = build_default_graph(args.tenant).invoke(entrada)
+    grafo = build_default_graph(args.tenant)
+    config: RunnableConfig = {"configurable": {"thread_id": args.phone}}
+    salida = grafo.invoke(entrada, config)
     print(salida["messages"][-1].content)
+    if salida.get("__interrupt__"):
+        # En producción aprueba una persona del equipo; aquí se simula para probar el flujo.
+        ok = (
+            input("Aprobación del equipo — ¿confirmar la cita? [s/N] ").strip().lower()
+            == "s"
+        )
+        salida = grafo.invoke(Command(resume={"approved": ok}), config)
+        print(salida["messages"][-1].content)
     return 0
 
 

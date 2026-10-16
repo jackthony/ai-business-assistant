@@ -9,20 +9,22 @@ from rag.documents import load_documents
 from rag.embedding import LexicalEmbedder
 from rag.store import ChromaStore
 
-DATA = Path(__file__).resolve().parents[1] / "data" / "hola_mujer"
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data" / "hola_mujer"
+CONFIGS = ROOT / "configs" / "hola_mujer"
 _ns = itertools.count()
 
 
 class ScriptedModel:
     """ChatModel de prueba: devuelve una respuesta fija y guarda lo que recibió."""
 
-    def __init__(self, answer: str = "") -> None:
-        self.answer = answer
+    def __init__(self, *answers: str) -> None:
+        self.answers = answers or ("",)
         self.calls: list[tuple[str, str]] = []
 
     def complete(self, system: str, user: str) -> str:
         self.calls.append((system, user))
-        return self.answer
+        return self.answers[min(len(self.calls), len(self.answers)) - 1]
 
 
 @pytest.fixture

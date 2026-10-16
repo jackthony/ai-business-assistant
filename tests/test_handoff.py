@@ -40,7 +40,7 @@ def env(store):
 
 def test_consulta_clinica_deriva_y_congela(env):
     out = env.say("Me duele mucho después del tratamiento, ¿es normal?")
-    assert out["messages"][-1].content.startswith(BRIDGE["clinical"])
+    assert out["messages"][-1].content.endswith(BRIDGE["clinical"])
     assert (out["intent"], out["status"]) == ("handoff_clinical", "handoff_requested")
     assert env.model.calls == []  # el modelo ni se entera de la consulta de salud
     alerta = env.notifier.sent()[0]

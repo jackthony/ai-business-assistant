@@ -39,7 +39,7 @@ class Embedder(Protocol):
     def embed(self, texts: list[str]) -> list[list[float]]: ...
 
 
-def _tokens(text: str) -> list[str]:
+def tokenize(text: str) -> list[str]:
     plain = unicodedata.normalize("NFKD", text.lower())
     plain = "".join(c for c in plain if not unicodedata.combining(c))
     return [t for t in re.findall(r"[a-z0-9]+", plain) if t not in STOPWORDS]
@@ -54,7 +54,7 @@ class LexicalEmbedder:
 
     def _one(self, text: str) -> list[float]:
         vec = [0.0] * self.dims
-        for tok in _tokens(text):
+        for tok in tokenize(text):
             vec[zlib.crc32(tok.encode("utf-8")) % self.dims] += 1.0
         norm = math.sqrt(sum(v * v for v in vec))
         if norm == 0:

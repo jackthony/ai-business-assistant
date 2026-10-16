@@ -4,6 +4,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 _spec = importlib.util.spec_from_file_location(
     "revisor_agente", ROOT / ".github" / "scripts" / "revisor_agente.py"
@@ -136,6 +138,97 @@ def test_ask_claude_payload_has_no_temperature(monkeypatch) -> None:
     assert ra.ask_claude("hola", "k") == "OK"
     assert "temperature" not in sent
     assert sent["messages"][0]["content"] == "hola"
+
+
+def fake_api(monkeypatch, body: dict) -> None:
+    """Simula una respuesta 2xx de la API con este cuerpo."""
+
+    class FakeResp:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def read(self) -> bytes:
+            return json.dumps(body).encode()
+
+    monkeypatch.setattr(ra.urllib.request, "urlopen", lambda req, timeout: FakeResp())
+
+
+def test_ask_claude_skips_a_leading_thinking_block(monkeypatch) -> None:
+    """#150: `content[0]` puede no ser texto; se toma el primer bloque de texto."""
+    fake_api(
+        monkeypatch,
+        {
+            "content": [
+                {"type": "thinking", "thinking": "...", "signature": "s"},
+                {"type": "text", "text": "OK"},
+            ]
+        },
+    )
+    assert ra.ask_claude("p", "k") == "OK"
+
+
+def test_ask_claude_names_the_shape_when_there_is_no_text_block(monkeypatch) -> None:
+    fake_api(
+        monkeypatch,
+        {
+            "type": "message",
+            "stop_reason": "max_tokens",
+            "content": [{"type": "thinking", "thinking": "SECRETO-DEL-MODELO"}],
+        },
+    )
+    with pytest.raises(ra.ClaudeResponseError) as exc:
+        ra.ask_claude("p", "k")
+    msg = str(exc.value)
+    assert "thinking" in msg and "max_tokens" in msg
+    assert "SECRETO-DEL-MODELO" not in msg  # solo estructura, nunca el texto del modelo
+
+
+def test_ask_claude_names_an_error_body_with_status_200(monkeypatch) -> None:
+    fake_api(
+        monkeypatch,
+        {"type": "error", "error": {"type": "overloaded_error", "message": "busy"}},
+    )
+    with pytest.raises(ra.ClaudeResponseError, match="overloaded_error"):
+        ra.ask_claude("p", "k")
+
+
+def test_ask_claude_rejects_empty_content(monkeypatch) -> None:
+    fake_api(monkeypatch, {"content": []})
+    with pytest.raises(ra.ClaudeResponseError, match="bloques=\\[\\]"):
+        ra.ask_claude("p", "k")
+
+
+def test_decide_unreadable_response_is_loud_but_does_not_block(capsys) -> None:
+    def boom(_: str) -> str:
+        raise ra.ClaudeResponseError("bloques=['thinking']; stop_reason=max_tokens")
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False
+    assert "formato" in o.note and "KeyError" not in o.note
+    out = capsys.readouterr().out
+    assert "::warning::" in out and "stop_reason=max_tokens" in out
+
+
+def test_decide_network_error_is_logged_with_its_type(capsys) -> None:
+    def boom(_: str) -> str:
+        raise TimeoutError("timed out")
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False and "TimeoutError" in o.note
+    assert "::warning::" in capsys.readouterr().out
+
+
+def test_decide_does_not_swallow_unexpected_bugs() -> None:
+    """Un KeyError propio ya no se presenta como una caída de la API (#150)."""
+
+    def bug(_: str) -> str:
+        raise KeyError("content")
+
+    with pytest.raises(KeyError):
+        ra.decide(False, False, "k", bug, SECCIONES, "p")
 
 
 def test_decide_http_config_error_is_named_but_does_not_block() -> None:

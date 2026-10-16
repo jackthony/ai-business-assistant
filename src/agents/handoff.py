@@ -40,6 +40,7 @@ def is_frozen(state: AgentState) -> bool:
 
 
 def _trigger_id(state: AgentState, text: str) -> str:
+    """Id del mensaje que dispara la derivación (en el grafo siempre existe; el hash es respaldo)."""
     last = next(
         (m for m in reversed(state["messages"]) if isinstance(m, HumanMessage)), None
     )
@@ -66,7 +67,12 @@ def make_handoff_node(notifier: Notifier) -> Callable[[AgentState], dict[str, An
                 excerpt=re.sub(r"\s+", " ", text).strip()[:EXCERPT_CHARS],
             )
         )
-        reply = BRIDGE[signal.reason] + (URGENT_LINE if signal.urgent else "")
+        # En una urgencia lo primero que se lee es la emergencia, no el puente tranquilizador.
+        reply = (
+            f"{URGENT_LINE.strip()} {BRIDGE[signal.reason]}"
+            if signal.urgent
+            else BRIDGE[signal.reason]
+        )
         return {
             "messages": [AIMessage(content=reply)],
             "intent": f"handoff_{signal.reason}",

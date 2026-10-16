@@ -56,7 +56,9 @@ def test_pedir_una_persona_deriva(env):
 
 def test_urgencia_agrega_la_linea_de_emergencia(env):
     out = env.say("tengo sangrado abundante")
-    assert out["messages"][-1].content.endswith(URGENT_LINE)
+    contenido = out["messages"][-1].content
+    assert contenido.startswith(URGENT_LINE.strip())
+    assert contenido.endswith(BRIDGE["clinical"])
     assert env.notifier.sent()[0].urgent
 
 

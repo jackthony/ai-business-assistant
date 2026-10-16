@@ -8,7 +8,7 @@ import sys
 
 from langchain_core.messages import HumanMessage
 
-from agents.graph import build_graph
+from infrastructure.wiring import build_default_graph
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -25,7 +25,7 @@ def main(argv: list[str] | None = None) -> int:
         "intent": None,
         "status": "nuevo",
     }
-    salida = build_graph().invoke(entrada)
+    salida = build_default_graph(args.tenant).invoke(entrada)
     print(salida["messages"][-1].content)
     return 0
 

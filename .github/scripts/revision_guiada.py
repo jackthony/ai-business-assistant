@@ -91,9 +91,18 @@ def build_report(expected: list[str], present: set[str], changed: list[str]) -> 
     return "\n".join(out)
 
 
+DEFAULT_DEEPSEEK_MODEL = "deepseek-flash"
+
+
+def deepseek_model() -> str:
+    """Modelo de DeepSeek: la variable DEEPSEEK_MODEL del environment, o el valor por defecto."""
+    return os.environ.get("DEEPSEEK_MODEL", "").strip() or DEFAULT_DEEPSEEK_MODEL
+
+
 def ask_llm(prompt: str, key: str) -> str:
+    model = deepseek_model()
     payload = {
-        "model": "deepseek-chat",
+        "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.2,
     }
@@ -104,7 +113,8 @@ def ask_llm(prompt: str, key: str) -> str:
     )
     try:
         with urllib.request.urlopen(req, timeout=120) as resp:
-            return str(json.loads(resp.read())["choices"][0]["message"]["content"])
+            text = str(json.loads(resp.read())["choices"][0]["message"]["content"])
+            return f"{text}\n\n_Modelo: `{model}`_"
     except urllib.error.HTTPError as e:
         print("DeepSeek HTTP", e.code, e.read()[:300])
     except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as e:

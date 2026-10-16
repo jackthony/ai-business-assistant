@@ -80,6 +80,7 @@ jobs:
       - name: Revisar con DeepSeek (o avisar que falta el secreto)
         env:
           KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL }}
           PR_NUM: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -129,8 +130,9 @@ jobs:
           Diff:\n{diff}\n
           Cuerpo del Issue:\n{cuerpo_issue[:2500]}"""
 
+          model = os.environ.get("DEEPSEEK_MODEL", "").strip() or "deepseek-flash"
           payload = {
-              "model": "deepseek-chat",
+              "model": model,
               "messages": [{"role": "user", "content": prompt}],
               "temperature": 0.2,
           }
@@ -142,6 +144,7 @@ jobs:
               texto = json.loads(r.stdout)["choices"][0]["message"]["content"]
           except Exception:
               texto = "La API no respondió bien; revisa el log del job."
+          texto += f"\n\n_Modelo: `{model}`_"
           with open("review.md", "w") as f:
               f.write("> 🔎 **DeepSeek reviewer (primer pase automático):** la nota final la decide el monitor.\n\n" + texto)
           run("gh", "pr", "comment", pr_num, "--body-file", "review.md")

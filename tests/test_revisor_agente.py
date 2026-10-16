@@ -157,3 +157,21 @@ def test_decide_server_outage_keeps_generic_note() -> None:
     o = ra.decide(False, False, "k", boom, SECCIONES, "p")
     assert o.failed is False
     assert "HTTP 503" not in o.note
+
+
+def test_claude_model_defaults_and_ignores_empty_variable(monkeypatch) -> None:
+    monkeypatch.delenv("REVISOR_MODEL", raising=False)
+    assert ra.claude_model() == "claude-haiku-5-5"
+    monkeypatch.setenv("REVISOR_MODEL", "")  # una `vars.X` sin definir llega como vacía
+    assert ra.claude_model() == "claude-haiku-5-5"
+    monkeypatch.setenv("REVISOR_MODEL", "otro-modelo")
+    assert ra.claude_model() == "otro-modelo"
+
+
+def test_verdict_comment_names_the_model(monkeypatch) -> None:
+    monkeypatch.setenv("REVISOR_MODEL", "modelo-x")
+    v = ra.parse_verdict(
+        '{"veredicto":"APROBAR","resumen":"ok","hallazgos":[]}', SECCIONES
+    )
+    assert v is not None
+    assert "_Modelo: `modelo-x`_" in ra.render_verdict(ra.Outcome(False, "ok", v))

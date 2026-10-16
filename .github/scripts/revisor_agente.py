@@ -152,7 +152,33 @@ def ask_claude(prompt: str, key: str) -> str:
         },
     )
     with urllib.request.urlopen(req, timeout=120) as resp:
-        return str(json.loads(resp.read())["content"][0]["text"])
+        return extract_text(resp.read())
+
+
+class RespuestaIlegible(Exception):
+    """La API respondió (2xx) pero el cuerpo no trae un bloque de texto utilizable."""
+
+    def __init__(self, motivo: str, cuerpo: str = "") -> None:
+        super().__init__(motivo)
+        self.motivo = motivo
+        self.cuerpo = cuerpo[:300]
+
+
+def extract_text(raw: bytes | str) -> str:
+    """Primer bloque `type == "text"` de la respuesta; ignora `thinking` y otros tipos."""
+    cuerpo = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else raw
+    try:
+        data = json.loads(cuerpo)
+    except ValueError:
+        raise RespuestaIlegible("el cuerpo no es JSON", cuerpo) from None
+    blocks_ = data.get("content") if isinstance(data, dict) else None
+    if not isinstance(blocks_, list):
+        raise RespuestaIlegible("la respuesta no trae `content`", cuerpo)
+    for b in blocks_:
+        if isinstance(b, dict) and b.get("type") == "text" and "text" in b:
+            return str(b["text"])
+    tipos = [b.get("type") if isinstance(b, dict) else "?" for b in blocks_]
+    raise RespuestaIlegible(f"ningún bloque de texto (tipos: {tipos})", cuerpo)
 
 
 def decide(
@@ -192,6 +218,13 @@ def decide(
         return Outcome(
             False,
             "El revisor-agente no respondió (API caída o saturada); no se bloquea por eso.",
+        )
+    except RespuestaIlegible as e:
+        # Fallo del código o del formato, no una caída de la API: se nombra para que no pase por una.
+        print(f"::warning::revisor-agente: {e.motivo}. Cuerpo (300 car.): {e.cuerpo!r}")
+        return Outcome(
+            False,
+            f"Error al leer la respuesta del revisor-agente ({e.motivo}); avisa al monitor. No se bloquea.",
         )
     except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as e:
         return Outcome(

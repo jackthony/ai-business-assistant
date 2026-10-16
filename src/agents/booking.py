@@ -6,12 +6,13 @@ checkpoint no repite nada, y si aun así se repite, la clave de idempotencia evi
 (ADR-009).
 """
 
+import datetime as dt
 import json
 import re
 import unicodedata
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import date, datetime, time
+from datetime import datetime
 from typing import Any
 
 from langchain_core.messages import AIMessage, HumanMessage
@@ -47,20 +48,20 @@ class Extraction(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    servicio: str | None = None
-    fecha: date | None = None
-    hora: time | None = None
+    service: str | None = None
+    date: dt.date | None = None
+    time: dt.time | None = None
 
-    @field_validator("servicio", "fecha", "hora", mode="before")
+    @field_validator("service", "date", "time", mode="before")
     @classmethod
     def _tolerant(cls, v: Any, info: Any) -> Any:
         if v in ("", "null", None):
             return None
         try:
-            if info.field_name == "fecha":
-                return date.fromisoformat(str(v))
-            if info.field_name == "hora":
-                return time.fromisoformat(str(v))
+            if info.field_name == "date":
+                return dt.date.fromisoformat(str(v))
+            if info.field_name == "time":
+                return dt.time.fromisoformat(str(v))
         except ValueError:
             return None
         return str(v)
@@ -153,7 +154,7 @@ def make_draft_node(
         ]
         raw = model.complete(deps.prompt, _extraction_prompt(humans[-HISTORY:], now))
         ex = parse_extraction(raw)
-        matches = deps.catalog.find(ex.servicio) if ex.servicio else []
+        matches = deps.catalog.find(ex.service) if ex.service else []
         if not matches:
             return _reply(ASK_SERVICE, "booking_needs_info")
         if len(matches) > 1:
@@ -162,14 +163,14 @@ def make_draft_node(
                 f"¿Cuál de estos servicios quieres?\n{nombres}", "booking_needs_info"
             )
         service = matches[0]
-        if ex.fecha is None or ex.hora is None:
+        if ex.date is None or ex.time is None:
             a, c = deps.schedule.open, deps.schedule.close
             return _reply(
                 f"¿Qué día y a qué hora te gustaría tu cita de *{service.nombre}*? "
                 f"Atendemos de {a:%H:%M} a {c:%H:%M}.",
                 "booking_needs_info",
             )
-        start = datetime.combine(ex.fecha, ex.hora, tzinfo=LIMA)
+        start = datetime.combine(ex.date, ex.time, tzinfo=LIMA)
         try:
             inp = AgendarInput(
                 phone=state["phone"], service_id=service.service_id, start=start

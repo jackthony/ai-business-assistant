@@ -23,7 +23,7 @@ from tools.schedule import LIMA, load_schedule
 
 NOW = datetime(2026, 10, 19, 10, 0, tzinfo=LIMA)  # lunes 10:00
 PHONE = "51900000000"
-DATOS = '{"servicio": "PRP facial", "fecha": "2026-10-20", "hora": "16:00"}'
+DATOS = '{"service": "PRP facial", "date": "2026-10-20", "time": "16:00"}'
 
 
 class Env:
@@ -138,9 +138,7 @@ def test_horario_ocupado_propone_otros_sin_pausar(env):
 
 
 def test_fuera_de_horario_propone_otros(store):
-    env = Env(
-        store, '{"servicio": "PRP facial", "fecha": "2026-10-20", "hora": "21:00"}'
-    )
+    env = Env(store, '{"service": "PRP facial", "date": "2026-10-20", "time": "21:00"}')
     out = env.say("Quiero agendar PRP facial mañana a las 9 de la noche")
     assert "no está disponible" in texto(out) and "• " in texto(out)
     assert "__interrupt__" not in out
@@ -157,19 +155,19 @@ def test_se_ocupa_entre_la_propuesta_y_la_aprobacion(env):
 
 
 def test_falta_el_servicio_pregunta(store):
-    env = Env(store, '{"servicio": null, "fecha": null, "hora": null}')
+    env = Env(store, '{"service": null, "date": null, "time": null}')
     out = env.say("Quiero agendar una cita")
     assert "¿Qué servicio" in texto(out) and out["intent"] == "booking_needs_info"
 
 
 def test_falta_fecha_u_hora_pregunta_con_el_horario(store):
-    env = Env(store, '{"servicio": "PRP facial", "fecha": null, "hora": null}')
+    env = Env(store, '{"service": "PRP facial", "date": null, "time": null}')
     out = env.say("Quiero agendar PRP facial")
     assert "15:00 a 19:00" in texto(out)
 
 
 def test_servicio_ambiguo_lista_opciones(store):
-    env = Env(store, '{"servicio": "facial", "fecha": "2026-10-20", "hora": "16:00"}')
+    env = Env(store, '{"service": "facial", "date": "2026-10-20", "time": "16:00"}')
     out = env.say("Quiero agendar algo facial")
     assert "¿Cuál de estos" in texto(out) and texto(out).count("• ") > 1
     assert env.calendar.bookings() == []
@@ -184,7 +182,7 @@ def test_salida_del_modelo_ilegible_no_inventa(store, salida):
 
 
 def test_conversacion_en_dos_turnos(store):
-    env = Env(store, '{"servicio": null, "fecha": null, "hora": null}', DATOS)
+    env = Env(store, '{"service": null, "date": null, "time": null}', DATOS)
     primero = env.say("Quiero agendar una cita")
     assert primero["intent"] == "booking_needs_info"
     segundo = env.say(
@@ -229,9 +227,9 @@ def test_router_de_intencion(frase, esperado):
 
 
 def test_extraccion_tolerante():
-    assert parse_extraction(DATOS).hora.hour == 16  # type: ignore[union-attr]
-    ex = parse_extraction('{"servicio": "x", "fecha": "mañana", "hora": "tarde"}')
-    assert (ex.servicio, ex.fecha, ex.hora) == ("x", None, None)
+    assert parse_extraction(DATOS).time.hour == 16  # type: ignore[union-attr]
+    ex = parse_extraction('{"service": "x", "date": "mañana", "time": "tarde"}')
+    assert (ex.service, ex.date, ex.time) == ("x", None, None)
 
 
 def test_formato_de_horario():

@@ -1,6 +1,6 @@
-<!-- version: booking-v1 -->
+<!-- version: booking-v2 -->
 Extraes los datos de una solicitud de cita de Hola Mujer a partir de la conversación. Respondes SOLO un JSON válido, sin texto extra:
-{"servicio": "nombre del servicio tal como lo dijo la clienta, o null", "fecha": "AAAA-MM-DD o null", "hora": "HH:MM en 24 h o null"}
+{"service": "nombre del servicio tal como lo dijo la clienta, o null", "date": "AAAA-MM-DD o null", "time": "HH:MM en 24 h o null"}
 
 REGLAS
 1. Usa null cuando la clienta no haya dado el dato. No lo adivines ni lo completes.

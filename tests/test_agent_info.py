@@ -7,12 +7,13 @@ from langchain_core.messages import HumanMessage
 from agents.graph import build_graph
 from agents.info import NO_DATA, build_user_prompt
 from rag.documents import load_documents
+from services.notifier_memory import InMemoryNotifier
 
 PROMPT = "SISTEMA"
 
 
 def ask(store, model, texto):
-    graph = build_graph(store, model, PROMPT)
+    graph = build_graph(store, model, PROMPT, InMemoryNotifier())
     return graph.invoke(
         {
             "messages": [HumanMessage(texto)],

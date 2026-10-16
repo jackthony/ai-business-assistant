@@ -18,6 +18,7 @@ from agents.booking import (
 from agents.graph import build_graph
 from rag.catalog import ServiceCatalog
 from services.calendar_memory import InMemoryCalendar
+from services.notifier_memory import InMemoryNotifier
 from tools.agendar import make_agendar_tool
 from tools.schedule import LIMA, load_schedule
 
@@ -41,8 +42,9 @@ class Env:
             clock=clock,
         )
         self.model = ScriptedModel(*answers)
+        self.notifier = InMemoryNotifier()
         self.graph = build_graph(
-            store, self.model, "SISTEMA", self.deps, InMemorySaver()
+            store, self.model, "SISTEMA", self.notifier, self.deps, InMemorySaver()
         )
         self.cfg = {"configurable": {"thread_id": PHONE}}
 
@@ -207,7 +209,7 @@ def test_texto_de_la_clienta_no_cierra_las_etiquetas(store):
 
 def test_agendar_sin_checkpointer_es_un_error(store, env):
     with pytest.raises(ValueError, match="checkpointer"):
-        build_graph(store, ScriptedModel(), "S", env.deps, None)
+        build_graph(store, ScriptedModel(), "S", InMemoryNotifier(), env.deps, None)
 
 
 @pytest.mark.parametrize(

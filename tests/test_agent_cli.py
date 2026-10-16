@@ -5,12 +5,15 @@ from conftest import ScriptedModel
 
 from agents import cli
 from agents.graph import build_graph
+from services.notifier_memory import InMemoryNotifier
 
 
 def test_cli_imprime_respuesta(store, capsys, monkeypatch):
     modelo = ScriptedModel("Cuesta S/ 149.99 [1].")
     monkeypatch.setattr(
-        cli, "build_default_graph", lambda tenant: build_graph(store, modelo, "SISTEMA")
+        cli,
+        "build_default_graph",
+        lambda tenant: build_graph(store, modelo, "SISTEMA", InMemoryNotifier()),
     )
     codigo = cli.main(["--phone", "51900000000", "precio taller PRP facial"])
     assert codigo == 0

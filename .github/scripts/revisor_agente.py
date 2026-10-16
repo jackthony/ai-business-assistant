@@ -155,6 +155,15 @@ def ask_claude(prompt: str, key: str) -> str:
         return str(json.loads(resp.read())["content"][0]["text"])
 
 
+def api_key() -> str:
+    """CI inyecta KEY; en sesiones de Claude Code la plataforma reserva ANTHROPIC_API_KEY."""
+    for name in ("KEY", "REVIEWER_ANTHROPIC_KEY", "ANTHROPIC_API_KEY"):
+        value = os.environ.get(name, "").strip()
+        if value:
+            return value
+    return ""
+
+
 def decide(
     has_errors: bool,
     draft: bool,
@@ -295,11 +304,12 @@ def main() -> int:
     has_errors = any(f.level == "error" for f in findings)
     d = diff if len(diff) <= 20000 else diff[:20000] + "\n[diff truncado]"
     prompt = build_prompt({str(k): v for k, v in sec.items()}, d, det)
+    key = api_key()
     o = decide(
         has_errors,
         draft,
-        os.environ.get("KEY", ""),
-        lambda p: ask_claude(p, os.environ["KEY"]),
+        key,
+        lambda p: ask_claude(p, key),
         section_ids(text),
         prompt,
     )

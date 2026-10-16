@@ -175,3 +175,15 @@ def test_verdict_comment_names_the_model(monkeypatch) -> None:
     )
     assert v is not None
     assert "_Modelo: `modelo-x`_" in ra.render_verdict(ra.Outcome(False, "ok", v))
+
+
+def test_api_key_prioriza_key_y_cae_a_los_alias(monkeypatch):
+    for name in ("KEY", "REVIEWER_ANTHROPIC_KEY", "ANTHROPIC_API_KEY"):
+        monkeypatch.delenv(name, raising=False)
+    assert ra.api_key() == ""
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "c")
+    assert ra.api_key() == "c"
+    monkeypatch.setenv("REVIEWER_ANTHROPIC_KEY", " b \n")
+    assert ra.api_key() == "b"
+    monkeypatch.setenv("KEY", "a")
+    assert ra.api_key() == "a"

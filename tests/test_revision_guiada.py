@@ -48,3 +48,13 @@ def test_skips_monitor_and_any_bot_but_not_students() -> None:
     assert rg.is_skipped_author("renovate[bot]")
     assert not rg.is_skipped_author("adbon-dm1")
     assert not rg.is_skipped_author("")
+
+
+def test_deepseek_model_defaults_and_ignores_empty_variable(monkeypatch) -> None:
+    monkeypatch.delenv("DEEPSEEK_MODEL", raising=False)
+    assert rg.deepseek_model() == "deepseek-flash"
+    # una `vars.X` sin definir llega como cadena vacía
+    monkeypatch.setenv("DEEPSEEK_MODEL", "  ")
+    assert rg.deepseek_model() == "deepseek-flash"
+    monkeypatch.setenv("DEEPSEEK_MODEL", "otro-modelo")
+    assert rg.deepseek_model() == "otro-modelo"

@@ -1,8 +1,25 @@
-"""Pruebas del grafo mínimo de agente (S5 D1)."""
+"""Contrato del grafo del agente (estado de 5 campos, reducer, phone/tenant intactos)."""
 
 from typing import get_type_hints
 
+from conftest import ScriptedModel
+from langchain_core.messages import HumanMessage
+
+from agents.graph import build_graph
 from agents.state import AgentState
+
+
+def run(store, texto="hola", phone="51900000000"):
+    model = ScriptedModel("Cuesta S/ 149.99 [1].")
+    return build_graph(store, model, "SISTEMA").invoke(
+        {
+            "messages": [HumanMessage(texto)],
+            "phone": phone,
+            "tenant": "hola_mujer",
+            "intent": None,
+            "status": "nuevo",
+        }
+    )
 
 
 def test_agent_state_campos_exactos():
@@ -10,95 +27,17 @@ def test_agent_state_campos_exactos():
     assert set(hints) == {"messages", "phone", "tenant", "intent", "status"}
 
 
-"""Prueba T2"""
+def test_reducer_anade_no_reemplaza(store):
+    out = run(store, "precio taller PRP facial")
+    assert len(out["messages"]) == 2
+    assert out["messages"][0].content == "precio taller PRP facial"
 
 
-def test_reducer_anade_no_reemplaza():
-    from langchain_core.messages import HumanMessage
-
-    from agents.graph import build_graph
-
-    entrada = {
-        "messages": [HumanMessage("hola")],
-        "phone": "51900000000",
-        "tenant": "hola_mujer",
-        "intent": None,
-        "status": "nuevo",
-    }
-    salida = build_graph().invoke(entrada)
-    assert len(salida["messages"]) == 2
-    assert salida["messages"][0].content == "hola"
-    assert salida["messages"][1].content == "eco: hola"
+def test_phone_y_tenant_intactos(store):
+    out = run(store, phone="51900000001")
+    assert (out["phone"], out["tenant"]) == ("51900000001", "hola_mujer")
 
 
-"""Prueba 3"""
-
-
-def test_intent_y_status():
-    from langchain_core.messages import HumanMessage
-
-    from agents.graph import build_graph
-
-    entrada = {
-        "messages": [HumanMessage("hola")],
-        "phone": "51900000000",
-        "tenant": "hola_mujer",
-        "intent": None,
-        "status": "nuevo",
-    }
-    salida = build_graph().invoke(entrada)
-    assert salida["intent"] == "eco"
-    assert salida["status"] == "respondido"
-
-
-def test_phone_y_tenant_intactos():
-    from langchain_core.messages import HumanMessage
-
-    from agents.graph import build_graph
-
-    entrada = {
-        "messages": [HumanMessage("hola")],
-        "phone": "51900000001",
-        "tenant": "hola_mujer",
-        "intent": None,
-        "status": "nuevo",
-    }
-    salida = build_graph().invoke(entrada)
-    assert salida["phone"] == "51900000001"
-    assert salida["tenant"] == "hola_mujer"
-
-
-def test_tildes():
-    from langchain_core.messages import HumanMessage
-
-    from agents.graph import build_graph
-
-    entrada = {
-        "messages": [HumanMessage("¿Cuánto cuesta el masaje?")],
-        "phone": "51900000000",
-        "tenant": "hola_mujer",
-        "intent": None,
-        "status": "nuevo",
-    }
-    salida = build_graph().invoke(entrada)
-    assert salida["messages"][1].content == "eco: ¿Cuánto cuesta el masaje?"
-
-
-def test_sin_llm():
-    import subprocess
-    import sys
-
-    codigo = subprocess.run(
-        [
-            sys.executable,
-            "-c",
-            (
-                "import agents.graph, sys; "
-                "modulos = [m for m in sys.modules if m.startswith('ollama') or m.startswith('langchain_ollama')]; "
-                "sys.exit(1 if modulos else 0)"
-            ),
-        ],
-        check=False,
-        capture_output=True,
-    )
-    assert codigo.returncode == 0
+def test_tildes_y_signos(store):
+    out = run(store, "¿Cuánto cuesta el taller PRP facial?")
+    assert out["intent"] == "info"

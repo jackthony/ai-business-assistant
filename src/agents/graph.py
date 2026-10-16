@@ -1,27 +1,19 @@
-"""Grafo mínimo: START -> echo -> END (contrato S05 D1)."""
+"""Grafo del agente único: START -> info -> END. Las siguientes capas (agendar, safety/handoff)
+se agregan como nodos del MISMO grafo (ADR-007)."""
 
-from typing import Any
-
-from langchain_core.messages import AIMessage
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
+from agents.info import make_info_node
+from agents.ports import ChatModel, Retriever
 from agents.state import AgentState
 
 
-def echo_node(state: AgentState) -> dict[str, Any]:
-    """Eco del último mensaje: devuelve solo lo que cambia."""
-    texto = state["messages"][-1].content
-    return {
-        "messages": [AIMessage(content=f"eco: {texto}")],
-        "intent": "eco",
-        "status": "respondido",
-    }
-
-
-def build_graph() -> CompiledStateGraph:
+def build_graph(
+    retriever: Retriever, model: ChatModel, system_prompt: str
+) -> CompiledStateGraph:
     grafo = StateGraph(AgentState)
-    grafo.add_node("echo", echo_node)  # type: ignore[call-overload]
-    grafo.add_edge(START, "echo")
-    grafo.add_edge("echo", END)
+    grafo.add_node("info", make_info_node(retriever, model, system_prompt))  # type: ignore[call-overload]
+    grafo.add_edge(START, "info")
+    grafo.add_edge("info", END)
     return grafo.compile()

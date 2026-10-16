@@ -126,7 +126,7 @@ def test_ask_claude_payload_has_no_temperature(monkeypatch) -> None:
             return False
 
         def read(self) -> bytes:
-            return json.dumps({"content": [{"text": "OK"}]}).encode()
+            return json.dumps({"content": [{"type": "text", "text": "OK"}]}).encode()
 
     def fake_urlopen(req, timeout):
         sent.update(json.loads(req.data))

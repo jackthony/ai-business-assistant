@@ -128,9 +128,17 @@ Veredicto APROBAR solo si no hay BLOCKER ni MAJOR.
 {diff}"""
 
 
+DEFAULT_MODEL = "claude-haiku-5-5"
+
+
+def claude_model() -> str:
+    """Modelo de Claude: la variable REVISOR_MODEL del environment (vacía = sin definir), o el valor por defecto."""
+    return os.environ.get("REVISOR_MODEL", "").strip() or DEFAULT_MODEL
+
+
 def ask_claude(prompt: str, key: str) -> str:
     payload = {
-        "model": os.environ.get("REVISOR_MODEL", "claude-haiku-5-5"),
+        "model": claude_model(),
         "max_tokens": 2000,
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -211,6 +219,7 @@ def render_verdict(o: Outcome) -> str:
         )
         if h.pista:
             lines.append(f"  - 💡 {h.pista}")
+    lines += ["", f"_Modelo: `{claude_model()}`_"]
     return "\n".join(lines)
 
 

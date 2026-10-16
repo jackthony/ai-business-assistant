@@ -1,0 +1,6 @@
+{
+  "_nota": "Horario transcrito de OPENING_HOURS (CONFIRMED, monitor 2026-10-14): todos los días 15:00-19:00, Lima. slot_minutes=60 es PROVISIONAL: DEFAULT_APPOINTMENT_MINUTES sigue PENDING en 04_CONFIG y las duraciones no están verificadas.",
+  "open": "15:00",
+  "close": "19:00",
+  "slot_minutes": 60
+}

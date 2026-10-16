@@ -4,7 +4,7 @@
 >
 > **Orden de autoridad:** doc oficial/spec > código reproducible (repo real) > libro/curso > paper > afirmación de un LLM. Un LLM nunca es autoridad; toda afirmación técnica se verifica contra fuente primaria.
 >
-> **Columna «Última verificación»** (niveles 1–3): `fecha · método`. Del más fuerte al más débil: **ejecutado** (el paquete se instaló y los ejemplos pasaron) > **abierta** (alguien leyó la fuente en esa fecha) > **enlace responde / existe (git)** (solo se comprobó que la URL abre, o que el repo existe con `git ls-remote`; el contenido no se releyó) > **curaduría** (se listó en la curaduría del 2026-10-06; el método no quedó registrado) > **reseña secundaria** > **pendiente**. Una fecha de curaduría no prueba que la doc siga vigente: antes de enseñar con una fuente, mira su fila.
+> **Columna «Última verificación»** (niveles 1–3): `fecha · método`. Del más fuerte al más débil: **ejecutado** (el paquete se instaló y los ejemplos pasaron) > **abierta** (alguien leyó la fuente en esa fecha) > **enlace responde / existe (git)** (solo se comprobó que la URL abre, o que el repo existe con `git ls-remote`; el contenido no se releyó) > **curaduría** (se listó en la curaduría del 2026-10-06; el método no quedó registrado) > **reseña secundaria** > **pendiente**. Una fecha de curaduría no prueba que la doc siga vigente, y **un enlace presente no significa fuente verificada**: solo indica dónde buscar; el estado real es el de la columna. Antes de enseñar con una fuente, mira su fila.
 
 ## Inspiración directa del proyecto (indicada por el monitor)
 

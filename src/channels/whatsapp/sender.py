@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 
 import httpx
@@ -6,8 +7,10 @@ import httpx
 # Configuramos un logger para registrar eventos, advertencias o errores del sender
 logger = logging.getLogger(__name__)
 
-# URL base oficial de la Graph API de Meta para WhatsApp (versión 17.0)
-BASE_URL = "https://graph.facebook.com/v17.0"
+# Versión de la Graph API de Meta para WhatsApp.
+# Configurable por constructor o variable de entorno WHATSAPP_GRAPH_VERSION.
+# Verificar versión vigente en https://developers.facebook.com/docs/whatsapp (por definir al cerrar S4).
+DEFAULT_GRAPH_VERSION = os.getenv("WHATSAPP_GRAPH_VERSION", "v17.0")
 
 
 class WhatsAppSender:
@@ -18,6 +21,7 @@ class WhatsAppSender:
         phone_number_id: str,
         access_token: str,
         transport: httpx.AsyncBaseTransport | None = None,
+        graph_version: str | None = None,
     ) -> None:
         """Inicializa el sender con las credenciales necesarias.
 
@@ -26,17 +30,36 @@ class WhatsAppSender:
             access_token (str): Token de acceso permanente o temporal de la API de Meta.
             transport (httpx.AsyncBaseTransport, optional): Útil para inyectar un transporte
                 mockeado (como MockTransport) y realizar pruebas unitarias sin llamadas reales a internet.
+            graph_version (str, optional): Versión de la Graph API (p.ej. "v21.0"). Por defecto usa
+                WHATSAPP_GRAPH_VERSION o "v17.0".
         """
         self.phone_number_id = phone_number_id
         self.access_token = access_token
         self.transport = transport
+        self.graph_version = graph_version or DEFAULT_GRAPH_VERSION
 
-    async def send_text(self, to_wa_id: str, text: str) -> dict:
+    @property
+    def base_url(self) -> str:
+        return f"https://graph.facebook.com/{self.graph_version}"
+
+    async def send_text(
+        self,
+        to_wa_id: str,
+        text: str,
+        received_at: float | None = None,
+    ) -> dict:
         """Envía un mensaje de texto libre a un usuario de WhatsApp.
         Nota: Solo permitido dentro de la ventana de atención de 24 horas.
+
+        Args:
+            to_wa_id (str): Número de destino del usuario (ej. 51999999999).
+            text (str): Contenido del mensaje.
+            received_at (float, optional): Marca de tiempo (perf_counter) en que llegó el webhook
+                entrante. Si se pasa, se loguea `first_response_ms` (webhook receipt → start del envío).
+                La medición completa webhook→send se cierra en el orquestador cuando se integre con #3.
         """
         # 1. Construimos la URL del endpoint de mensajes usando el ID del teléfono
-        url = f"{BASE_URL}/{self.phone_number_id}/messages"
+        url = f"{self.base_url}/{self.phone_number_id}/messages"
 
         # 2. Preparamos los headers de autenticación requeridos por Meta
         headers = {"Authorization": f"Bearer {self.access_token}"}
@@ -66,8 +89,13 @@ class WhatsAppSender:
         # 6. Si Meta respondió con error (401, 400...), lanzamos la excepción
         response.raise_for_status()
 
-        # 7. Registramos la latencia
+        # 7. Registramos la latencia del POST a Meta
         latency_ms = (time.perf_counter() - start) * 1000
         logger.info("whatsapp_send ok latency_ms=%.1f", latency_ms)
+
+        # 8. Si conocemos el timestamp de entrada (webhook), logueamos tiempo de primera respuesta
+        if received_at is not None:
+            first_response_ms = (start - received_at) * 1000
+            logger.info("whatsapp_first_response_ms=%.1f", first_response_ms)
 
         return response.json()

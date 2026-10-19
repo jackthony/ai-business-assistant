@@ -1,4 +1,6 @@
+# tests/test_whatsapp_sender.py
 import json
+import time
 
 import httpx
 import pytest
@@ -56,6 +58,22 @@ async def test_reintenta_una_vez_ante_error_de_red():
 
 
 @pytest.mark.asyncio
+async def test_no_reintenta_ante_error_401_meta():
+    """Meta devuelve 401: falla cerrado en el primer intento, sin reintento."""
+    llamadas = 0
+
+    def handler(request):
+        nonlocal llamadas
+        llamadas += 1
+        return httpx.Response(401, json={"error": {"message": "invalid token"}})
+
+    sender = make_sender(handler)
+    with pytest.raises(httpx.HTTPStatusError):
+        await sender.send_text("51999999999", "hola")
+    assert llamadas == 1
+
+
+@pytest.mark.asyncio
 async def test_loguea_latencia(caplog):
     sender = make_sender(lambda r: httpx.Response(200, json={}))
     with caplog.at_level("INFO"):
@@ -64,15 +82,10 @@ async def test_loguea_latencia(caplog):
 
 
 @pytest.mark.asyncio
-async def test_no_reintenta_ante_error_4xx_de_meta():
-    llamadas = 0
-
-    def handler(request):
-        nonlocal llamadas
-        llamadas += 1
-        return httpx.Response(401, json={"error": {"message": "token invalido"}})
-
-    sender = make_sender(handler)
-    with pytest.raises(httpx.HTTPStatusError):
-        await sender.send_text("51999999999", "hola")
-    assert llamadas == 1
+async def test_loguea_tiempo_primera_respuesta_cuando_recibido(caplog):
+    """Si se conoce el timestamp de entrada (webhook), se loguea first_response_ms."""
+    t0 = time.perf_counter() - 0.250  # el webhook llegó hace 250 ms
+    sender = make_sender(lambda r: httpx.Response(200, json={}))
+    with caplog.at_level("INFO"):
+        await sender.send_text("51999999999", "hola", received_at=t0)
+    assert any("first_response_ms" in r.message for r in caplog.records)

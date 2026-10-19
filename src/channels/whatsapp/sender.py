@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 # Versión de la Graph API de Meta para WhatsApp.
 # Configurable por constructor o variable de entorno WHATSAPP_GRAPH_VERSION.
 # Verificar versión vigente en https://developers.facebook.com/docs/whatsapp (por definir al cerrar S4).
-DEFAULT_GRAPH_VERSION = os.getenv("WHATSAPP_GRAPH_VERSION", "v17.0")
+DEFAULT_GRAPH_VERSION = os.getenv("WHATSAPP_GRAPH_VERSION", "v26.0")
 
 
 class WhatsAppSender:
@@ -31,7 +31,7 @@ class WhatsAppSender:
             transport (httpx.AsyncBaseTransport, optional): Útil para inyectar un transporte
                 mockeado (como MockTransport) y realizar pruebas unitarias sin llamadas reales a internet.
             graph_version (str, optional): Versión de la Graph API (p.ej. "v21.0"). Por defecto usa
-                WHATSAPP_GRAPH_VERSION o "v17.0".
+                WHATSAPP_GRAPH_VERSION o "v26.0".
         """
         self.phone_number_id = phone_number_id
         self.access_token = access_token

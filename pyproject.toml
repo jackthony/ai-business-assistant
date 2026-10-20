@@ -19,7 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 etl = ["openpyxl>=3.1,<4"]
-dev = ["pytest", "pytest-asyncio>=0.23", "respx>=0.21", "ruff>=0.16,<0.17", "mypy", "bandit", "pre-commit"]
+dev = ["pytest", "pytest-asyncio>=0.23", "respx>=0.21", "ruff>=0.17.1,<0.18", "mypy", "bandit", "pre-commit"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

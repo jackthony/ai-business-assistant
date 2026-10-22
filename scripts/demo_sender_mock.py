@@ -20,6 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 import httpx
+
 from channels.whatsapp.sender import WhatsAppSender
 
 logging.basicConfig(level="INFO", format="%(levelname)s %(name)s: %(message)s")
@@ -97,7 +98,7 @@ async def main():
         # t1: justo antes de disparar el POST a Meta
         first_response_ms.append((time.perf_counter() - inbound["received_at"]) * 1000)
         print(f"\n2) SENDER armado el POST (t1 - t0 = {first_response_ms[-1]:.1f} ms):")
-        print(f"     URL  : {str(request.url)}")
+        print(f"     URL  : {request.url!s}")
         print(f"     Auth : {request.headers.get('Authorization')}")
         print(f"     Body : {json.dumps(body, ensure_ascii=False)}")
         return httpx.Response(200, json={"messages": [{"id": "wamid.demo_001"}]})

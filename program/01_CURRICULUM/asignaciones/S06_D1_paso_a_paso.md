@@ -4,7 +4,7 @@
 >
 > **Reglas del juego:** no hay código de la solución aquí (si lo hubiera, no aprenderías). Hay explicación, pistas y puntos de control. Una sesión dura ~3 h; los tiempos son una guía. Todos los comandos son para Windows (**cmd**, no PowerShell), desde la raíz del repo.
 >
-> **Punto de partida:** esta asignación **depende de #53** (el prompt por componentes y `check_reply_style`). El Paso 0 comprueba que ya está en `main`. Si no está, **no empieces**: comenta en el Issue #156 y espera; no escribas tú esas piezas.
+> **Punto de partida:** esta asignación **depende de #177** (la base del monitor: el prompt por componentes y `check_reply_style`). El Paso 0 comprueba que ya está en `main`. Si no está, **no empieces**: comenta en el Issue #156 y espera; no escribas tú esas piezas.
 
 > **Revisión automática de tu avance:** desde tu primer commit haz `git push -u origin <tu-rama>`. El robot abre solo un **PR en borrador** y deja **un comentario que se actualiza en cada push**: cuántos archivos del contrato ya trabajaste, cuáles te faltan, si tocaste algo fuera de la sección 4 y cuál es tu siguiente paso, con pistas. Haz push **al terminar cada paso en verde**, no solo al final.
 
@@ -14,7 +14,7 @@
 |---|---|---|
 | Lectura + mini-conceptos | 25 min | Sabes explicar qué enseña un ejemplo (few-shot) y qué no debe traer |
 | Calentamiento | 10 min | Detectas con una expresión regular un importe y una hora |
-| Paso 0 (terreno, #53, entorno, línea base) | 25 min | `N passed` antes de tocar código |
+| Paso 0 (terreno, #177, entorno, línea base) | 25 min | `N passed` antes de tocar código |
 | Pasos 1–2 (validador, carga y render) | 45 min | `4 passed` (F4–F7) |
 | Paso 3 (tus ejemplos) | 40 min | `7 passed` (F1–F7) |
 | Paso 4 (`prompt_v2`) | 15 min | `8 passed`, y las pruebas de #53 siguen en verde |
@@ -72,7 +72,7 @@ Resultado esperado: `True False` y luego `['too_many_lines'] ['too_many_question
 
 ## Paso a paso
 
-### Paso 0 — Prepara tu terreno (y comprueba #53)
+### Paso 0 — Prepara tu terreno (y comprueba #177)
 **Haz esto:** sigue los pasos 1 a 4 de la sección 7 del contrato: sincroniza `main`, comprueba que existen `prompt_v1.md`, `prompt.py` y `style.py` y que `check_reply_style('hola')` imprime `[]`, crea la rama `issue-156-fewshot-objeciones`, crea el entorno, instala el proyecto y corre `pytest tests -q`. Anota N.
 **Por qué:** esta asignación se apoya en el trabajo de otra compañera. Si falta, no es un problema tuyo: es una dependencia que hay que esperar.
 **Debes ver:** `N passed`, sin fallos, y los tres archivos listados.
@@ -161,7 +161,7 @@ Resultado esperado: `True False` y luego `['too_many_lines'] ['too_many_question
 
 | Síntoma (lo que ves) | Causa probable | Qué hacer |
 |---|---|---|
-| `ModuleNotFoundError: No module named 'agents.style'` | #53 todavía no está en tu `main` | Haz `git pull`; si sigue sin estar, espera: no lo escribas tú |
+| `ModuleNotFoundError: No module named 'agents.style'` | #177 todavía no está en tu `main` | Haz `git pull`; si sigue sin estar, espera: no lo escribas tú |
 | F3 falla con `no_citation` | Una respuesta no lleva `[1]` | Agrega la marca `[1]` donde remitas a la información |
 | F3 falla con `amount` o `hour` | Escribiste un precio u hora en un ejemplo | Quítalos: los datos salen de los fragmentos |
 | F3 falla con `too_many_questions` | Tienes dos signos `?` en una respuesta | Deja una sola pregunta |

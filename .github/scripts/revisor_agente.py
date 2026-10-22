@@ -226,10 +226,16 @@ def decide(
             False,
             f"Error al leer la respuesta del revisor-agente ({e.motivo}); avisa al monitor. No se bloquea.",
         )
-    except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as e:
+    except (urllib.error.URLError, TimeoutError) as e:
         return Outcome(
             False,
             f"El revisor-agente no respondió ({type(e).__name__}); no se bloquea por una caída de la API.",
+        )
+    except Exception as e:  # noqa: BLE001 - un bug nuestro no debe disfrazarse de caída de la API
+        print(f"::warning::revisor-agente: error interno {type(e).__name__}: {e}")
+        return Outcome(
+            False,
+            f"Error interno del revisor-agente ({type(e).__name__}); avisa al monitor. No se bloquea.",
         )
     v = parse_verdict(raw, sections or set())
     if v is None:

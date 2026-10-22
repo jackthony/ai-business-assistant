@@ -159,6 +159,30 @@ def test_decide_server_outage_keeps_generic_note() -> None:
     assert "HTTP 503" not in o.note
 
 
+def test_decide_network_failure_is_an_outage_note() -> None:
+    def boom(_: str) -> str:
+        raise ra.urllib.error.URLError("sin red")
+
+    o = ra.decide(False, False, "k", boom, SECCIONES, "p")
+    assert o.failed is False
+    assert "URLError" in o.note
+    assert "caída de la API" in o.note
+
+
+def test_decide_internal_bug_is_not_disguised_as_api_outage(capsys) -> None:
+    """Un KeyError/IndexError es un bug del script: se nombra como error interno, no como caída."""
+
+    def bug(_: str) -> str:
+        return {}["content"]  # type: ignore[index]
+
+    o = ra.decide(False, False, "k", bug, SECCIONES, "p")
+    assert o.failed is False
+    assert "Error interno" in o.note
+    assert "KeyError" in o.note
+    assert "caída de la API" not in o.note
+    assert "::warning::" in capsys.readouterr().out
+
+
 def test_claude_model_defaults_and_ignores_empty_variable(monkeypatch) -> None:
     monkeypatch.delenv("REVISOR_MODEL", raising=False)
     assert ra.claude_model() == "claude-haiku-5-5"

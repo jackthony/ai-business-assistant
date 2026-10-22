@@ -5,6 +5,10 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # ruff en 0.x rompe en cada minor: se sube a mano junto con el rev de .pre-commit-config.yaml (#98)
+      - dependency-name: "ruff"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
     commit-message:
       prefix: "chore"
       include: scope

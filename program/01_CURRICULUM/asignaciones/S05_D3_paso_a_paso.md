@@ -170,8 +170,8 @@ pytest tests -q
 **Punto de control:** ¿por qué esta prueba fallaría si los dos teléfonos usaran el mismo hilo?
 
 
-### Paso 7 — T4: teléfono vacío o solo espacios se rechaza
-**Haz esto:** escribe T4. Llama a la función de configuración con `""` y con `"   "`, y comprueba que en los dos casos se lanza `ValueError` (fila T4 de la sección 6). Son **dos** bloques `pytest.raises` dentro de **una** misma función: el contrato cuenta una función por prueba.
+### Paso 7 — T4: teléfono vacío, con espacios o con caracteres peligrosos se rechaza
+**Haz esto:** escribe T4. Llama a la función de configuración con `""`, con `"   "` y con `"51900000000'; DROP TABLE checkpoints;--"`, y comprueba que en los tres casos se lanza `ValueError` (fila T4 de la sección 6). Son **tres** bloques `pytest.raises` dentro de **una** misma función: el contrato cuenta una función por prueba.
 **Por qué:** un hilo sin identificador mezcla conversaciones de personas distintas. Es mejor fallar que mezclar.
 **Debes ver:** nada nuevo: el archivo entero sigue con el mismo error de colección. Escribe la función; el rojo se comprueba una vez en el Paso 10.
 **Si falla:** si no recuerdas cómo esperar una excepción en pytest, mira la Escalera de pistas (Paso 7).
@@ -288,7 +288,7 @@ Abre el PR contra `main` con `Closes #54`, la plantilla completa y tus respuesta
 
 **Paso 5 (T2).** Pista 1: un objeto que se crea con `with` puede cerrarse y volverse a abrir; el archivo es lo único que sobrevive al cierre. Pista 2: busca `SqliteSaver` y `from_conn_string` en <https://langchain-ai.github.io/langgraph/concepts/persistence/> y en <https://pypi.org/project/langgraph-checkpoint-sqlite/>. Pista 3: en cada «proceso» abres el `with` con la misma ruta, armas el grafo y lo invocas con el mismo `thread_id`; compara las listas de mensajes de cada salida.
 
-**Paso 7 (T4).** Pista 1: `strip()` quita espacios al principio y al final de un texto. Pista 2: busca cómo esperar una excepción en <https://docs.pytest.org/en/stable/how-to/assert.html#assertions-about-expected-exceptions> (`pytest.raises`). Pista 3: pruebas cada valor malo dentro de un bloque `with pytest.raises(ValueError):` y compruebas que la excepción aparece.
+**Paso 7 (T4).** Pista 1: `strip()` quita espacios al principio y al final de un texto. Pista 2: busca cómo esperar una excepción en <https://docs.pytest.org/en/stable/how-to/assert.html#assertions-about-expected-exceptions> (`pytest.raises`). Pista 3 (para el tercero: la sección 5.1 dice qué caracteres se permiten; `re.fullmatch` comprueba un texto completo contra un patrón): pruebas cada valor malo dentro de un bloque `with pytest.raises(ValueError):` y compruebas que la excepción aparece.
 
 **Paso 8 (T5).** Pista 1: `Path(__file__)` es la ruta de tu archivo de prueba. Pista 2: busca `resolve` y `parents` en <https://docs.python.org/3/library/pathlib.html>. 
 

@@ -30,6 +30,15 @@
 
 El estado de las invitaciones como colaboradores está en el Issue #5 (sigue abierto). Los días de práctica y el roster viven en `.github/coach.json`.
 
+## Alerta de seguridad (2026-10-22)
+
+- **LiteLLM 1.107.0 comprometido:** no lo usamos (solo una línea de documentación lo descarta). Lo que sí concierne: tokens de GitHub CLI robados; los practicantes usan `gh`, así que ante duda deben rotar su token (`gh auth logout` y `gh auth login`).
+- **Starlette «BadHost» (CISA KEV):** `pyproject.toml` ahora exige `starlette>=1.0.1,<2`.
+- **Checkpointers SQLite/Redis de LangGraph (SQL injection → ejecución de código):** hoy solo `InMemorySaver`. El contrato `S05_D3` (#54) exige validar el `thread_id` en `config_for_phone` (T4) y no usar texto de la clienta como clave de filtro.
+- **ChromaDB CVE-2026-45829:** afecta al servidor; usamos el cliente en proceso. Sin acción.
+- **⏳ Pendiente del monitor, solo se ve en la M5:** Ollama debe estar en 0.35.0 o superior (RCE por `/api/pull`, CVE-2026-103663). Ejecutar `ollama --version` y `netstat -ano | findstr 11434` (que escuche solo en 127.0.0.1) y anotar el resultado aquí.
+- **Dependabot:** `ruff` queda fuera de sus PRs automáticos (#164): se sube a mano junto con el `rev` de `.pre-commit-config.yaml`, como en #98.
+
 ## Estado por área
 
 | Área | Estado |

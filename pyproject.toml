@@ -16,6 +16,7 @@ dependencies = [
     "langchain-core>=1,<2",
     "chromadb>=1.0,<2",
     "pydantic>=2.7,<3",
+    "langchain-ollama>=1,<2",
 ]
 
 [project.optional-dependencies]

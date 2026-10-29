@@ -43,11 +43,6 @@ def handle_inbound(
     current_state = graph.get_state(config)
     has_state = bool(current_state and current_state.values)
 
-    if has_state:
-        val = current_state.values
-        if val.get("status") == "handoff_requested" or val.get("handoff_active"):
-            return None
-
     state_input: dict[str, Any] = {
         "messages": [HumanMessage(content=event.content)],
         "phone": event.user_id,
@@ -81,17 +76,13 @@ def handle_inbound(
         if isinstance(msg, AIMessage) and (not msg.id or msg.id not in existing_msg_ids)
     ]
 
+    # Sin AIMessage nuevo el hilo está congelado: el bot calla (el grafo ya guardó el mensaje)
     if not new_ai_messages:
-        if messages:
-            last_msg = messages[-1]
-            response_text = getattr(last_msg, "content", str(last_msg))
-            citations = getattr(last_msg, "additional_kwargs", {}).get("citations", [])
-        else:
-            return None
-    else:
-        last_ai_msg = new_ai_messages[-1]
-        response_text = last_ai_msg.content
-        citations = last_ai_msg.additional_kwargs.get("citations", [])
+        return None
+
+    last_ai_msg = new_ai_messages[-1]
+    response_text = str(last_ai_msg.content)
+    citations = last_ai_msg.additional_kwargs.get("citations", [])
 
     # R4: pending_approval True si ocurre interrupción o handoff
     pending_approval = "__interrupt__" in result or bool(

@@ -70,10 +70,39 @@ jobs:
               d = dt.datetime.fromisoformat(iso.replace("Z", "+00:00"))
               return d >= since
 
+          # PRs por la API REST del repo (como digest-semanal): `gh pr list --json commits` devolvía vacío (#198)
+          todos_prs = jpages(f"repos/{REPO}/pulls?state=all&sort=updated&direction=desc&per_page=100")
+          NO_ALUMNO = {REPO.split("/")[0], "claude"}
+
+          def prs_de(login):
+              out = []
+              for p in todos_prs:
+                  if p["user"]["login"] != login or (p["state"] != "open" and not in_range(p["updated_at"], since)):
+                      continue
+                  merged_at = p.get("merged_at")
+                  detalle = jget(["api", f"repos/{REPO}/pulls/{p['number']}"]) if merged_at else {}
+                  detalle = detalle if isinstance(detalle, dict) else {}
+                  out.append({
+                      "number": p["number"],
+                      "title": p["title"],
+                      "state": "MERGED" if merged_at else p["state"].upper(),
+                      "mergedAt": merged_at,
+                      "additions": detalle.get("additions", 0),
+                      "deletions": detalle.get("deletions", 0),
+                      "commits": [
+                          {"authoredDate": c["commit"]["author"]["date"], "oid": c["sha"],
+                           "messageHeadline": c["commit"]["message"].split("\n")[0]}
+                          for c in jpages(f"repos/{REPO}/pulls/{p['number']}/commits?per_page=100")
+                          # fuera los ajustes del monitor y de Claude; no se exige login == alumno porque un
+                          # user.email mal escrito vincula sus commits a otra cuenta (le pasó a Allan en #126)
+                          if (c.get("author") or {}).get("login") not in NO_ALUMNO
+                      ],
+                  })
+              return out
+
           for name, login in STUDENTS.items():
               commits = jget(["api", f"repos/{REPO}/commits?author={login}&since={since.isoformat()}&per_page=100"])
-              prs = jget(["pr", "list", "-R", REPO, "--author", login, "--state", "all",
-                          "--json", "number,title,state,mergedAt,additions,deletions,commits", "--limit", "100"])
+              prs = prs_de(login)
               issues = jget(["issue", "list", "-R", REPO, "--assignee", login, "--state", "closed",
                              "--json", "number,title,closedAt", "--limit", "100"])
 

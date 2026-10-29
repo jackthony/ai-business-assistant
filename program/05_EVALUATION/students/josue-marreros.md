@@ -28,6 +28,7 @@ TODO: nivel inicial, diagnóstico de la primera semana.
 ## Feedback y compromisos quincenales
 
 - Q1: TODO
+- Q2 (S6–S7, borrador 2026-10-29; nota la decide el monitor) — **Evidencia:** 3 PRs abiertos con contrato S06: [#186](https://github.com/jackthony/ai-business-assistant/pull/186) (#156), [#192](https://github.com/jackthony/ai-business-assistant/pull/192) (#157), [#193](https://github.com/jackthony/ai-business-assistant/pull/193) (#158); revisión con rúbrica del PR de Allan ([#37](https://github.com/jackthony/ai-business-assistant/issues/37#issuecomment-6325244713)); auditoría de Dependabot ([#169](https://github.com/jackthony/ai-business-assistant/issues/169#issuecomment-6483712832)); reportó él mismo el fallo de `reglas-tbd` de #186 y preguntó antes de reescribir historia ([comentario](https://github.com/jackthony/ai-business-assistant/pull/186#issuecomment-6428913773)). **Logro:** entrega constante y pide permiso antes de una acción destructiva. **Mejora:** commits ≤72 caracteres y la sección «Preguntas de comprensión» en el PR desde el primer push. **Acción:** cerrar #186 vía rama nueva con commit corregido (sin force-push) y responder las preguntas de comprensión en #192 y #193.
 
 ## Evaluación final
 

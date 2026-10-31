@@ -96,7 +96,7 @@ def comment(num: str, body: str) -> None:
     if os.environ.get("DRY_RUN"):
         print(f"--- comentario en #{num}\n{body}\n")
         return
-    subprocess.run(
+    r = subprocess.run(
         [
             "gh",
             "api",
@@ -111,6 +111,10 @@ def comment(num: str, body: str) -> None:
         text=True,
         check=False,
     )
+    if r.returncode:
+        # The notification is secondary (the PR already exists): warn, never swallow.
+        detail = (r.stderr or r.stdout).strip().replace("\n", " | ")
+        print(f"::warning::No se pudo comentar en #{num}: {detail}")
 
 
 def unblock(readme: str, issue: str, pr: str, author: str) -> None:

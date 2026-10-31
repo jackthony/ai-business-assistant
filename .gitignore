@@ -21,3 +21,6 @@ data/**/crudo/
 
 # Índice local de ChromaDB (se reconstruye desde data/)
 .chroma/
+
+# Worktrees aislados de los subagentes del orquestador (Claude Code)
+.claude/worktrees/

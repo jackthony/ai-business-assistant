@@ -21,3 +21,4 @@ data/**/crudo/
 
 # Índice local de ChromaDB (se reconstruye desde data/)
 .chroma/
+*.db

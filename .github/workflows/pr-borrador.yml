@@ -42,8 +42,17 @@ jobs:
           def gh(*a):
               return subprocess.run(["gh", *a], capture_output=True, text=True)
 
-          abiertos = gh("pr", "list", "--head", branch, "--state", "open", "--json", "number").stdout
-          if json.loads(abiertos or "[]"):
+          def fail(reason, r):
+              # Red job with gh's own error in view: nothing is swallowed (#207).
+              error = (r.stderr or r.stdout).strip() or f"exit {r.returncode}"
+              print(error)
+              print(f"::error::{reason} gh dijo: " + error.replace("\n", " | "))
+              raise SystemExit(1)
+
+          lista = gh("pr", "list", "--head", branch, "--state", "open", "--json", "number")
+          if lista.returncode:
+              fail(f"No se pudo consultar los PRs de {branch}.", lista)
+          if json.loads(lista.stdout or "[]"):
               print("Ya hay un PR abierto para esta rama.")
               raise SystemExit(0)
           body = (
@@ -54,11 +63,17 @@ jobs:
           )
           r = gh("pr", "create", "--draft", "--base", "main", "--head", branch,
                  "--title", f"WIP: avance del Issue #{n}", "--body", body)
-          print(r.stdout or r.stderr)
-          if r.returncode == 0:
-              num = r.stdout.strip().rstrip("/").split("/")[-1]
-              subprocess.run(["python3", ".github/scripts/equipo_avisa.py", "borrador"],
-                             env={**os.environ, "PR_NUM": num, "PR_AUTHOR": actor, "ISSUE": n}, check=False)
+          if r.returncode and "No commits between" in (r.stderr or r.stdout):
+              # A freshly pushed branch with nothing new is not an error: the PR opens with the first commit.
+              print(f"::notice::{branch} todavía no tiene commits nuevos: el PR se abre con tu primer commit.")
+              raise SystemExit(0)
           if r.returncode:
-              print("::warning::No se pudo abrir el PR en borrador (¿permiso de Actions para crear PRs?). Ábrelo a mano en borrador.")
+              fail(f"No se pudo abrir el PR en borrador de {branch}: ábrelo a mano en borrador. "
+                   "Si gh dice 'not permitted to create or approve pull requests', el monitor debe "
+                   "activar Settings > Actions > General > Workflow permissions > "
+                   "'Allow GitHub Actions to create and approve pull requests'.", r)
+          print(r.stdout)
+          num = r.stdout.strip().rstrip("/").split("/")[-1]
+          subprocess.run(["python3", ".github/scripts/equipo_avisa.py", "borrador"],
+                         env={**os.environ, "PR_NUM": num, "PR_AUTHOR": actor, "ISSUE": n}, check=False)
           PY

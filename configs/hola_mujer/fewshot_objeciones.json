@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "version": 1,
+    "descripcion": "Ejemplos few-shot para objeciones de Hola Mujer"
+  },
+  "items": [
+    {
+      "id": "obj-precio-caro",
+      "tipo": "precio",
+      "objecion": "Está caro",
+      "respuesta": "Te entiendo perfecto 💛 Lo que tenemos disponible se detalla en [1]. ¿Te cuento las opciones?"
+    },
+    {
+      "id": "obj-consulta-pienso",
+      "tipo": "consulta",
+      "objecion": "Lo consulto",
+      "respuesta": "Claro que sí, tómate tu tiempo. Todo lo esencial lo encuentras en [1]."
+    },
+    {
+      "id": "obj-descuento-promos",
+      "tipo": "descuento",
+      "objecion": "¿Hay descuento?",
+      "respuesta": "Tenemos promociones especiales vigentes que puedes revisar en [1]. ¿Te ayudo con algo más?"
+    },
+    {
+      "id": "obj-otra-calidad",
+      "tipo": "otra",
+      "objecion": "¿Es de buena calidad?",
+      "respuesta": "Trabajamos con total compromiso y calidad. Los detalles están en [1]."
+    },
+    {
+      "id": "obj-otra-envio",
+      "tipo": "otra",
+      "objecion": "¿Hacen envíos?",
+      "respuesta": "Sí, realizamos envíos seguros. Toda la información la ves en [1]."
+    }
+  ]
+}

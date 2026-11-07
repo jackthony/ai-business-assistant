@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "question": "horario de atencion",
+      "expected_doc_id": "NEG-OPENING_HOURS"
+    },
+    {
+      "question": "direccion del local",
+      "expected_doc_id": "NEG-ADDRESS"
+    },
+    {
+      "question": "Taller PRP Facial + Capilar",
+      "expected_doc_id": "HM-ACA-001"
+    },
+    {
+      "question": "Talleres practicos Hola Mujer",
+      "expected_doc_id": "HM-ACA-002"
+    },
+    {
+      "question": "Masaje de drenaje",
+      "expected_doc_id": "HM-CORP-002"
+    },
+    {
+      "question": "Tratamiento reductor localizado",
+      "expected_doc_id": "HM-CORP-003"
+    },
+    {
+      "question": "Consulta obstetrica",
+      "expected_doc_id": "HM-OBS-001"
+    },
+    {
+      "question": "tratamiento capilar",
+      "expected_doc_id": "HM-CAP-001"
+    },
+    {
+      "question": "masaje capilar",
+      "expected_doc_id": "HM-CAP-002"
+    },
+    {
+      "question": "masaje corporal",
+      "expected_doc_id": "HM-CORP-001"
+    },
+    {
+      "question": "reparacion y mantenimiento de consolas de videojuegos",
+      "expected_doc_id": null
+    },
+    {
+      "question": "venta de repuestos para maquinaria pesada industrial",
+      "expected_doc_id": null
+    }
+  ]
+}

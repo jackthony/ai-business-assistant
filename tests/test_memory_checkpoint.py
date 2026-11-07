@@ -4,6 +4,7 @@ import pytest
 from conftest import ScriptedModel
 from langchain_core.messages import HumanMessage
 
+from agents import cli
 from agents.graph import build_graph
 from memory.sqlite_checkpointer import open_checkpointer
 from memory.thread_config import config_for_phone
@@ -147,3 +148,73 @@ def test_t7_caller_decides_the_db_path(tmp_path, store):
             config=config_for_phone("51900000000"),
         )
     assert db.exists()
+
+
+def test_t8_handoff_freeze_survives_a_restart(tmp_path, store):
+    db = tmp_path / "memoria.db"
+    config = config_for_phone("51900000000")
+
+    # Proceso 1: la clienta pide hablar con una persona
+    with open_checkpointer(str(db)) as saver:
+        model = ScriptedModel(PRICE_ANSWER)
+        graph = build_graph(store, model, "SISTEMA", InMemoryNotifier(), None, saver)
+        first = graph.invoke(
+            {
+                "messages": [HumanMessage(content="Quiero hablar con una persona")],
+                "phone": "51900000000",
+                "tenant": "hola_mujer",
+                "intent": None,
+                "status": "nuevo",
+            },
+            config=config,
+        )
+    assert first["status"] == "handoff_requested"
+
+    # Proceso 2: el servidor reinició; mismo archivo, grafo y modelo nuevos
+    with open_checkpointer(str(db)) as saver:
+        model_b = ScriptedModel(PRICE_ANSWER)
+        graph = build_graph(store, model_b, "SISTEMA", InMemoryNotifier(), None, saver)
+        second = graph.invoke(
+            {
+                "messages": [HumanMessage(content=PRICE_QUESTION)],
+                "phone": "51900000000",
+                "tenant": "hola_mujer",
+            },
+            config=config,
+        )
+
+    assert second["status"] == "handoff_requested"
+    assert len(second["messages"]) == len(first["messages"]) + 1
+    assert model_b.calls == []
+
+
+def test_t9_cli_db_remembers_between_runs(tmp_path, store, monkeypatch):
+    db = tmp_path / "memoria.db"
+    model = ScriptedModel(PRICE_ANSWER)
+
+    def fake_build(tenant, checkpointer=None):
+        return build_graph(
+            store, model, "SISTEMA", InMemoryNotifier(), None, checkpointer
+        )
+
+    monkeypatch.setattr(cli, "build_default_graph", fake_build)
+    base = ["--phone", "51900000000", "--db", str(db)]
+    codes = [
+        cli.main([*base, PRICE_QUESTION]),
+        cli.main([*base, "Quiero hablar con una persona"]),
+        cli.main([*base, PRICE_QUESTION]),
+    ]
+    assert codes == [0, 0, 0]
+
+    with open_checkpointer(str(db)) as saver:
+        graph = build_graph(
+            store,
+            ScriptedModel(PRICE_ANSWER),
+            "SISTEMA",
+            InMemoryNotifier(),
+            None,
+            saver,
+        )
+        state = graph.get_state(config_for_phone("51900000000")).values
+    assert state["status"] == "handoff_requested"
+    assert len(state["messages"]) == 5

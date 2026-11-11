@@ -2,7 +2,8 @@ import asyncio
 import hashlib
 import hmac
 import json
-from collections.abc import Callable
+import logging
+from collections.abc import Callable, Iterator
 from inspect import isawaitable
 from typing import Any, Literal
 
@@ -14,6 +15,7 @@ from channels.contract import InboundEvent
 from channels.dispatch import handle_inbound
 
 MEDIA_TYPES = {"image", "video", "document", "sticker"}
+logger = logging.getLogger(__name__)
 
 
 def verify_challenge(
@@ -38,6 +40,13 @@ def parse_payload(
 ) -> InboundEvent | None:
     try:
         message = payload["entry"][0]["changes"][0]["value"]["messages"][0]
+    except (KeyError, IndexError, TypeError):
+        return None
+    return _parse_message(message, tenant)
+
+
+def _parse_message(message: dict[str, Any], tenant: str) -> InboundEvent | None:
+    try:
         user_id = message["from"]
         kind = message["type"]
         if kind == "text":
@@ -69,6 +78,23 @@ def parse_payload(
         return None
 
 
+def _object_items(container: object, field: str) -> Iterator[dict[str, Any]]:
+    values = container.get(field) if isinstance(container, dict) else None
+    if isinstance(values, list):
+        yield from (value for value in values if isinstance(value, dict))
+
+
+def _parse_batch(payload: object, tenant: str) -> list[InboundEvent]:
+    events = []
+    for entry in _object_items(payload, "entry"):
+        for change in _object_items(entry, "changes"):
+            for message in _object_items(change.get("value"), "messages"):
+                event = _parse_message(message, tenant)
+                if event is not None:
+                    events.append(event)
+    return events
+
+
 async def process_whatsapp_event(
     event: InboundEvent, graph: CompiledStateGraph, send_func: Callable[[str, str], Any]
 ) -> None:
@@ -77,6 +103,19 @@ async def process_whatsapp_event(
         send_result = await asyncio.to_thread(send_func, event.user_id, reply.text)
         if isawaitable(send_result):
             await send_result
+
+
+async def _process_batch(
+    events: list[InboundEvent],
+    graph: CompiledStateGraph,
+    send_func: Callable[[str, str], Any],
+) -> None:
+    for event in events:
+        try:
+            await process_whatsapp_event(event, graph, send_func)
+        # A provider failure belongs to this message. Do not log its payload.
+        except Exception as exc:  # noqa: BLE001
+            logger.error("whatsapp_event_failed error_type=%s", type(exc).__name__)
 
 
 def build_whatsapp_router(
@@ -115,11 +154,9 @@ def build_whatsapp_router(
             payload = json.loads(body)
         except ValueError:
             return {"ok": True}
-        event = (
-            parse_payload(payload, tenant=tenant) if isinstance(payload, dict) else None
-        )
-        if event:
-            background_tasks.add_task(process_whatsapp_event, event, graph, send_func)
+        events = _parse_batch(payload, tenant)
+        if events:
+            background_tasks.add_task(_process_batch, events, graph, send_func)
         return {"ok": True}
 
     return router

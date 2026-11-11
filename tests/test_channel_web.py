@@ -1,6 +1,9 @@
+from unittest.mock import MagicMock
+
 import pytest
 from conftest import ScriptedModel
 from fastapi.testclient import TestClient
+from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import InMemorySaver
 
 from agents.graph import build_graph
@@ -65,3 +68,16 @@ def test_w3_web_handoff_and_silence(client):
     assert data2["reply"] is None
     assert data2["silent"] is True
     assert data2["first_response_ms"] == 0.0
+
+
+def test_create_chat_app_preserves_positional_tenant():
+    graph = MagicMock()
+    graph.get_state.return_value = None
+    graph.invoke.return_value = {"messages": [AIMessage(content="Respuesta ficticia")]}
+    app = create_chat_app(graph, None, None, "tenant_ficticio")
+
+    with TestClient(app) as client:
+        response = client.post("/chat", json={"user_id": "u123", "text": "Hola"})
+
+    assert response.status_code == 200
+    assert graph.invoke.call_args.args[0]["tenant"] == "tenant_ficticio"

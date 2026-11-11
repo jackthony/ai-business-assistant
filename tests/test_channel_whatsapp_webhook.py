@@ -3,6 +3,7 @@ import hmac
 import json
 from unittest.mock import MagicMock
 
+import httpx
 import pytest
 from conftest import ScriptedModel
 from fastapi.testclient import TestClient
@@ -13,6 +14,7 @@ from agents.graph import build_graph
 from api.chat_app import create_chat_app
 from channels.dispatch import thread_id_for
 from channels.telegram import parse_update
+from channels.whatsapp.sender import WhatsAppSender
 from rag.documents import Document
 from rag.embedding import LexicalEmbedder
 from rag.store import ChromaStore
@@ -186,3 +188,27 @@ def test_w10_same_phone_two_channels_two_threads():
     assert thread_id_for(wa) == f"whatsapp:{PHONE}"
     assert thread_id_for(tg) == f"telegram:{PHONE}"
     assert thread_id_for(wa) != thread_id_for(tg)
+
+
+def test_signed_webhook_sends_reply_through_async_sender():
+    requests: list[httpx.Request] = []
+
+    def fake_meta(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"messages": [{"id": "wamid.ficticio"}]})
+
+    sender = WhatsAppSender(
+        "id-ficticio", "token-ficticio", transport=httpx.MockTransport(fake_meta)
+    )
+    payload = _payload({"from": PHONE, "type": "audio"})
+    with TestClient(_app(MagicMock(), sender.send_text)) as client:
+        response = _post(client, payload)
+
+    assert (response.status_code, response.json()) == (200, {"ok": True})
+    assert len(requests) == 1
+    assert requests[0].url.path.endswith("/id-ficticio/messages")
+    assert requests[0].headers["Authorization"] == "Bearer token-ficticio"
+    body = json.loads(requests[0].content)
+    assert body["to"] == PHONE
+    assert body["type"] == "text"
+    assert "solo puedo leer mensajes de texto" in body["text"]["body"]

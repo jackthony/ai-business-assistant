@@ -100,6 +100,16 @@ def test_documentation_only_does_not_need_product_tests(repo):
             [{CONTRACT: CONTRACT_TEXT, TEST: "# marcador\n"}, {SOURCE: SOURCE_BODY}],
             "prueba",
         ),
+        (
+            [
+                {
+                    CONTRACT: CONTRACT_TEXT,
+                    TEST: "def helper():\n    def test_answer():\n        assert False\n",
+                },
+                {SOURCE: SOURCE_BODY},
+            ],
+            "prueba",
+        ),
         ([{TEST: TEST_BODY}, {CONTRACT: CONTRACT_TEXT, SOURCE: SOURCE_BODY}], "antes"),
         (
             [{CONTRACT: CONTRACT_TEXT, TEST: TEST_BODY}, {"src/otro.py": "x = 1\n"}],

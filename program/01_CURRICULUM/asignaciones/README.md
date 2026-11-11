@@ -28,7 +28,27 @@ Cada Issue de producción tiene aquí su **contrato de asignación** (`S05_D1.md
 | #185 | [`S07_D3.md`](S07_D3.md) | [`S07_D3_paso_a_paso.md`](S07_D3_paso_a_paso.md) | Oferta proactiva de 2–3 horarios libres cuando falta fecha u hora y pruebas de colisión | Josue (`adbon-dm1`) | — |
 | #3 | [`S04_D2.md`](S04_D2.md) | [`S04_D2_paso_a_paso.md`](S04_D2_paso_a_paso.md) | Webhook de WhatsApp con fixtures: verificación GET, firma HMAC del cuerpo crudo, conversión a `InboundEvent` y respuesta en segundo plano | Pilar (`estefanyP-hub`) | — |
 
-> **Contratos S06 (2026-10-22).** Se validaron ejecutando una solución de referencia y el revisor `contrato_check`; D1 depende de #177, la base (`prompt_v1.md`, `prompt.py`, `style.py`) que el monitor entregó para no frenar a Josue; #53 sigue siendo de Pilar y no se le acredita ese trabajo. Estos contratos reescriben el texto original de los Issues #156–#158: el ETL de #157 ya existe en `src/rag/`, y #158 cubre la parte de código del HITO 1 (la demo en vivo, el video, el informe Q3 y el release `hito-1` los coordina el monitor).
+Los contratos S06 (#156–#158) se verificaron con pruebas y una solución de referencia. El #53 se cerró cuando la base del prompt entró por #178. La práctica vigente de Pilar es #3 y parte de la etiqueta `tdd-issue-3`.
+
+## Issues pendientes de contrato
+
+Antes de iniciar un cambio de producto, el Issue debe enlazar un contrato con comportamiento observable, archivos previstos y comandos que ejecuten sus pruebas. Para entregar, conserva el commit de pruebas previo al código, la salida en rojo y las mismas pruebas en verde. Usa datos sintéticos.
+
+Si el Issue ya está en la tabla, usa el contrato allí enlazado. Para un Issue nuevo, guarda `issue-N.md` en esta carpeta con tres secciones:
+
+- **Comportamiento** describe qué resultado se debe observar.
+- **Archivos** enumera entre acentos graves las rutas de producto que se pueden cambiar.
+- **Pruebas** incluye las rutas de pruebas entre acentos graves y el comando para ejecutarlas, por ejemplo `pytest tests/test_ejemplo.py -q`.
+
+El primer commit puede incluir el contrato nuevo y la prueba. La puerta `calidad` comprueba el Issue vinculado, el alcance y que una prueba indicada en el contrato cambie en un commit separado, anterior al código. Después corre la suite sobre el resultado final. Pega en el PR el fallo inicial y la salida final para que el revisor pueda comprobar el ciclo completo.
+
+| Issues abiertos | Qué falta concretar para escribir sus pruebas |
+|---|---|
+| #183 | Separar ubicación y CTA de la respuesta comercial que depende de Jioysi. |
+| #210, #211 | Acordar datos mínimos y estado del lead ficticio. Definir qué se verifica en una escritura simulada y en su reintento. |
+| #212 | Definir el flujo sintético y las métricas locales antes de instrumentar en la M5. |
+| #224 | Acordar el resultado esperado para consultas ambiguas y fijar la matriz de casos. |
+| #225, #226 | Definir la reanudación con avisos simulados y los escenarios de cierre del HITO 2 que pueden ejecutarse localmente. |
 
 **La asignación ya está hecha:** la columna *Alumno* es la fuente. Tu asistente no puede ver GitHub, así que no te pide «demostrarla»: si dices tu nombre o tu Issue, confía en ti y sigue con tu contrato. Nunca debe mandarte a pedir al monitor que te asigne el Issue; si de verdad no encuentras tu Issue en la tabla, repórtalo en el Issue o en el grupo.
 

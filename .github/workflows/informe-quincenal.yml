@@ -10,6 +10,10 @@ permissions:
   pull-requests: read
   contents: read
 
+concurrency:
+  group: informe-quincenal
+  cancel-in-progress: false
+
 jobs:
   generar:
     runs-on: ubuntu-24.04
@@ -24,16 +28,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
-          import json, subprocess, datetime as dt, collections, sys
+          import json, subprocess, datetime as dt, collections, re, sys
 
           sys.path.insert(0, ".github/scripts")
           from pr_student import pr_student
 
           REPO = "jackthony/ai-business-assistant"
+          # Un Issue canónico por alumno. No usar búsqueda ni crear reemplazos
+          # automáticos: una coincidencia en el cuerpo puede ser el digest (#221).
           STUDENTS = {
-              "Allan Zerpa": "WhoAllan",
-              "Pilar Aguilar": "estefanyP-hub",
-              "Josue Marreros": "adbon-dm1",
+              "Allan Zerpa": ("WhoAllan", 221),
+              "Pilar Aguilar": ("estefanyP-hub", 12),
+              "Josue Marreros": ("adbon-dm1", 13),
           }
 
           now = dt.datetime.now(dt.timezone.utc).astimezone(dt.timezone(dt.timedelta(hours=-5), "America/Lima"))
@@ -47,6 +53,28 @@ jobs:
 
           def gh(args):
               return subprocess.run(["gh"] + args, capture_output=True, text=True)
+
+          def report_api(number, *args):
+              result = gh(["api", f"repos/{REPO}/issues/{number}", *args])
+              if result.returncode:
+                  raise SystemExit(f"Informe #{number}: {result.stderr.strip() or 'falló la API'}")
+              return json.loads(result.stdout)
+
+          def report_prefix(name):
+              return f"📄 Borrador de informe quincenal — {name} (presentación "
+
+          # Validar todos antes de escribir cualquiera. Si se cierra o reemplaza
+          # un borrador, el monitor corrige el destino explícitamente.
+          if len({number for _, number in STUDENTS.values()}) != len(STUDENTS):
+              raise SystemExit("Dos alumnos tienen el mismo Issue de informe.")
+          for name, (_, number) in STUDENTS.items():
+              issue = report_api(number)
+              expected = re.escape(report_prefix(name)) + r"\d{4}-\d{2}-\d{2}\)"
+              if (issue.get("number") != number or issue.get("state") != "open"
+                      or issue.get("pull_request")
+                      or (issue.get("user") or {}).get("login") != "github-actions[bot]"
+                      or not re.fullmatch(expected, issue.get("title") or "")):
+                  raise SystemExit(f"Informe #{number}: no es el borrador abierto de {name}.")
 
           def jget(args):
               r = gh(args)
@@ -109,7 +137,8 @@ jobs:
                   })
               return out
 
-          for name, login in STUDENTS.items():
+          updates = []
+          for name, (login, number) in STUDENTS.items():
               commits = jget(["api", f"repos/{REPO}/commits?author={login}&since={since.isoformat()}&per_page=100"])
               prs = prs_de(login)
               issues = jget(["issue", "list", "-R", REPO, "--assignee", login, "--state", "closed",
@@ -204,16 +233,12 @@ jobs:
               lines.append("- [ ] Copiado al Word FPE y subido a Drive para entregar en SENATI")
 
               body = "\n".join(lines)
-              title = f"📄 Borrador de informe quincenal — {name} (presentación {presentacion})"
-              existing = jget(["issue", "list", "-R", REPO, "--state", "open",
-                               "--search", f"Borrador de informe quincenal {name}", "--json", "number"])
-              if existing:
-                  num = existing[0]["number"]
-                  subprocess.run(["gh", "api", "-X", "PATCH", f"repos/{REPO}/issues/{num}",
-                                  "-f", f"title={title}", "-f", f"body={body}"],
-                                 capture_output=True, text=True)
-                  print(f"{name}: refrescado (#{num})")
-                  continue
-              r = gh(["issue", "create", "-R", REPO, "-t", title, "-b", body, "-l", "senati"])
-              print(f"{name}: creado {r.stdout.strip()}")
+              title = f"{report_prefix(name)}{presentacion})"
+              updates.append((name, number, title, body))
+
+          for name, number, title, body in updates:
+              saved = report_api(number, "-X", "PATCH", "-f", f"title={title}", "-f", f"body={body}")
+              if saved.get("number") != number or saved.get("title") != title or saved.get("body") != body:
+                  raise SystemExit(f"Informe #{number}: GitHub no confirmó el contenido actualizado.")
+              print(f"{name}: refrescado (#{number})")
           PY

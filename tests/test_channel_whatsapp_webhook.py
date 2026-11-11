@@ -3,12 +3,12 @@ import hmac
 import json
 from unittest.mock import MagicMock
 
-import channels.whatsapp.webhook
 import pytest
 from conftest import ScriptedModel
 from fastapi.testclient import TestClient
 from langgraph.checkpoint.memory import InMemorySaver
 
+import channels.whatsapp.webhook
 from agents.graph import build_graph
 from api.chat_app import create_chat_app
 from channels.dispatch import thread_id_for

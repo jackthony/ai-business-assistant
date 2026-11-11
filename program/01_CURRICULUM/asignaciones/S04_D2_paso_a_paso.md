@@ -49,6 +49,20 @@ En un archivo suelto (`calentamiento.py`), con `hmac` y `hashlib`, firma dos vec
 
 ## Paso a paso
 
+### Práctica desde el commit de TDD
+
+Si el webhook ya está integrado en `main`, parte de la etiqueta `tdd-issue-3`. Contiene las pruebas W1–W10 y la base anterior al webhook. Desde PowerShell, con el entorno de Python 3.11 activado:
+
+```powershell
+git fetch origin tag tdd-issue-3
+git switch -c practica/webhook-whatsapp tdd-issue-3
+pytest tests/test_channel_whatsapp_webhook.py -q
+```
+
+El primer resultado esperado es `ModuleNotFoundError: No module named 'channels.whatsapp.webhook'`. Con las pruebas ya presentes, implementa una pieza a la vez según el orden de los pasos 1 a 10. Ejecuta la prueba de cada paso con `-k` y termina con las diez en verde. Conserva el resultado en rojo, el resultado final y tus respuestas de comprensión para la revisión del [Issue #3](https://github.com/jackthony/ai-business-assistant/issues/3).
+
+En esta modalidad el entregable es la evidencia de tu práctica. La rama de ejercicio se compara contra `tdd-issue-3` y la integración de producto ya está en `main`.
+
 ### Paso 0 — Prepara tu terreno
 **Haz esto:** sigue los pasos 1 a 4 de la sección 7 del contrato: `git checkout main`, `git pull`, `git checkout -b issue-3-webhook-whatsapp`, activa el entorno (`.venv\Scripts\activate`), corre `pytest tests -q` y **anota N**. Corre también `pytest program/02_REFERENCE/ejemplos/webhook-meta -q`.
 **Por qué:** necesitas saber cuántas pruebas había antes para comprobar al final que subió exactamente en 10.

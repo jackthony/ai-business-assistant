@@ -15,12 +15,19 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
       - name: Generar borradores de informe FPE por alumno
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
-          import json, subprocess, datetime as dt, collections
+          import json, subprocess, datetime as dt, collections, sys
+
+          sys.path.insert(0, ".github/scripts")
+          from pr_student import pr_student
 
           REPO = "jackthony/ai-business-assistant"
           STUDENTS = {
@@ -72,12 +79,14 @@ jobs:
 
           # PRs por la API REST del repo (como digest-semanal): `gh pr list --json commits` devolvía vacío (#198)
           todos_prs = jpages(f"repos/{REPO}/pulls?state=all&sort=updated&direction=desc&per_page=100")
+          autores_pr = {p["number"]: pr_student(p, REPO) for p in todos_prs
+                        if p["state"] == "open" or in_range(p["updated_at"], since)}
           NO_ALUMNO = {REPO.split("/")[0], "claude"}
 
           def prs_de(login):
               out = []
               for p in todos_prs:
-                  if p["user"]["login"] != login or (p["state"] != "open" and not in_range(p["updated_at"], since)):
+                  if autores_pr.get(p["number"]) != login:
                       continue
                   merged_at = p.get("merged_at")
                   detalle = jget(["api", f"repos/{REPO}/pulls/{p['number']}"]) if merged_at else {}

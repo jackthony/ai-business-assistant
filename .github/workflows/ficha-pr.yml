@@ -33,9 +33,14 @@ jobs:
           PR_BODY: ${{ github.event.pull_request.body }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
+          export STUDENT_AUTHOR=""
+          if [ "$PR_AUTHOR" = 'github-actions[bot]' ]; then
+            STUDENT_AUTHOR=$(python3 .github/scripts/pr_student.py --event)
+          fi
           python3 - <<'PY'
           import os, re, subprocess, json
 
+          author = os.environ["STUDENT_AUTHOR"] or os.environ["PR_AUTHOR"]
           pr_num = os.environ["PR_NUM"]
           base, head = os.environ["BASE_SHA"], os.environ["HEAD_SHA"]
           body = os.environ.get("PR_BODY") or ""
@@ -56,7 +61,7 @@ jobs:
                   ttl, idd = meta["t"], meta["b"]
                   issue_ref = f"#{num} {ttl}"
                   owners = meta.get("a", [])
-                  if owners and os.environ["PR_AUTHOR"] not in owners and "disponible" not in meta.get("l", []):
+                  if owners and author != "github-actions[bot]" and author not in owners and "disponible" not in meta.get("l", []):
                       issue_ref += f" ⚠️ asignado a @{' @'.join(owners)} — política de equipo: verificar permiso/justificación"
                   for sec in ("criterios", "definición de hecho", "criterios de aceptación"):
                       mm = re.search(rf"(?is)##?\s*{re.escape(sec)}[^\n]*\n(.*?)(?=\n##?\s|\Z)", idd)
@@ -91,7 +96,7 @@ jobs:
           lines = []
           lines.append("## 📋 Ficha de revisión (automática — para el monitor)")
           lines.append("")
-          lines.append(f"- **Autor:** {os.environ['PR_AUTHOR']} · **PR:** {os.environ['PR_TITLE']}")
+          lines.append(f"- **Autor:** {author} · **PR:** {os.environ['PR_TITLE']}")
           lines.append(f"- **Cierra:** {issue_ref}")
           lines.append("")
           lines.append("### Qué toca")

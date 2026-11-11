@@ -1,7 +1,9 @@
+import asyncio
 import hashlib
 import hmac
 import json
 from collections.abc import Callable
+from inspect import isawaitable
 from typing import Any, Literal
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Query, Request
@@ -67,12 +69,14 @@ def parse_payload(
         return None
 
 
-def process_whatsapp_event(
+async def process_whatsapp_event(
     event: InboundEvent, graph: CompiledStateGraph, send_func: Callable[[str, str], Any]
 ) -> None:
-    reply = handle_inbound(event, graph=graph)
+    reply = await asyncio.to_thread(handle_inbound, event, graph=graph)
     if reply and reply.text:
-        send_func(event.user_id, reply.text)
+        send_result = await asyncio.to_thread(send_func, event.user_id, reply.text)
+        if isawaitable(send_result):
+            await send_result
 
 
 def build_whatsapp_router(

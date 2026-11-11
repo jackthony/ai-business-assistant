@@ -212,3 +212,58 @@ def test_signed_webhook_sends_reply_through_async_sender():
     assert body["to"] == PHONE
     assert body["type"] == "text"
     assert "solo puedo leer mensajes de texto" in body["text"]["body"]
+
+
+def test_signed_batch_sends_every_valid_message_in_order():
+    sent = []
+    payload = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {"from": "51900000000", "type": "audio"},
+                                {"type": "text", "text": {"body": "Sin remitente"}},
+                                {"from": "51900000001", "type": "image"},
+                            ]
+                        }
+                    },
+                    {"value": {"statuses": [{"id": "estado-ficticio"}]}},
+                ]
+            },
+            {
+                "changes": [
+                    {"value": {"messages": None}},
+                    {"value": {"messages": [{"from": "51900000002", "type": "audio"}]}},
+                ]
+            },
+        ]
+    }
+    with TestClient(_app(MagicMock(), lambda user, text: sent.append(user))) as client:
+        response = _post(client, payload)
+
+    assert (response.status_code, response.json()) == (200, {"ok": True})
+    assert sent == ["51900000000", "51900000001", "51900000002"]
+
+
+def test_batch_continues_after_a_message_fails(caplog):
+    attempted = []
+
+    def sender(user, text):
+        attempted.append(user)
+        if user == "51900000000":
+            raise RuntimeError("detalle sensible de prueba")
+
+    payload = _payload({"from": "51900000000", "type": "audio"})
+    payload["entry"][0]["changes"][0]["value"]["messages"].append(
+        {"from": "51900000001", "type": "audio"}
+    )
+    with TestClient(_app(MagicMock(), sender), raise_server_exceptions=False) as client:
+        response = _post(client, payload)
+
+    assert (response.status_code, response.json()) == (200, {"ok": True})
+    assert attempted == ["51900000000", "51900000001"]
+    assert "RuntimeError" in caplog.text
+    assert "detalle sensible de prueba" not in caplog.text
+    assert "51900000000" not in caplog.text

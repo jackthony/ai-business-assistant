@@ -63,7 +63,7 @@ jobs:
           IN_SOLO: ${{ inputs.solo }}
           IN_DRY: ${{ inputs.dry_run }}
           PR_NUM: ${{ github.event.pull_request.number }}
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          GH_REPO: ${{ github.repository }}
           REVIEWER: ${{ github.event.review.user.login }}
           REVIEW_STATE: ${{ github.event.review.state }}
           ISSUE_NUM: ${{ github.event.issue.number }}
@@ -85,9 +85,13 @@ jobs:
               [ "$IN_DRY" = "true" ] && args+=(--dry-run)
               coach "$IN_MODO" "${args[@]}" ;;
             pull_request_review)
-              coach revision --pr "$PR_NUM" --autor "$PR_AUTHOR" --reviewer "$REVIEWER" --estado "$REVIEW_STATE" ;;
+              autor=$(python3 .github/scripts/pr_student.py --event)
+              [ -n "$autor" ] || exit 0
+              coach revision --pr "$PR_NUM" --autor "$autor" --reviewer "$REVIEWER" --estado "$REVIEW_STATE" ;;
             issues)
               coach asignado --issue "$ISSUE_NUM" --asignado "$ASSIGNEE" --titulo "$ISSUE_TITLE" ;;
             pull_request_target)
-              coach merge --pr "$PR_NUM" --autor "$PR_AUTHOR" ;;
+              autor=$(python3 .github/scripts/pr_student.py --event)
+              [ -n "$autor" ] || exit 0
+              coach merge --pr "$PR_NUM" --autor "$autor" ;;
           esac

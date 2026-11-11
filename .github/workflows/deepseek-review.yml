@@ -23,13 +23,13 @@ jobs:
   # Sin secretos ni aprobación: decide si el PR necesita este pase, para no pedir una aprobación
   # que no sirve (bots, forks y PRs con contrato, que ya revisa revision-guiada).
   elegir:
-    if: >-
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.type != 'Bot'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: read
+      issues: read
+      pull-requests: read
     outputs:
       revisar: ${{ steps.contrato.outputs.revisar }}
     steps:
@@ -37,8 +37,17 @@ jobs:
         with:
           ref: main
           persist-credentials: false
+      - name: Identificar al practicante
+        id: alumno
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          alumno=$(python3 .github/scripts/pr_student.py --event)
+          echo "login=$alumno" >> "$GITHUB_OUTPUT"
       - name: PR con contrato lo revisa revision-guiada (evita doble comentario)
         id: contrato
+        if: steps.alumno.outputs.login != ''
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |

@@ -16,6 +16,27 @@
 pytest program/02_REFERENCE/ejemplos/webhook-meta -q     # debe dar 10 passed
 ```
 
+## Laboratorio local en Docker
+
+Desde la raíz del repo, con Docker en modo de contenedores Linux, ejecuta en PowerShell:
+
+```powershell
+docker build -f Dockerfile.whatsapp-test -t senati-whatsapp-test .
+docker run --rm --network none senati-whatsapp-test
+```
+
+La primera orden descarga la imagen base y las dependencias. La segunda ejecuta las pruebas de firma, lectura de payloads y envío saliente con respuestas simuladas. Usa teléfonos y tokens inventados. No monta el directorio de datos, no necesita `.env` y no publica puertos.
+
+Cuando tu rama ya implemente el webhook del [Issue #3](https://github.com/jackthony/ai-business-assistant/issues/3), reconstruye la imagen en esa rama y ejecuta también:
+
+```powershell
+docker run --rm --network none senati-whatsapp-test python program/02_REFERENCE/ejemplos/webhook-meta/prueba_loopback.py
+```
+
+La prueba HTTP inicia FastAPI en `127.0.0.1` dentro del contenedor. Comprueba el challenge, rechaza firmas ausentes o alteradas, ignora un estado y un JSON inválido, y recibe un único envío simulado para un texto válido. El modelo, el catálogo y el envío son ficticios. En una rama sin el webhook, la prueba explica que #3 aún falta y sale con error. Esto complementa las diez pruebas W1–W10 del [contrato](../../../01_CURRICULUM/asignaciones/S04_D2.md).
+
+Si Docker no está disponible en tu PC, puedes correr las pruebas del ejemplo con tu entorno de Python 3.11, usando el primer comando de esta página.
+
 ## Los dos GET/POST que Meta te manda
 
 | Método | Para qué | Qué debes hacer |
@@ -28,7 +49,7 @@ pytest program/02_REFERENCE/ejemplos/webhook-meta -q     # debe dar 10 passed
 ## Paso a paso sugerido para tu Issue (usa estos bloques como referencia)
 
 1. Corre los tests del ejemplo y léelos: son la especificación de cada bloque.
-2. En tu `src/channels/whatsapp/`, escribe **primero** tus tests (con tus fixtures en `tests/fixtures/`) y luego tu código; adapta los bloques a tus nombres y al contrato `InboundEvent`.
+2. Escribe **primero** las pruebas con los datos sintéticos que fija el contrato y después implementa el webhook en las rutas de su sección 4. Adapta los bloques a `InboundEvent`.
 3. En tu ruta `POST`: `cuerpo = await request.body()` **antes** de parsear JSON (la firma es sobre los bytes originales; si re-serializas el JSON, la firma ya no coincide).
 4. Registra en logs solo `wa_id` enmascarado (`51900***000`), nunca el texto ni el teléfono completo.
 5. Prueba a mano con `curl` y con el `/docs` de FastAPI; para firmar un POST de prueba usa `firmar()` de este ejemplo en un `python -c`.

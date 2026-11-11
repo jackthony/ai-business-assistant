@@ -1,0 +1,10 @@
+**
+!pyproject.toml
+!src/
+!src/**/*.py
+!tests/
+!tests/test_whatsapp_sender.py
+!program/02_REFERENCE/ejemplos/webhook-meta/
+!program/02_REFERENCE/ejemplos/webhook-meta/*.py
+!program/02_REFERENCE/ejemplos/webhook-meta/fixtures/
+!program/02_REFERENCE/ejemplos/webhook-meta/fixtures/*.json

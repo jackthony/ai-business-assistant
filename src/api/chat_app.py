@@ -12,10 +12,11 @@ def create_chat_app(
     graph,
     telegram_secret: str | None = None,
     telegram_send: Callable[[str, str], Any] | None = None,
+    tenant: str = "hola_mujer",
+    *,
     whatsapp_verify_token: str | None = None,
     whatsapp_app_secret: str | None = None,
     whatsapp_send: Callable[[str, str], Any] | None = None,
-    tenant: str = "hola_mujer",
 ) -> FastAPI:
     app = FastAPI(title="AI Business Assistant - API")
 

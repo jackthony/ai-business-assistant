@@ -1,9 +1,9 @@
-# Estatus del proyecto — 2026-11-10
+# Estatus del proyecto — 2026-11-11
 
 - **Programa:** HealthTech Software & AI — SENATI 2026 (ciclo 3)
 - **Fase:** semana 9 según el calendario. S06 está en `main` (#192, #193, #197). S07–S09 se reorientó a extender y endurecer el agente existente (#234). El foco de integración es **WhatsApp local con datos ficticios**: #3 (Pilar), #184 (Allan) y #185 (Josue) tienen contrato y guía en `main` (#228). #183, #210–#212 y #224–#226 siguen abiertos sin asignar.
 - **Alcance (decisión del monitor, 2026-10-14):** solo **Hola Mujer**. NeuraCode es otro proyecto: se adapta recién cuando Hola Mujer esté terminado, validado y evaluado con su ciclo completo de evals. Multitenant y NeuraCode salieron del plan (S10 D3, S11 D1 y S12 D1 ahora son evals y el hito multimodal de Hola Mujer).
-- **Código del producto (`src/`):** `/health` (#2), el grafo base de S5 D1 (#52, Josue) y el **agente único del HITO 2** (serie #140–#143, la hace el monitor con Claude), ya en `main`: **#140** RAG con citas, **#141** agendar idempotente con aprobación humana, **#142** derivación a una persona, y el código de **#143** (evals de los 12 escenarios: `python -m evals.run`, guía en `program/05_EVALUATION/hito2_evals.md`). Además, ya en `main`: **#192** (ingesta reproducible con huella SHA-256 y evaluación/calibración de la recuperación), **#193** (contrato de canal `InboundEvent`/`OutboundReply`, despachador y canales web y Telegram sobre el mismo agente: el código del HITO 1) y **#197** (few-shot de objeciones, `prompt_v2` sin activar y comparador v1/v2). 339 pruebas de repo en verde tras incorporar las de atribución de PRs (#230). **#143 sigue abierto:** falta la corrida real `--live` en la M5 con DeepSeek y calibrar `RAG_MAX_DISTANCE`. El calendario y los avisos son **simulados** (en memoria) por decisión del monitor; `CALENDAR_ID`, la duración por servicio (la rejilla de 60 min es provisional), `JIOYSI_ALERT_CHANNEL` y `EMERGENCY_PROTOCOL` se resuelven con Jioysi al final, y hasta entonces el bot no debe usarse con clientas reales. Siguen pendientes: el webhook de WhatsApp (#3, Pilar) y la memoria persistente (#54, Allan). La memoria sigue siendo `InMemorySaver` (el PR #222 aún no se fusiona).
+- **Código del producto (`src/`):** `/health` (#2), el grafo base de S5 D1 (#52, Josue) y el **agente único del HITO 2** (serie #140–#143, la hace el monitor con Claude), ya en `main`: **#140** RAG con citas, **#141** agendar idempotente con aprobación humana, **#142** derivación a una persona, y el código de **#143** (evals de los 12 escenarios: `python -m evals.run`, guía en `program/05_EVALUATION/hito2_evals.md`). Además, ya en `main`: **#192** (ingesta reproducible con huella SHA-256 y evaluación/calibración de la recuperación), **#193** (contrato de canal `InboundEvent`/`OutboundReply`, despachador y canales web y Telegram sobre el mismo agente: el código del HITO 1) y **#197** (few-shot de objeciones, `prompt_v2` sin activar y comparador v1/v2). 349 pruebas de repo en verde tras incorporar las diez del webhook local (#240). **#143 sigue abierto:** falta la corrida real `--live` en la M5 con DeepSeek y calibrar `RAG_MAX_DISTANCE`. El calendario y los avisos son **simulados** (en memoria) por decisión del monitor; `CALENDAR_ID`, la duración por servicio (la rejilla de 60 min es provisional), `JIOYSI_ALERT_CHANNEL` y `EMERGENCY_PROTOCOL` se resuelven con Jioysi al final, y hasta entonces el bot no debe usarse con clientas reales. El webhook local de WhatsApp se integró en #240; el #3 sigue abierto para la práctica TDD de Pilar. Sigue pendiente la memoria persistente (#54, Allan). La memoria sigue siendo `InMemorySaver` (el PR #222 aún no se fusiona).
 - **Informe quincenal: presentación sábado 2026-11-14.** Borradores #12 (Pilar), #13 (Josue) y #221 (Allan), regenerados y verificados en la [corrida 42938135326](https://github.com/jackthony/ai-business-assistant/actions/runs/42938135326). El informe de Allan incluye #222. #50 quedó como histórico. El generador valida los tres Issues por número antes de escribir (#232) y los expedientes tienen seguimiento con evidencia, sin nota.
 - **Pendiente del HITO 1** (lo coordina el monitor): la demo en vivo en la M5, el video, la medición de respuestas correctas, el informe Q3, el release `hito-1` y la corrida `--live` de #156 (tabla v1/v2).
 
@@ -49,7 +49,7 @@
 **Estado al 2026-11-10:**
 
 - **Josue:** S06 en `main` (#192, #193, #197). Tiene asignado #185, contrato S07 D3: oferta de horarios sin reservar. Le falta responder las preguntas de comprensión de #192 y #193.
-- **Pilar:** #201 cerró sin fusionarse porque la base quedó en `main` con #178; sus ocho commits de octubre constan como evidencia. #53 cerró con explicación. Tiene asignado #3, contrato S04 D2: empieza por el challenge GET con datos ficticios.
+- **Pilar:** #201 cerró sin fusionarse porque la base quedó en `main` con #178; sus ocho commits de octubre constan como evidencia. #53 cerró con explicación. Tiene asignado #3, contrato S04 D2: reproduce el rojo desde la etiqueta `tdd-issue-3` y empieza por el challenge GET con datos ficticios.
 - **Allan:** #126 (Issue #4) está en `main`. En el PR #222 de memoria persistente (#54) pasan las nueve pruebas; la [revisión](https://github.com/jackthony/ai-business-assistant/pull/222#issuecomment-6783915941) pide ajustar la firma de `checkpointer` y completar la comprensión. Tiene #184 (S07 D2) como siguiente asignación tras #54.
 
 El estado de las invitaciones como colaboradores está en el Issue #5 (sigue abierto). Los días de práctica y el roster viven en `.github/coach.json`.
@@ -77,7 +77,7 @@ El estado de las invitaciones como colaboradores está en el Issue #5 (sigue abi
 | DevSecOps (todo en GitHub) | ✅ CodeQL · secret scanning + push protection · Dependabot · dependency-review · acciones pineadas por SHA · `GITHUB_TOKEN` con permisos mínimos · Environments `staging`/`produccion` (producción exige al monitor) · Codespaces (`.devcontainer`) · Releases por tag |
 | Evaluación | ✅ Excel EVALUABLE; rúbrica y expedientes en `program/05_EVALUATION/` |
 | Decisiones | ✅ 11 ADRs (`program/03_ARCHITECTURE/decisions/`) + `program/02_REFERENCE/source_map.md` |
-| Código producto (`src/`) | ✅ agente del HITO 2, RAG con ingesta/evaluación (#192), canales web y Telegram (#193), few-shot v2 sin activar (#197). ⏳ webhook de WhatsApp (#3) y memoria persistente (#54) |
+| Código producto (`src/`) | ✅ agente del HITO 2, RAG con ingesta/evaluación (#192), canales web y Telegram (#193), few-shot v2 sin activar (#197). ✅ webhook local de WhatsApp (#240). ⏳ memoria persistente (#54) |
 
 ## Gestión abierta (sin novedad registrada en este archivo desde 2026-10-06)
 
@@ -94,7 +94,7 @@ Issues del monitor: **#5** colaboradores · **#6** mapear códigos PEA (SINFO) �
 ## Riesgos abiertos
 
 - **Informe quincenal del 14-nov:** cada alumno completa horas, ATS y sustentación sobre los borradores #12, #13 y #221. El monitor evalúa.
-- **WhatsApp:** el sender ya está en `main` (#126); el webhook #3 sigue siendo la entrega de Pilar. El [laboratorio Docker](../02_REFERENCE/ejemplos/webhook-meta/README.md) (#237) permite probar el sender y el ejemplo. La solución de referencia se comprobó con W1–W10 y HTTP por loopback, catálogo ficticio y envío simulado. La prueba no valida reintentos de Meta ni entrega real.
+- **WhatsApp:** el sender ya está en `main` (#126); el webhook local se integró en #240 y #3 conserva la práctica TDD de Pilar. El [laboratorio Docker](../02_REFERENCE/ejemplos/webhook-meta/README.md) (#237) permite probar el sender y el ejemplo. La implementación pasó W1–W10 y HTTP por loopback con catálogo ficticio y envío simulado. La prueba no valida reintentos de Meta ni entrega real.
 - **Persistencia (#54):** el PR #222 no se fusiona hasta que Allan corrija el contrato, responda las preguntas de comprensión y se verifique el nuevo head.
 - **Las preguntas de oro de #192 son casi nombres de servicios**, así que la calibración de `bge-m3` saldría optimista.
 - **El webhook de Telegram con textos de más de 1000 caracteres** lanza `ValidationError` → 500 → Telegram reintenta. Es un hueco del contrato `S06_D3`.
@@ -107,7 +107,7 @@ Issues del monitor: **#5** colaboradores · **#6** mapear códigos PEA (SINFO) �
 
 ## Próximo paso
 
-1. Pilar: implementar #3 con su contrato y correr W1–W10; comprobar HTTP en Docker con datos ficticios. Allan: resolver #222 y luego #184. Josue: empezar #185 y responder en #192/#193.
+1. Pilar: partir de `tdd-issue-3`, reproducir el rojo, implementar por pasos y comprobar W1–W10 y HTTP en Docker para la práctica #3. Allan: resolver #222 y luego #184. Josue: empezar #185 y responder en #192/#193.
 2. Presentación del informe quincenal: sábado 14-nov, Issues #12, #13 y #221.
 3. Monitor: confirmar el texto para fuera de Chimbote (#183), el diseño de estado para leads sintéticos (#210/#211) y la política de preguntas ambiguas de safety (#224). Se mantienen los avisos y el calendario simulados.
 4. Monitor: decidir sobre las corridas en `revision-ia`. En la M5: `--live` de #156 y #143, calibración de `RAG_MAX_DISTANCE`, verificar Ollama y preparar demo, video y releases de los hitos.

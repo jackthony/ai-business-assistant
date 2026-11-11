@@ -1,6 +1,6 @@
 # Backlog de Issues #01–#39
 
-Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo). Nota: en GitHub los números varían — S4 = GitHub #2/#3/#4, gestión #5–#8, borradores de informe #11–#13; la referencia estable es el título `[S## D#]`. El workflow `crear-issues-semana` crea los Issues de cada semana desde esta tabla.
+Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas según **plan v2** (`16_week_plan.md`); el estado se gestiona en GitHub (este repo). Nota: en GitHub los números varían — S4 = GitHub #2/#3/#4, gestión #5–#8, borradores de informe #12, #13 y #221; la referencia estable es el título `[S## D#]`. El workflow `crear-issues-semana` crea los Issues de cada semana desde esta tabla.
 
 | Issue | Semana | Título | Estado |
 |---|---|---|---|
@@ -13,22 +13,22 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas segú
 | #07 | S6 D1 | Reglas de formateo + few-shot para objeciones | todo |
 | #08 | S6 D2 | Ingesta `data/hola_mujer/servicios.json` → ChromaDB (la hoja→JSON ya está hecha) | todo |
 | #09 | S6 D3 | HITO 1: bot Hola Mujer respondiendo | todo |
-| #10 | S7 D1 | Agente 1: Info & RAG especializado + guardrail Chimbote | todo |
-| #11 | S7 D2 | Pydantic tools para servicios | todo |
-| #12 | S7 D3 | Agente 2: citas y disponibilidad (02_CITAS / Calendar) | todo |
-| #13 | S8 D1 | Agente 3: cierre y registro de lead | todo |
-| #14 | S8 D2 | Herramienta de registro (Sheets/DB) | todo |
+| #10 | S7 D1 | Extender RAG: ubicación de Chimbote, CTA y evaluación | GitHub #183; texto comercial pendiente |
+| #11 | S7 D2 | Agregar la herramienta Pydantic de consulta de servicios | GitHub #184; contrato de Allan |
+| #12 | S7 D3 | Ofrecer horarios libres antes de reservar | GitHub #185; contrato de Josue |
+| #13 | S8 D1 | Extender el cierre de citas con datos sintéticos de lead | GitHub #210; diseño de estado pendiente |
+| #14 | S8 D2 | Registrar un lead simulado con gate N2 y auditoría | GitHub #211; depende de #210 |
 | #15 | S10 D1 | OCR multimodal de pagos (Yape/Plin) | todo |
-| #16 | S9 D1 | Agente 4: Safety & triage clínico | todo |
-| #17 | S9 D2 | Human-in-the-Loop (interrupt) + permisos N1/N2/N3 + alerta a Jioysi | todo |
-| #18 | S9 D3 | HITO 2: agente único completo (+ handoff) | todo |
+| #16 | S9 D1 | Evaluar safety y triage con casos límite sintéticos | GitHub #224; política de casos ambiguos pendiente |
+| #17 | S9 D2 | Endurecer reanudación y permisos N1/N2/N3 con avisos simulados | GitHub #225 |
+| #18 | S9 D3 | Validar el agente único y handoff con simulaciones | GitHub #226; cierre del hito en M5 |
 | #19 | S10 D2 | Supervisor router (orquestador) + clase de frameworks | todo |
 | #20 | S10 D3 | Evals de Hola Mujer + cierre Q5 | todo |
 | #21 | S11 D1 | Rúbrica y dataset de evals de Hola Mujer | todo |
 | #22 | S11 D2 | Pre-procesador multimodal: Whisper (local) | todo |
 | #23 | S11 D3 | Normalización de audio y contexto | todo |
 | #24 | S12 D1 | HITO 3: Hola Mujer multimodal | todo |
-| #25 | S8 D3 | Telemetría temprana (Langfuse self-host + OTel GenAI semconv) | todo |
+| #25 | S8 D3 | Medir una traza sintética e instrumentar en la M5 | GitHub #212 |
 | #26 | S12 D2 | Seguridad OWASP (guardrails ASI01/ASI02) | todo |
 | #27 | S12 D3 | Evaluaciones offline (LLM-as-a-Judge + heurística de Lusser) | todo |
 | #28 | S13 D1 | Módulo proactivo de reactivación (>2 h inactivo) | todo |

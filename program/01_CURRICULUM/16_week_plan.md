@@ -210,81 +210,55 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 - Evidencia: video + release + informe.
 - **HITO 1 ✅**
 
-### Semana 7 — Tools + Agentes 1 y 2 (Issues #10–#12)
+### Semana 7 — Extender el agente: información, herramientas y citas (GitHub #183–#185)
 
-**D1 — Issue #10: Agente 1 Info & RAG + guardrail Chimbote**
-- Objetivo: respuestas comerciales confiables y con fuente.
-- Actividades: nodo especialista de información con contrato de salida (respuesta breve + precio + ubicación Chimbote + CTA); guardrail de ubicación (fuera de Chimbote → respuesta definida); búsqueda híbrida keyword+vector; 10 casos de evaluación.
-- Criterios: [ ] 10/10 respuestas con respaldo del RAG; [ ] cero precios inventados; [ ] guardrail de ubicación probado; [ ] CI verde.
-- Evidencia: PR + tabla de 10 casos.
-- Foco de evaluación: calidad técnica, criterio.
+**Punto de partida:** el agente único ya recupera y cita fuentes (#140), agenda con confirmación e idempotencia (#141) y recibe eventos por el contrato común de canal (#193). WhatsApp es el canal prioritario de integración: #3 practica con payloads, firma, número y envío de prueba, sin Meta ni clientas reales. No se vuelve a construir el grafo.
 
-**D2 — Issue #11: Pydantic tools estrictas**
-- Objetivo: tools que no aceptan basura.
-- Actividades: `@tool consultar_servicio()` con schemas Pydantic V2 (entrada/salida), errores tipados; tests válido/inválido/borde; verificar tool-calling con el modelo local (si falla, cambiar a `qwen2.5-coder`); handbook Parte VI (diseñar la ACI, no solo el prompt).
-- Criterios: [ ] 100% de args validados; [ ] tests de los 3 tipos; [ ] tool-calling funcionando con el modelo local; [ ] CI verde.
-- Evidencia: PR + tests.
-- Foco de evaluación: calidad técnica, autonomía.
+**D1 — GitHub #183: RAG, ubicación y CTA**
+- Extiende el nodo de información: añade CTA únicamente cuando venga del catálogo y diseña pruebas que distingan Chimbote, otra ciudad y ciudad no indicada. El texto comercial definitivo para fuera de Chimbote requiere validación de Jioysi; mientras tanto, usa respuestas ficticias en los escenarios.
+- Compara la recuperación vectorial vigente con una candidata híbrida usando preguntas sintéticas que no copien los nombres de los servicios. La calibración con el modelo local se valida aparte en la M5.
+- Evidencia: tabla de 10 preguntas con fuente, CTA o motivo de omisión y resultado del guardrail; cero precios inventados.
 
-**D3 — Issue #12: Agente 2 Citas y disponibilidad**
-- Objetivo: proponer horarios reales y evitar colisiones.
-- Actividades: leer disponibilidad (`02_CITAS` / Google Calendar mock); nodo que propone 2–3 opciones reales; confirmación básica; idempotencia con `request_id`; pruebas de colisión.
-- Criterios: [ ] propone solo horarios libres (0 colisiones en 10 pruebas); [ ] mismo `request_id` no duplica cita; [ ] conversación completa probada.
-- Evidencia: PR + escenarios.
-- Foco de evaluación: comprensión, calidad técnica.
+**D2 — GitHub #184: herramienta de consulta de servicios**
+- Sigue el contrato [S07 D2](asignaciones/S07_D2.md): valida entradas y salidas con Pydantic, devuelve errores tipados y no presenta duraciones sin verificar. Prueba la herramienta con `.invoke()` y dentro de un `ToolNode`.
+- Evidencia: nueve pruebas del contrato en verde. La prueba con un modelo local se hace aparte en la M5; el contrato no la necesita.
 
-### Semana 8 — Cierre de venta + telemetría (Issues #13, #14, #25)
+**D3 — GitHub #185: oferta proactiva de horarios**
+- Sigue el contrato [S07 D3](asignaciones/S07_D3.md): ofrece 2–3 horarios libres cuando falten fecha u hora, sin reservar todavía. Reutiliza disponibilidad en memoria, el flujo de confirmación y la clave de idempotencia existentes.
+- Evidencia: diez pruebas del contrato con calendario simulado, sin choques ni reservas antes de confirmar.
 
-**D1 — Issue #13: Agente 3 Cierre y registro de lead**
-- Objetivo: pedir datos y formalizar la intención de compra.
-- Actividades: nodo que solicita nombre, DNI y teléfono con validación (DNI 8 dígitos, celular PE); estados del cierre (`waiting_data`, `ready_to_book`); tests de datos inválidos; nunca pedir datos clínicos.
-- Criterios: [ ] valida DNI/teléfono; [ ] flujo info → cita → datos completo; [ ] sin datos clínicos; [ ] CI verde.
-- Evidencia: PR + transcripción.
-- Foco de evaluación: comprensión, comunicación.
+### Semana 8 — Extender el cierre comercial y medirlo (GitHub #210–#212)
 
-**D2 — Issue #14: registrar_lead_sheet()**
-- Objetivo: persistir el lead real sin duplicados.
-- Actividades: tool que escribe en Google Sheets/DB (mock en CI); idempotencia + log de auditoría; prueba real con fila de prueba; **gate N2**: la escritura requiere confirmación (harness, ADR-009).
-- Criterios: [ ] una fila por lead (sin duplicados); [ ] mock en CI (sin credenciales); [ ] log sin datos sensibles; [ ] gate de confirmación activo.
-- Evidencia: PR + captura de la hoja.
-- Foco de evaluación: evidencia, calidad técnica.
+**D1 — GitHub #210: completar datos mínimos de un lead ficticio**
+- Sobre el flujo de citas existente, prepara escenarios sintéticos de datos incompletos, inválidos y corregidos. Define qué datos mínimos hacen falta y conserva el estado entre turnos.
+- La ubicación del estado de cierre y el tratamiento del DNI requieren decisión del monitor: las pruebas de S05 fijan los cinco campos de `AgentState`. Hasta decidir, no cambies el contrato de estado ni pidas DNI a personas reales.
+- Evidencia: tabla de casos y transcripción sintética del flujo información → horario → datos pendientes.
 
-**D3 — Issue #25: Telemetría temprana + cierre Q4**
-- Objetivo: ver el sistema por dentro antes de crecer.
-- Actividades: **Langfuse self-host** (Docker en la M5, gratis — no LangSmith): trazas por nodo, latencia, tokens; instrumentación con conceptos OpenTelemetry (semconv GenAI, ver `observabilidad-costos.md`); dashboard mínimo (primera respuesta, contención, errores por nodo); demo quincenal + informe SENATI Q4; Excel S7–S8.
-- Entregable: release `q4` + informe Q4.
-- Criterios: [ ] trazas por conversación visibles; [ ] dashboard con 3 métricas; [ ] error inducido detectado en trazas; [ ] informe subido.
-- Evidencia: captura del dashboard + informe.
-- Foco de evaluación: aprendizaje y mejora, evidencia. **Observabilidad temprana: es la base para el multiagente.**
+**D2 — GitHub #211: escritura simulada con aprobación**
+- Reutiliza la pausa N2 de #141 y extiéndela a un registro de lead en memoria cuando se acuerde el contrato. Comprueba rechazo, aprobación y reintento con el mismo identificador. Registra qué operación pasó y por qué, sin datos sensibles en el log.
+- Evidencia: una entrada simulada por lead aprobado, ninguna si se rechaza y ninguna duplicada al reintentar. Google Sheets, credenciales y datos reales quedan pendientes de Jioysi.
+
+**D3 — GitHub #212: trazas de un flujo sintético**
+- Define los eventos por nodo, latencia, consumo de tokens si el proveedor lo informa y error inducido. Usa el mismo caso sintético en los canales y separa las métricas calculadas de los datos no disponibles.
+- Evidencia: una traza de punta a punta y tres métricas con su método de medición. Langfuse local y OpenTelemetry se verifican en la M5; adjunta el informe quincenal cuando corresponda.
 
 ---
 
 ## Detalle de sesiones — Bloque 3 (S9–S12)
 
-### Semana 9 — Safety + HITL/harness + HITO 2 (Issues #16–#18)
+### Semana 9 — Endurecer seguridad, aprobación humana y HITO 2 (GitHub #224–#226)
 
-**D1 — Issue #16: Agente 4 Safety & triage clínico**
-- Objetivo: el bot nunca improvisa en salud.
-- Actividades: clasificador de riesgo **de 1 token con confianza calibrada** (patrón Jev de `jackthony/IA-local`: Choice + logprobs + umbral), no texto libre; nodo que congela el flujo (`status=handoff_requested`); respuestas puente definidas ("ya te contacta una especialista"); 15 casos (10 normales, 5 de riesgo).
-- Entregable: PR #16 + tabla de 15 casos.
-- Criterios: [ ] 5/5 casos de riesgo congelados; [ ] 0/10 falsos positivos en normales; [ ] respuesta puente sin diagnóstico; [ ] CI verde.
-- Evidencia: PR + tabla + transcripciones.
-- Foco de evaluación: criterio, seguridad, comprensión.
+**D1 — GitHub #224: evaluar safety con casos límite**
+- Parte del clasificador por reglas y la derivación ya entregados en #142. Compara cinco consultas de riesgo y diez consultas comerciales sintéticas, incluyendo preguntas ambiguas. Registra falso positivo, falso negativo y mensaje puente.
+- Evidencia: matriz etiquetada y salida de las pruebas. Un cambio de política ante «qué me recomiendas» requiere decisión del monitor; la prueba de logprobs se hace en la M5.
 
-**D2 — Issue #17: HITL con interrupt + permisos N1/N2/N3**
-- Objetivo: cuando el bot se congela, avisa a Jioysi y un humano reanuda.
-- Actividades: `interrupt()` de LangGraph; alerta a Jioysi (WhatsApp/Email) dentro del SLA del negocio (10 min, `04_CONFIG`); clasificar tools por nivel (N1 auto: RAG/precios/disponibilidad · N2 aprobación: agendar/registrar/validar pago · N3 nunca: borrar/precios base); patrón `draft → review → apply`; probar reanudación sin re-ejecutar efectos.
-- Entregable: PR #17.
-- Criterios: [ ] pausa y reanuda con `Command(resume=)`; [ ] alerta real recibida por Jioysi (prueba); [ ] tools clasificadas N1/N2/N3; [ ] efecto no se duplica al reanudar (test).
-- Evidencia: PR + captura de alerta + test de re-ejecución.
-- Foco de evaluación: calidad técnica, criterio.
+**D2 — GitHub #225: reanudación segura y permisos**
+- Clasifica las herramientas existentes y nuevas por N1 (lectura), N2 (requiere aprobación) y N3 (prohibida). Extiende las pruebas del `interrupt()` existente: rechazo, reanudación y reintento sin repetir efectos. Prueba el adaptador de canal con un notificador simulado y contempla un reinicio cuando #54 esté listo.
+- Evidencia: tabla de permisos, captura del aviso simulado y prueba de que la reanudación no duplica efectos. El aviso real depende del canal y del protocolo que acuerde el monitor con Jioysi.
 
-**D3 — Issue #18: HITO 2 — agente único completo + handoff**
-- Objetivo: demostrar el asistente completo y confiable (sin supervisor todavía).
-- Actividades: flujo E2E real (info → cita → datos → pago/handoff); batería de 12 escenarios (2 de handoff, 1 de re-ejecución); release `hito-2`; medir contención y latencia.
-- Criterios: [ ] 12/12 escenarios según lo esperado; [ ] handoff real a Jioysi; [ ] métricas del hito; [ ] release publicado.
-- Evidencia: video + release + tabla de escenarios.
-- **HITO 2 ✅**
+**D3 — GitHub #226: validar el agente único de punta a punta**
+- Reutiliza los 12 escenarios de #143 y ejecuta la batería con modelo y datos sintéticos. Incluye información con fuente, citas, derivación, reintentos y, cuando #3 esté en `main`, el webhook de WhatsApp con envío simulado.
+- Evidencia: resultados por escenario y métricas medidas. El HITO 2 se cierra con la corrida `--live` y calibración en la M5, video y release `hito-2`; el cierre no supone activar Meta, calendarios o alertas reales.
 
 ### Semana 10 — OCR + supervisor + evals de Hola Mujer (Issues #15, #19, #20)
 

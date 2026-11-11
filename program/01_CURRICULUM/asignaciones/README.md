@@ -30,6 +30,8 @@ Cada Issue de producción tiene aquí su **contrato de asignación** (`S05_D1.md
 
 Los contratos S06 (#156–#158) se verificaron con pruebas y una solución de referencia. El #53 se cerró cuando la base del prompt entró por #178. La práctica vigente de Pilar es #3 y parte de la etiqueta `tdd-issue-3`.
 
+El #183 tiene un [contrato breve de ubicación](issue-183.md) y la etiqueta de inicio `tdd-issue-183`.
+
 ## Issues pendientes de contrato
 
 Antes de iniciar un cambio de producto, el Issue debe enlazar un contrato con comportamiento observable, archivos previstos y comandos que ejecuten sus pruebas. Para entregar, conserva el commit de pruebas previo al código, la salida en rojo y las mismas pruebas en verde. Usa datos sintéticos.
@@ -44,7 +46,6 @@ El primer commit puede incluir el contrato nuevo y la prueba. La puerta `calidad
 
 | Issues abiertos | Qué falta concretar para escribir sus pruebas |
 |---|---|
-| #183 | Separar ubicación y CTA de la respuesta comercial que depende de Jioysi. |
 | #210, #211 | Acordar datos mínimos y estado del lead ficticio. Definir qué se verifica en una escritura simulada y en su reintento. |
 | #212 | Definir el flujo sintético y las métricas locales antes de instrumentar en la M5. |
 | #224 | Acordar el resultado esperado para consultas ambiguas y fijar la matriz de casos. |

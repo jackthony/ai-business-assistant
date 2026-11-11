@@ -214,10 +214,9 @@ S1–S3 se mantienen (Java/Git/HTTP). Plan completo: **S1–S16** (abajo).
 
 **Punto de partida:** el agente único ya recupera y cita fuentes (#140), agenda con confirmación e idempotencia (#141) y recibe eventos por el contrato común de canal (#193). WhatsApp es el canal prioritario de integración: #3 practica con payloads, firma, número y envío de prueba, sin Meta ni clientas reales. No se vuelve a construir el grafo.
 
-**D1 — GitHub #183: RAG, ubicación y CTA**
-- Extiende el nodo de información: añade CTA únicamente cuando venga del catálogo y diseña pruebas que distingan Chimbote, otra ciudad y ciudad no indicada. El texto comercial definitivo para fuera de Chimbote requiere validación de Jioysi; mientras tanto, usa respuestas ficticias en los escenarios.
-- Compara la recuperación vectorial vigente con una candidata híbrida usando preguntas sintéticas que no copien los nombres de los servicios. La calibración con el modelo local se valida aparte en la M5.
-- Evidencia: tabla de 10 preguntas con fuente, CTA o motivo de omisión y resultado del guardrail; cero precios inventados.
+**D1 — GitHub #183: confirmar ubicación presencial**
+- Sigue el [contrato de ubicación](asignaciones/issue-183.md). Primero reproduce el rojo con una ciudad declarada fuera de Chimbote. Después comprueba que una ciudad local, ausente o negada mantiene la respuesta con fuente.
+- El CTA comercial y la comparación de búsqueda vectorial e híbrida quedan como cambios separados. La calibración del modelo local se verifica en la M5.
 
 **D2 — GitHub #184: herramienta de consulta de servicios**
 - Sigue el contrato [S07 D2](asignaciones/S07_D2.md): valida entradas y salidas con Pydantic, devuelve errores tipados y no presenta duraciones sin verificar. Prueba la herramienta con `.invoke()` y dentro de un `ToolNode`.

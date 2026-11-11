@@ -13,7 +13,7 @@ Un Issue = una unidad de trabajo TBD (branch corta + PR + cierre). Semanas segú
 | #07 | S6 D1 | Reglas de formateo + few-shot para objeciones | todo |
 | #08 | S6 D2 | Ingesta `data/hola_mujer/servicios.json` → ChromaDB (la hoja→JSON ya está hecha) | todo |
 | #09 | S6 D3 | HITO 1: bot Hola Mujer respondiendo | todo |
-| #10 | S7 D1 | Extender RAG: ubicación de Chimbote, CTA y evaluación | GitHub #183; texto comercial pendiente |
+| #10 | S7 D1 | Confirmar ubicación para atención presencial | GitHub #183; contrato TDD de ubicación |
 | #11 | S7 D2 | Agregar la herramienta Pydantic de consulta de servicios | GitHub #184; contrato de Allan |
 | #12 | S7 D3 | Ofrecer horarios libres antes de reservar | GitHub #185; contrato de Josue |
 | #13 | S8 D1 | Extender el cierre de citas con datos sintéticos de lead | GitHub #210; diseño de estado pendiente |

@@ -52,7 +52,7 @@ jobs:
         run: |
           gate="$RUNNER_TEMP/tdd_gate.py"
           git show "$TDD_BASE_SHA:.github/scripts/tdd_gate.py" > "$gate"
-          python3 "$gate"
+          python3 -I -S "$gate"
       - name: 1. Lint — ruff (cero warnings)
         run: |
           if [ -d src ] || [ -d tests ]; then

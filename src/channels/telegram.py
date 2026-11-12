@@ -4,7 +4,7 @@ from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request, status
 
-from channels.contract import InboundEvent
+from channels.contract import MAX_CONTENT_CHARS, InboundEvent
 from channels.dispatch import handle_inbound
 
 
@@ -24,12 +24,15 @@ def parse_update(
         return None
     user_id = str(chat_id)
 
-    if message.get("text"):
+    text = message.get("text")
+    if isinstance(text, str) and len(text) > MAX_CONTENT_CHARS:
+        return None
+    if text:
         return InboundEvent(
             tenant=tenant,
             user_id=user_id,
             type="text",
-            content=message["text"],
+            content=text,
             channel="telegram",
         )
     elif "voice" in message or "audio" in message:

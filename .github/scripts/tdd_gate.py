@@ -221,7 +221,11 @@ def verify_red_green(sha: str, selectors: list[str]) -> int:
         green_status, green_cases = run_pytest(
             green_checkout, python, green_env, temporary / "green.xml", selectors
         )
-        passed = {case_key(case) for case in green_cases if len(case) == 0}
+        passed = {
+            case_key(case)
+            for case in green_cases
+            if all(case.find(tag) is None for tag in ("failure", "error", "skipped"))
+        }
         if green_status != 0 or not failed <= passed:
             raise ValueError(
                 "En verde deben pasar los mismos casos que fallaron en rojo."

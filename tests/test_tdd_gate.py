@@ -147,6 +147,22 @@ def test_replay_does_not_pass_ci_credentials(repo, monkeypatch):
     assert "rojo → verde" in result.stdout
 
 
+def test_green_can_include_junit_properties(repo):
+    root, base = repo
+    test_with_property = TEST_BODY.replace(
+        "def test_answer():",
+        "def test_answer(record_property):\n    record_property('case', '42')",
+    )
+    commit(
+        root, "contrato y prueba", {CONTRACT: CONTRACT_TEXT, TEST: test_with_property}
+    )
+    commit(root, "producto", {SOURCE: SOURCE_BODY})
+
+    result = gate(root, base)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
 def test_red_replays_changed_tests_only(repo):
     root, _ = repo
     old_test = TEST_BODY.replace("test_answer", "test_untouched")

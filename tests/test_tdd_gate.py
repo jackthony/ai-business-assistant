@@ -79,7 +79,7 @@ def test_separate_contract_test_and_product_pass(repo):
     commit(root, "producto", {SOURCE: SOURCE_BODY})
     result = gate(root, base)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "rojo → verde" in result.stdout
+    assert "ciclo rojo y verde" in result.stdout
 
 
 @pytest.mark.parametrize(
@@ -144,7 +144,7 @@ def test_replay_does_not_pass_ci_credentials(repo, monkeypatch):
     result = gate(root, base)
 
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "rojo → verde" in result.stdout
+    assert "ciclo rojo y verde" in result.stdout
 
 
 def test_green_can_include_junit_properties(repo):

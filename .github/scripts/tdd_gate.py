@@ -300,9 +300,7 @@ def validate(base: str, head: str, ref: str, body: str) -> str:
             continue
         if all(ancestor(sha, code_sha) for code_sha, _ in product_commits):
             count = verify_red_green(sha, selectors)
-            return (
-                f"TDD: contrato #{issue}, rojo → verde en {count} caso(s) ({sha[:12]})."
-            )
+            return f"TDD: contrato #{issue}, ciclo rojo y verde en {count} caso(s) ({sha[:12]})."
     raise ValueError(
         "El contrato y la misma prueba deben existir en un commit separado antes del código."
     )

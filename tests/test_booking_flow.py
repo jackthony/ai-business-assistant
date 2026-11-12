@@ -1,6 +1,6 @@
 """Agendar en el grafo: nada se escribe antes de la aprobación, y reanudar no duplica."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pytest
 from conftest import CONFIGS, DATA, ScriptedModel
@@ -28,11 +28,11 @@ DATOS = '{"service": "PRP facial", "date": "2026-10-20", "time": "16:00"}'
 
 
 class Env:
-    def __init__(self, store, *answers: str) -> None:
+    def __init__(self, store, *answers: str, now: datetime = NOW) -> None:
         self.calendar = InMemoryCalendar()
         catalog = ServiceCatalog.from_file(DATA / "servicios.json")
         schedule = load_schedule(CONFIGS / "schedule.json")
-        clock = lambda: NOW
+        clock = lambda: now
         self.deps = BookingDeps(
             catalog=catalog,
             calendar=self.calendar,
@@ -137,6 +137,67 @@ def test_horario_ocupado_propone_otros_sin_pausar(env):
     assert "ya está ocupado" in texto(out) and "Tengo libre" in texto(out)
     assert "martes 20/10 a las 4:00 pm" not in texto(out)
     assert len(env.calendar.bookings()) == 1
+
+
+def test_manana_con_extraccion_variable_no_duplica_la_cita(store):
+    env = Env(store, DATOS.replace("2026-10-20", "2026-10-19"), DATOS)
+    request = "Quiero agendar PRP facial mañana a las 4"
+
+    first = env.say(request)
+    assert "martes 20/10 a las 4:00 pm" in texto(first)
+    assert env.calendar.bookings() == []
+    assert env.resume({"approved": True})["intent"] == "booking_confirmed"
+
+    repeated = env.say(request)
+    assert "__interrupt__" not in repeated
+    assert "ya está ocupado" in texto(repeated)
+    assert len(env.calendar.bookings()) == 1
+
+
+def test_manana_ocupado_se_detecta_aunque_el_modelo_diga_hoy(store):
+    env = Env(store, DATOS.replace("2026-10-20", "2026-10-19"))
+    env.calendar.book(
+        "otra", "51911111111", "HM-FAC-001", datetime(2026, 10, 20, 16, tzinfo=LIMA)
+    )
+
+    out = env.say("Quiero agendar PRP facial mañana a las 4")
+
+    assert "__interrupt__" not in out
+    assert out["intent"] == "booking_needs_info"
+    assert "ya está ocupado" in texto(out) and "Tengo libre" in texto(out)
+
+
+def test_manana_en_un_seguimiento_usa_el_dia_local_de_lima(store):
+    env = Env(
+        store,
+        '{"service": "PRP facial"}',
+        '{"service": "PRP facial", "time": "16:00"}',
+        now=datetime(2026, 10, 20, 2, tzinfo=UTC),
+    )
+    assert env.say("Quiero agendar PRP facial")["intent"] == "booking_needs_info"
+
+    out = env.say("Para mañana a las 4")
+
+    assert "martes 20/10 a las 4:00 pm" in texto(out)
+    assert out["__interrupt__"]
+
+
+@pytest.mark.parametrize(
+    "message",
+    [
+        "Quiero agendar PRP facial pasado mañana a las 4",
+        "No puedo mañana, quiero agendar PRP facial el miércoles a las 4",
+        "Quiero agendar PRP facial el miércoles, no mañana",
+        "Quiero agendar PRP facial el miércoles por la mañana",
+    ],
+)
+def test_otra_expresion_temporal_conserva_la_fecha_extraida(store, message):
+    env = Env(store, DATOS.replace("2026-10-20", "2026-10-21"))
+
+    out = env.say(message)
+
+    assert out["__interrupt__"]
+    assert "miércoles 21/10" in texto(out)
 
 
 def test_fuera_de_horario_propone_otros(store):

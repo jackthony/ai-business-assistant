@@ -79,6 +79,108 @@ def test_separate_contract_test_and_product_pass(repo):
     commit(root, "producto", {SOURCE: SOURCE_BODY})
     result = gate(root, base)
     assert result.returncode == 0, result.stdout + result.stderr
+    assert "ciclo rojo y verde" in result.stdout
+
+
+@pytest.mark.parametrize(
+    ("test", "expected"),
+    [
+        ("def test_answer():\n    assert True\n", "falló"),
+        ("import missing_senati_module\n" + TEST_BODY, "colección"),
+        (
+            "import pytest\n@pytest.mark.skip\ndef test_answer():\n    assert False\n",
+            "falló",
+        ),
+        (
+            TEST_BODY.replace("== 42", "== 7"),
+            "verde",
+        ),
+        (
+            (
+                "import pytest\nfrom service import answer\ndef test_answer():\n"
+                "    if answer() == 42:\n        pytest.skip('oculta el caso')\n"
+                "    assert False\n"
+            ),
+            "verde",
+        ),
+    ],
+)
+def test_replay_rejects_unproven_red_green(repo, test, expected):
+    root, base = repo
+    commit(root, "contrato y prueba", {CONTRACT: CONTRACT_TEXT, TEST: test})
+    commit(root, "producto", {SOURCE: SOURCE_BODY})
+
+    result = gate(root, base)
+
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert expected in result.stdout.lower()
+
+
+def test_green_must_preserve_the_test_from_red(repo):
+    root, base = repo
+    commit(root, "contrato y prueba", {CONTRACT: CONTRACT_TEXT, TEST: TEST_BODY})
+    commit(
+        root,
+        "producto y prueba alterada",
+        {SOURCE: SOURCE_BODY, TEST: "def test_answer():\n    assert True\n"},
+    )
+
+    result = gate(root, base)
+
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "misma prueba" in result.stdout
+
+
+def test_replay_does_not_pass_ci_credentials(repo, monkeypatch):
+    root, base = repo
+    monkeypatch.setenv("GH_TOKEN", "fake-ci-token")
+    isolated_test = "import os\n" + TEST_BODY.replace(
+        "    assert answer()",
+        "    assert 'GH_TOKEN' not in os.environ\n    assert answer()",
+    )
+    commit(root, "contrato y prueba", {CONTRACT: CONTRACT_TEXT, TEST: isolated_test})
+    commit(root, "producto", {SOURCE: SOURCE_BODY})
+
+    result = gate(root, base)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "ciclo rojo y verde" in result.stdout
+
+
+def test_green_can_include_junit_properties(repo):
+    root, base = repo
+    test_with_property = TEST_BODY.replace(
+        "def test_answer():",
+        "def test_answer(record_property):\n    record_property('case', '42')",
+    )
+    commit(
+        root, "contrato y prueba", {CONTRACT: CONTRACT_TEXT, TEST: test_with_property}
+    )
+    commit(root, "producto", {SOURCE: SOURCE_BODY})
+
+    result = gate(root, base)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_red_replays_changed_tests_only(repo):
+    root, _ = repo
+    old_test = TEST_BODY.replace("test_answer", "test_untouched")
+    base = commit(root, "prueba existente", {TEST: old_test})
+    commit(
+        root,
+        "contrato y prueba",
+        {
+            CONTRACT: CONTRACT_TEXT,
+            TEST: old_test + "\ndef test_answer():\n    assert True\n",
+        },
+    )
+    commit(root, "producto", {SOURCE: SOURCE_BODY})
+
+    result = gate(root, base)
+
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "falló" in result.stdout
 
 
 def test_documentation_only_does_not_need_product_tests(repo):

@@ -3,9 +3,11 @@ import hashlib
 import hmac
 import json
 import logging
+from collections import OrderedDict
 from collections.abc import Callable, Iterator
 from inspect import isawaitable
-from typing import Any, Literal
+from threading import Lock
+from typing import Any, Literal, NamedTuple
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Query, Request
 from fastapi.responses import PlainTextResponse
@@ -15,7 +17,39 @@ from channels.contract import InboundEvent
 from channels.dispatch import handle_inbound
 
 MEDIA_TYPES = {"image", "video", "document", "sticker"}
+COMPLETED_MESSAGE_LIMIT = 4096
 logger = logging.getLogger(__name__)
+
+
+class _ReceivedMessage(NamedTuple):
+    event: InboundEvent
+    message_id: str | None
+
+
+class _RecentMessages:
+    def __init__(self) -> None:
+        self._in_progress: set[str] = set()
+        self._completed: OrderedDict[str, None] = OrderedDict()
+        self._lock = Lock()
+
+    def claim(self, message_id: str | None) -> bool:
+        if message_id is None:
+            return True
+        with self._lock:
+            if message_id in self._in_progress or message_id in self._completed:
+                return False
+            self._in_progress.add(message_id)
+            return True
+
+    def finish(self, message_id: str | None, completed: bool) -> None:
+        if message_id is None:
+            return
+        with self._lock:
+            self._in_progress.remove(message_id)
+            if completed:
+                self._completed[message_id] = None
+                if len(self._completed) > COMPLETED_MESSAGE_LIMIT:
+                    self._completed.popitem(last=False)
 
 
 def verify_challenge(
@@ -84,15 +118,17 @@ def _object_items(container: object, field: str) -> Iterator[dict[str, Any]]:
         yield from (value for value in values if isinstance(value, dict))
 
 
-def _parse_batch(payload: object, tenant: str) -> list[InboundEvent]:
-    events = []
+def _parse_batch(payload: object, tenant: str) -> list[_ReceivedMessage]:
+    messages = []
     for entry in _object_items(payload, "entry"):
         for change in _object_items(entry, "changes"):
             for message in _object_items(change.get("value"), "messages"):
                 event = _parse_message(message, tenant)
                 if event is not None:
-                    events.append(event)
-    return events
+                    raw_id = message.get("id")
+                    message_id = raw_id if isinstance(raw_id, str) and raw_id else None
+                    messages.append(_ReceivedMessage(event, message_id))
+    return messages
 
 
 async def process_whatsapp_event(
@@ -106,16 +142,23 @@ async def process_whatsapp_event(
 
 
 async def _process_batch(
-    events: list[InboundEvent],
+    messages: list[_ReceivedMessage],
     graph: CompiledStateGraph,
     send_func: Callable[[str, str], Any],
+    recent_messages: _RecentMessages,
 ) -> None:
-    for event in events:
+    for event, message_id in messages:
+        if not recent_messages.claim(message_id):
+            continue
+        completed = False
         try:
             await process_whatsapp_event(event, graph, send_func)
+            completed = True
         # A provider failure belongs to this message. Do not log its payload.
         except Exception as exc:  # noqa: BLE001
             logger.error("whatsapp_event_failed error_type=%s", type(exc).__name__)
+        finally:
+            recent_messages.finish(message_id, completed)
 
 
 def build_whatsapp_router(
@@ -129,6 +172,7 @@ def build_whatsapp_router(
         raise ValueError("WhatsApp verify token and app secret must be configured")
 
     router = APIRouter(prefix="/whatsapp")
+    recent_messages = _RecentMessages()
 
     @router.get("/webhook")
     async def whatsapp_verify(
@@ -154,9 +198,11 @@ def build_whatsapp_router(
             payload = json.loads(body)
         except ValueError:
             return {"ok": True}
-        events = _parse_batch(payload, tenant)
-        if events:
-            background_tasks.add_task(_process_batch, events, graph, send_func)
+        messages = _parse_batch(payload, tenant)
+        if messages:
+            background_tasks.add_task(
+                _process_batch, messages, graph, send_func, recent_messages
+            )
         return {"ok": True}
 
     return router

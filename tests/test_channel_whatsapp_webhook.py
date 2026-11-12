@@ -1,6 +1,8 @@
 import hashlib
 import hmac
 import json
+from concurrent.futures import ThreadPoolExecutor
+from threading import Event
 from unittest.mock import MagicMock
 
 import httpx
@@ -267,3 +269,60 @@ def test_batch_continues_after_a_message_fails(caplog):
     assert "RuntimeError" in caplog.text
     assert "detalle sensible de prueba" not in caplog.text
     assert "51900000000" not in caplog.text
+
+
+def test_duplicate_ids_across_posts_and_in_a_batch():
+    send = MagicMock()
+    message = {"from": PHONE, "type": "audio", "id": "wamid.repetido"}
+    payload = _payload(message)
+    messages = payload["entry"][0]["changes"][0]["value"]["messages"]
+    messages.extend([message, {**message, "id": "wamid.distinto"}])
+
+    with TestClient(_app(MagicMock(), send)) as client:
+        assert _post(client, payload).json() == {"ok": True}
+        assert _post(client, _payload(message)).json() == {"ok": True}
+
+    assert send.call_count == 2
+
+
+def test_duplicate_id_while_first_send_is_in_progress():
+    first_send_started = Event()
+    allow_first_send = Event()
+
+    def block_first_send(user, text):
+        if not first_send_started.is_set():
+            first_send_started.set()
+            assert allow_first_send.wait(timeout=10)
+
+    send = MagicMock(side_effect=block_first_send)
+    payload = _payload({"from": PHONE, "type": "audio", "id": "wamid.en-curso"})
+
+    with (
+        TestClient(_app(MagicMock(), send)) as client,
+        ThreadPoolExecutor(max_workers=2) as executor,
+    ):
+        first = executor.submit(_post, client, payload)
+        try:
+            assert first_send_started.wait(timeout=5)
+            duplicate = executor.submit(_post, client, payload)
+            assert duplicate.result(timeout=5).json() == {"ok": True}
+        finally:
+            allow_first_send.set()
+        assert first.result(timeout=5).json() == {"ok": True}
+
+    send.assert_called_once()
+
+
+def test_failed_message_can_be_retried_until_it_succeeds():
+    def fail_first_attempt(user, text):
+        if send.call_count == 1:
+            raise RuntimeError("falla simulada")
+
+    send = MagicMock(side_effect=fail_first_attempt)
+    payload = _payload({"from": PHONE, "type": "audio", "id": "wamid.reintento"})
+
+    with TestClient(_app(MagicMock(), send)) as client:
+        for _ in range(3):
+            assert _post(client, payload).json() == {"ok": True}
+
+    assert send.call_count == 2

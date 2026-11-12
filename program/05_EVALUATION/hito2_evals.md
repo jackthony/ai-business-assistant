@@ -33,15 +33,24 @@ Los escenarios se comprueban por **propiedades** (intención, estado, fuentes ci
 ## Cómo leer el resultado
 
 - **Escenarios N/12**: criterio del hito (12/12).
-- **Contención**: de los 10 que no deben derivar, cuántos terminan sin derivar. **Derivación correcta**: de los 2 que sí deben derivar, cuántos derivan.
+- **Contención**: de los 10 que deben resolverse sin derivar, cuántos pasan y terminan sin derivación. **Derivación correcta**: de los 2 que deben derivar, cuántos pasan y terminan derivados.
 - **Latencia por paso**: p50 y p95 de cada invocación del grafo. Solo es la del modelo real en modo `--live`.
 
-## Qué falta para cerrar el hito
+## Resultado del 12 de noviembre de 2026
 
-1. Correr `--live` en la M5 y guardar la tabla como evidencia.
-2. Calibrar `RAG_MAX_DISTANCE` (0.6 es un valor inicial): subirlo si el bot dice «no tengo ese dato» de más, bajarlo si cita fragmentos que no vienen al caso.
-3. Revisar con Jioysi los textos del puente de derivación, `EMERGENCY_PROTOCOL` y `JIOYSI_ALERT_CHANNEL` (siguen PENDING): el escenario 10 y 11 usan un notificador de prueba, el aviso real todavía no llega a nadie.
-4. Video y release `hito-2` (los publica el monitor).
+La M5 Pro ejecutó la batería con Ollama 0.34.2, `deepseek-r1:14b` (`c333b7232bdb`), `bge-m3` (`790764642607`) y `RAG_MAX_DISTANCE=0.6`. El código evaluado en `61dea98` entró en `main` en `c652635`. [Tabla de los 12 escenarios en el PR #258](https://github.com/jackthony/ai-business-assistant/pull/258) · [Issue #143](https://github.com/jackthony/ai-business-assistant/issues/143)
+
+| Modo | Escenarios | Contención | Derivación correcta | Latencia por paso |
+|---|---|---|---|---|
+| Guionado | 12/12 | 10/10 | 2/2 | p50 2 ms · p95 3 ms |
+| Real | 12/12 | 10/10 | 2/2 | p50 9.317 s · p95 35.084 s |
+
+La prueba con umbral 0.4 reprodujo los fallos de precio y horario aunque se recuperaron sus fuentes. Se conservó 0.6 y se reforzó la instrucción de citas. La agenda pasó a calcular «mañana» con el reloj de Lima en solicitudes directas y verificó una sola cita en la re-ejecución. [Citas #256](https://github.com/jackthony/ai-business-assistant/pull/256) · [Agenda #258](https://github.com/jackthony/ai-business-assistant/pull/258)
+
+## Pendientes para cerrar el hito
+
+1. Revisar con Jioysi los textos del puente de derivación, `EMERGENCY_PROTOCOL` y `JIOYSI_ALERT_CHANNEL`. El calendario y los avisos de esta evaluación se simularon en memoria.
+2. Preparar el video y el release `hito-2` para publicación del monitor.
 
 ## Hallazgo de la propia batería
 

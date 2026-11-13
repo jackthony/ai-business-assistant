@@ -3,7 +3,9 @@
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
+from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph.state import CompiledStateGraph
 
@@ -22,7 +24,10 @@ from tools.schedule import LIMA
 DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "hola_mujer"
 
 
-def build_default_graph(tenant: str = "hola_mujer") -> CompiledStateGraph:
+def build_default_graph(
+    tenant: str = "hola_mujer",
+    checkpointer: BaseCheckpointSaver[Any] | None = None,
+) -> CompiledStateGraph:
     cfg = load_tenant_config(tenant)
     base = os.environ.get("OLLAMA_URL", "http://localhost:11434")
     store = ChromaStore(
@@ -47,4 +52,5 @@ def build_default_graph(tenant: str = "hola_mujer") -> CompiledStateGraph:
     # InMemorySaver: la pausa vive mientras viva el proceso; SqliteSaver/Postgres llegan con ADR-005.
     # El canal de alerta real (JIOYSI_ALERT_CHANNEL) sigue PENDING: por ahora solo queda en el log.
     notifier = InMemoryNotifier()
-    return build_graph(store, model, cfg.prompt, notifier, booking, InMemorySaver())
+    saver = checkpointer if checkpointer is not None else InMemorySaver()
+    return build_graph(store, model, cfg.prompt, notifier, booking, saver)

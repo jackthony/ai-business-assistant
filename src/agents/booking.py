@@ -33,6 +33,10 @@ INTENT_RE = re.compile(
     r"\b(agend\w*|reserv\w*|separ\w*|turno|(?:quiero|quisiera|necesito|puedo|sacar|pedir|hacer|"
     r"programar)\s+(?:una\s+|mi\s+)?cita)\b"
 )
+_BOOKING_PREFIX = re.compile(
+    r"^(?:(?:quiero|quisiera|necesito|puedo) )?(?:agendar|reservar|separar) "
+)
+_TOMORROW_TIME = r"(?: a las? \d{1,2}(?::\d{2})?(?: ?(?:[ap]\.?m\.?|de la (?:manana|tarde|noche)))?)?"
 HISTORY = 6  # mensajes de la clienta que se leen para completar los datos de la cita
 
 ASK_SERVICE = "¡Claro! 😊 ¿Qué servicio te gustaría agendar?"
@@ -144,6 +148,20 @@ def _extraction_prompt(texts: list[str], now: datetime) -> str:
     return f"Ahora (Lima): {hoy}\n<conversacion>\n{cuerpo}\n</conversacion>"
 
 
+def _booking_date(
+    message: str, extraction: Extraction, now: datetime
+) -> dt.date | None:
+    text = " ".join(_plain(message).strip("¿?¡!., ").split())
+    request = _BOOKING_PREFIX.sub("", text)
+    service = re.escape(" ".join(_plain(extraction.service or "").split()))
+    subject = rf"(?:(?:el|la|un|una) )?{service}|(?:una|mi) cita"
+    if re.fullmatch(
+        rf"(?:(?:{subject})[, ]+)?(?:para )?manana{_TOMORROW_TIME}", request
+    ):
+        return now.astimezone(LIMA).date() + dt.timedelta(days=1)
+    return extraction.date
+
+
 def make_draft_node(
     model: ChatModel, deps: BookingDeps
 ) -> Callable[[AgentState], dict[str, Any]]:
@@ -163,14 +181,15 @@ def make_draft_node(
                 f"¿Cuál de estos servicios quieres?\n{nombres}", "booking_needs_info"
             )
         service = matches[0]
-        if ex.date is None or ex.time is None:
+        date = _booking_date(humans[-1] if humans else "", ex, now)
+        if date is None or ex.time is None:
             a, c = deps.schedule.open, deps.schedule.close
             return _reply(
                 f"¿Qué día y a qué hora te gustaría tu cita de *{service.nombre}*? "
                 f"Atendemos de {a:%H:%M} a {c:%H:%M}.",
                 "booking_needs_info",
             )
-        start = datetime.combine(ex.date, ex.time, tzinfo=LIMA)
+        start = datetime.combine(date, ex.time, tzinfo=LIMA)
         try:
             inp = AgendarInput(
                 phone=state["phone"], service_id=service.service_id, start=start

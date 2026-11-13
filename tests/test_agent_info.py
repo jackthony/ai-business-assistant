@@ -45,6 +45,22 @@ def test_direccion_con_cita(store):
     )
 
 
+def test_el_modelo_recibe_la_regla_de_citas_fuera_de_la_pregunta(store):
+    model = ScriptedModel("El taller cuesta S/ 149.99 [1].")
+    ask(store, model, "¿Cuánto cuesta el taller PRP facial?")
+
+    _, user_prompt = model.calls[0]
+    _, closing_tag, instruction = user_prompt.partition("</pregunta>")
+    assert closing_tag
+    assert "Formato de salida obligatorio" in instruction
+    assert (
+        "marca numérica del fragmento que lo respalda, con sus corchetes" in instruction
+    )
+    assert (
+        "Si ningún fragmento respalda el dato, indica que no lo tienes." in instruction
+    )
+
+
 def test_sin_evidencia_no_llama_al_modelo(store):
     model = ScriptedModel("inventado [1]")
     out = ask(store, model, "vuelo a marte")

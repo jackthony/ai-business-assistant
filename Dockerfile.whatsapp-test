@@ -1,0 +1,12 @@
+FROM ghcr.io/astral-sh/uv:0.12.19 AS uv
+FROM python:3.11-slim
+WORKDIR /lab
+COPY --from=uv /uv /usr/local/bin/uv
+COPY pyproject.toml ./
+COPY src/ ./src/
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -e '.[dev]'
+COPY tests/test_whatsapp_sender.py ./tests/test_whatsapp_sender.py
+COPY program/02_REFERENCE/ejemplos/webhook-meta/ ./program/02_REFERENCE/ejemplos/webhook-meta/
+ENV HOME=/tmp PYTHONDONTWRITEBYTECODE=1
+USER 65532:65532
+CMD ["python", "-m", "pytest", "-q", "--noconftest", "-p", "no:cacheprovider", "tests/test_whatsapp_sender.py", "program/02_REFERENCE/ejemplos/webhook-meta"]

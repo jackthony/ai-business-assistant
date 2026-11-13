@@ -5,8 +5,10 @@ from conftest import ScriptedModel
 from fastapi.testclient import TestClient
 from langgraph.checkpoint.memory import InMemorySaver
 
+import channels.telegram
 from agents.graph import build_graph
 from api.chat_app import create_chat_app
+from channels.contract import OutboundReply
 from channels.telegram import build_telegram_router, parse_update
 from services.notifier_memory import InMemoryNotifier
 
@@ -185,3 +187,30 @@ def test_g6_telegram_same_agent_behavior(store):
     web_data = web_res.json()
     assert len(sent_calls) == 1
     assert sent_calls[0][1] == web_data["reply"]
+
+
+@pytest.mark.parametrize(("length", "accepted"), [(1000, True), (1001, False)])
+def test_telegram_webhook_acknowledges_text_at_length_boundary(
+    monkeypatch, length, accepted
+):
+    text = "á" * length
+    dispatch = MagicMock(return_value=OutboundReply(text="Respuesta simulada"))
+    send = MagicMock()
+    monkeypatch.setattr(channels.telegram, "handle_inbound", dispatch)
+    app = create_chat_app(MagicMock(), telegram_secret="secret123", telegram_send=send)
+    with TestClient(app, raise_server_exceptions=False) as client:
+        response = client.post(
+            "/telegram/webhook",
+            json={"message": {"chat": {"id": 123, "type": "private"}, "text": text}},
+            headers={"X-Telegram-Bot-Api-Secret-Token": "secret123"},
+        )
+
+    assert response.status_code == 200
+    assert response.json() == {"ok": True}
+    if accepted:
+        dispatch.assert_called_once()
+        assert dispatch.call_args.args[0].content == text
+        send.assert_called_once_with("123", "Respuesta simulada")
+    else:
+        dispatch.assert_not_called()
+        send.assert_not_called()

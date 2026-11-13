@@ -57,6 +57,7 @@ with open("notas.txt", "w", encoding="utf-8") as f:
 - **Ejemplo:**
 ```python
 import sqlite3
+
 con = sqlite3.connect("agenda.db")
 con.close()
 ```
@@ -89,6 +90,19 @@ Haz esto en el Escritorio, **fuera del repo**, en un archivo `practica_sqlite.py
 **Resultado esperado:** la fila `hola` sigue ahí. Luego investiga una pregunta: ¿`with sqlite3.connect(...)` cierra la conexión o solo guarda los cambios? La respuesta está en la documentación de `sqlite3`. Esa diferencia te servirá en el Paso 11. Borra el archivo al terminar.
 
 ## Paso a paso
+
+### Si ya publicaste una rama con código antes de las pruebas
+
+Conserva tu rama y el PR anterior como evidencia. Desde un árbol limpio, crea una rama nueva para #54 y trae solo tu archivo de pruebas. En PowerShell, con Python 3.11 y tu entorno activado:
+
+```powershell
+git fetch origin
+git switch -c issue-54-memoria-tdd origin/main
+git restore --source=origin/issue-54-memoria-persistente -- tests/test_memory_checkpoint.py
+pytest -q tests/test_memory_checkpoint.py
+```
+
+La prueba inicial debe fallar al importar `memory.sqlite_checkpointer`, que todavía no existe en la nueva rama. Guarda la salida y haz el commit de pruebas. Luego incorpora tu implementación por partes, aplica las observaciones de la revisión anterior y ejecuta T1–T9 y la suite completa. En el nuevo PR enlaza el #222 para conservar el contexto y explica el fallo inicial y el resultado final. No se necesita reescribir la rama publicada.
 
 ### Paso 0 — Prepara tu terreno
 **Haz esto:** en cmd, desde la raíz del repo:
@@ -195,7 +209,7 @@ pytest tests -q
 
 
 ### Paso 10 — T7: la ruta la decide quien llama
-**Haz esto:** escribe T7. Abre `open_checkpointer` con `str(tmp_path / "chat.db")`, haz una invocación con `51900000000` y comprueba que `chat.db` existe dentro de `tmp_path` (fila T7 de la sección 6). 
+**Haz esto:** escribe T7. Abre `open_checkpointer` con `str(tmp_path / "chat.db")`, haz una invocación con `51900000000` y comprueba que `chat.db` existe dentro de `tmp_path` (fila T7 de la sección 6).
 **Por qué:** la función no decide dónde guardar; quien la llama sí. Así las pruebas nunca ensucian el repo.
 **Debes ver:** nada nuevo: el archivo entero sigue con el mismo error de colección. Escribe la función; el rojo completo se comprueba en el Paso 12.
 **Si falla:** si el archivo aparece dentro del repo en vez de `tmp_path`, tu prueba tiene una ruta fija. Corrígela.
@@ -290,7 +304,7 @@ Abre el PR contra `main` con `Closes #54`, la plantilla completa y tus respuesta
 
 **Paso 7 (T4).** Pista 1: `strip()` quita espacios al principio y al final de un texto. Pista 2: busca cómo esperar una excepción en <https://docs.pytest.org/en/stable/how-to/assert.html#assertions-about-expected-exceptions> (`pytest.raises`). Pista 3 (para el tercero: la sección 5.1 dice qué caracteres se permiten; `re.fullmatch` comprueba un texto completo contra un patrón): pruebas cada valor malo dentro de un bloque `with pytest.raises(ValueError):` y compruebas que la excepción aparece.
 
-**Paso 8 (T5).** Pista 1: `Path(__file__)` es la ruta de tu archivo de prueba. Pista 2: busca `resolve` y `parents` en <https://docs.python.org/3/library/pathlib.html>. 
+**Paso 8 (T5).** Pista 1: `Path(__file__)` es la ruta de tu archivo de prueba. Pista 2: busca `resolve` y `parents` en <https://docs.python.org/3/library/pathlib.html>.
 
 **Paso 10 (T7).** Pista 1: `tmp_path` se comporta como una carpeta y `/` une carpeta con nombre de archivo. Pista 2: revisa <https://docs.pytest.org/en/stable/how-to/tmp_path.html>. Pista 3: construyes la ruta del `.db` dentro de `tmp_path`, la pasas a `open_checkpointer`, haces una invocación y compruebas que el archivo existe.
 

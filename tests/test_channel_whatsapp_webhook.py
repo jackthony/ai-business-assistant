@@ -1,0 +1,328 @@
+import hashlib
+import hmac
+import json
+from concurrent.futures import ThreadPoolExecutor
+from threading import Event
+from unittest.mock import MagicMock
+
+import httpx
+import pytest
+from conftest import ScriptedModel
+from fastapi.testclient import TestClient
+from langgraph.checkpoint.memory import InMemorySaver
+
+import channels.whatsapp.webhook
+from agents.graph import build_graph
+from api.chat_app import create_chat_app
+from channels.dispatch import thread_id_for
+from channels.telegram import parse_update
+from channels.whatsapp.sender import WhatsAppSender
+from rag.documents import Document
+from rag.embedding import LexicalEmbedder
+from rag.store import ChromaStore
+from services.notifier_memory import InMemoryNotifier
+
+webhook = channels.whatsapp.webhook
+
+SECRET = "secreto-de-prueba"
+VERIFY = "token-de-prueba"
+PHONE = "51900000000"
+TEXT = "Hola, ¿qué horarios tienen?"
+PREGUNTA = "¿Cuánto cuesta el taller ficticio SENATI?"
+RESPUESTA = "El taller ficticio SENATI cuesta S/ 42.00 [1]."
+STATUSES = {"entry": [{"changes": [{"value": {"statuses": [{"id": "x"}]}}]}]}
+
+
+def _payload(msg: dict) -> dict:
+    return {"entry": [{"changes": [{"value": {"messages": [msg]}}]}]}
+
+
+def _text(body: str = TEXT) -> dict:
+    return _payload({"from": PHONE, "type": "text", "text": {"body": body}})
+
+
+def _sign(body: bytes) -> str:
+    return "sha256=" + hmac.new(SECRET.encode(), body, hashlib.sha256).hexdigest()
+
+
+def _post(client, payload, signature=None):
+    body = json.dumps(payload).encode()
+    headers = {"X-Hub-Signature-256": signature or _sign(body)}
+    return client.post("/whatsapp/webhook", content=body, headers=headers)
+
+
+def _app(graph, send):
+    return create_chat_app(
+        graph,
+        whatsapp_verify_token=VERIFY,
+        whatsapp_app_secret=SECRET,
+        whatsapp_send=send,
+    )
+
+
+def test_w1_verify_challenge():
+    assert webhook.verify_challenge("subscribe", VERIFY, "123", VERIFY) == "123"
+    assert webhook.verify_challenge("subscribe", "otro", "123", VERIFY) is None
+    assert webhook.verify_challenge("unsubscribe", VERIFY, "123", VERIFY) is None
+    assert webhook.verify_challenge("subscribe", "", "123", "") is None
+
+
+def test_w2_get_verification_http():
+    client = TestClient(_app(MagicMock(), lambda u, t: None))
+    url = "/whatsapp/webhook?hub.mode=subscribe&hub.challenge=987&hub.verify_token="
+    ok = client.get(url + VERIFY)
+    assert ok.status_code == 200
+    assert ok.text == "987"
+    assert client.get(url + "malo").status_code == 403
+
+
+def test_w3_signature_is_valid():
+    body = b'{"a": 1}'
+    assert webhook.signature_is_valid(body, _sign(body), SECRET) is True
+    assert webhook.signature_is_valid(b'{"a": 2}', _sign(body), SECRET) is False
+    assert webhook.signature_is_valid(body, None, SECRET) is False
+    assert webhook.signature_is_valid(body, _sign(body), "") is False
+    assert webhook.signature_is_valid(body, _sign(body)[7:], SECRET) is False
+
+
+def test_w4_parse_text():
+    event = webhook.parse_payload(_text())
+    assert event is not None
+    assert event.channel == "whatsapp"
+    assert event.type == "text"
+    assert event.user_id == PHONE
+    assert event.content == TEXT
+    assert event.tenant == "hola_mujer"
+
+
+def test_w5_parse_audio_and_image():
+    voice = webhook.parse_payload(
+        _payload({"from": PHONE, "type": "audio", "audio": {}})
+    )
+    media = webhook.parse_payload(
+        _payload({"from": PHONE, "type": "image", "image": {}})
+    )
+    assert voice is not None and voice.type == "voice" and voice.content is None
+    assert media is not None and media.type == "media" and media.content is None
+
+
+def test_w6_parse_ignored():
+    assert webhook.parse_payload({}) is None
+    assert webhook.parse_payload(STATUSES) is None
+    assert webhook.parse_payload(_payload({"from": PHONE, "type": "reaction"})) is None
+    assert webhook.parse_payload(_payload({"from": PHONE, "type": "location"})) is None
+    assert (
+        webhook.parse_payload(_payload({"type": "text", "text": {"body": "hola"}}))
+        is None
+    )
+    assert (
+        webhook.parse_payload(
+            _payload({"from": PHONE, "type": "text", "text": {"body": None}})
+        )
+        is None
+    )
+
+
+def test_w7_bad_signature_rejected():
+    sent: list = []
+    client = TestClient(_app(MagicMock(), lambda u, t: sent.append((u, t))))
+    assert _post(client, _text(), signature="sha256=abc").status_code == 403
+    body = json.dumps(_text()).encode()
+    assert client.post("/whatsapp/webhook", content=body).status_code == 403
+    assert sent == []
+
+
+def test_w8_router_fails_closed():
+    def send(user_id, text):
+        return None
+
+    with pytest.raises(ValueError):
+        webhook.build_whatsapp_router(MagicMock(), "", SECRET, send)
+    with pytest.raises(ValueError):
+        webhook.build_whatsapp_router(MagicMock(), VERIFY, "  ", send)
+
+
+def test_w9_post_sends_reply_in_background():
+    store = ChromaStore(LexicalEmbedder(), "whatsapp-contract-test")
+    store.ingest(
+        [
+            Document(
+                doc_id="taller-ficticio",
+                text="El taller ficticio SENATI cuesta S/ 42.00.",
+                label="Catálogo ficticio",
+                source="fixture:taller-ficticio",
+                kind="servicio",
+            )
+        ]
+    )
+    graph = build_graph(
+        store,
+        ScriptedModel(RESPUESTA),
+        "SISTEMA",
+        InMemoryNotifier(),
+        None,
+        InMemorySaver(),
+    )
+    sent: list = []
+    with TestClient(_app(graph, lambda u, t: sent.append((u, t)))) as client:
+        malformed = b"{"
+        ignored = client.post(
+            "/whatsapp/webhook",
+            content=malformed,
+            headers={"X-Hub-Signature-256": _sign(malformed)},
+        )
+        assert ignored.status_code == 200
+        assert not sent
+        accepted = _post(client, _text(PREGUNTA))
+        assert (accepted.status_code, accepted.json()) == (200, {"ok": True})
+        assert _post(client, STATUSES).status_code == 200
+    assert len(sent) == 1
+    assert sent[0][0] == PHONE
+    assert "S/ 42.00" in sent[0][1]
+    assert "Catálogo ficticio" in sent[0][1]
+
+
+def test_w10_same_phone_two_channels_two_threads():
+    wa = webhook.parse_payload(_text())
+    raw = {"message": {"chat": {"id": int(PHONE), "type": "private"}, "text": "hola"}}
+    tg = parse_update(raw)
+    assert wa is not None and tg is not None
+    assert thread_id_for(wa) == f"whatsapp:{PHONE}"
+    assert thread_id_for(tg) == f"telegram:{PHONE}"
+    assert thread_id_for(wa) != thread_id_for(tg)
+
+
+def test_signed_webhook_sends_reply_through_async_sender():
+    requests: list[httpx.Request] = []
+
+    def fake_meta(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"messages": [{"id": "wamid.ficticio"}]})
+
+    sender = WhatsAppSender(
+        "id-ficticio", "token-ficticio", transport=httpx.MockTransport(fake_meta)
+    )
+    payload = _payload({"from": PHONE, "type": "audio"})
+    with TestClient(_app(MagicMock(), sender.send_text)) as client:
+        response = _post(client, payload)
+
+    assert (response.status_code, response.json()) == (200, {"ok": True})
+    assert len(requests) == 1
+    assert requests[0].url.path.endswith("/id-ficticio/messages")
+    assert requests[0].headers["Authorization"] == "Bearer token-ficticio"
+    body = json.loads(requests[0].content)
+    assert body["to"] == PHONE
+    assert body["type"] == "text"
+    assert "solo puedo leer mensajes de texto" in body["text"]["body"]
+
+
+def test_signed_batch_sends_every_valid_message_in_order():
+    sent = []
+    payload = {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {"from": "51900000000", "type": "audio"},
+                                {"type": "text", "text": {"body": "Sin remitente"}},
+                                {"from": "51900000001", "type": "image"},
+                            ]
+                        }
+                    },
+                    {"value": {"statuses": [{"id": "estado-ficticio"}]}},
+                ]
+            },
+            {
+                "changes": [
+                    {"value": {"messages": None}},
+                    {"value": {"messages": [{"from": "51900000002", "type": "audio"}]}},
+                ]
+            },
+        ]
+    }
+    with TestClient(_app(MagicMock(), lambda user, text: sent.append(user))) as client:
+        response = _post(client, payload)
+
+    assert (response.status_code, response.json()) == (200, {"ok": True})
+    assert sent == ["51900000000", "51900000001", "51900000002"]
+
+
+def test_batch_continues_after_a_message_fails(caplog):
+    attempted = []
+
+    def sender(user, text):
+        attempted.append(user)
+        if user == "51900000000":
+            raise RuntimeError("detalle sensible de prueba")
+
+    payload = _payload({"from": "51900000000", "type": "audio"})
+    payload["entry"][0]["changes"][0]["value"]["messages"].append(
+        {"from": "51900000001", "type": "audio"}
+    )
+    with TestClient(_app(MagicMock(), sender), raise_server_exceptions=False) as client:
+        response = _post(client, payload)
+
+    assert (response.status_code, response.json()) == (200, {"ok": True})
+    assert attempted == ["51900000000", "51900000001"]
+    assert "RuntimeError" in caplog.text
+    assert "detalle sensible de prueba" not in caplog.text
+    assert "51900000000" not in caplog.text
+
+
+def test_duplicate_ids_across_posts_and_in_a_batch():
+    send = MagicMock()
+    message = {"from": PHONE, "type": "audio", "id": "wamid.repetido"}
+    payload = _payload(message)
+    messages = payload["entry"][0]["changes"][0]["value"]["messages"]
+    messages.extend([message, {**message, "id": "wamid.distinto"}])
+
+    with TestClient(_app(MagicMock(), send)) as client:
+        assert _post(client, payload).json() == {"ok": True}
+        assert _post(client, _payload(message)).json() == {"ok": True}
+
+    assert send.call_count == 2
+
+
+def test_duplicate_id_while_first_send_is_in_progress():
+    first_send_started = Event()
+    allow_first_send = Event()
+
+    def block_first_send(user, text):
+        if not first_send_started.is_set():
+            first_send_started.set()
+            assert allow_first_send.wait(timeout=10)
+
+    send = MagicMock(side_effect=block_first_send)
+    payload = _payload({"from": PHONE, "type": "audio", "id": "wamid.en-curso"})
+
+    with (
+        TestClient(_app(MagicMock(), send)) as client,
+        ThreadPoolExecutor(max_workers=2) as executor,
+    ):
+        first = executor.submit(_post, client, payload)
+        try:
+            assert first_send_started.wait(timeout=5)
+            duplicate = executor.submit(_post, client, payload)
+            assert duplicate.result(timeout=5).json() == {"ok": True}
+        finally:
+            allow_first_send.set()
+        assert first.result(timeout=5).json() == {"ok": True}
+
+    send.assert_called_once()
+
+
+def test_failed_message_can_be_retried_until_it_succeeds():
+    def fail_first_attempt(user, text):
+        if send.call_count == 1:
+            raise RuntimeError("falla simulada")
+
+    send = MagicMock(side_effect=fail_first_attempt)
+    payload = _payload({"from": PHONE, "type": "audio", "id": "wamid.reintento"})
+
+    with TestClient(_app(MagicMock(), send)) as client:
+        for _ in range(3):
+            assert _post(client, payload).json() == {"ok": True}
+
+    assert send.call_count == 2

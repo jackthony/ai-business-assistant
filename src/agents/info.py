@@ -44,7 +44,10 @@ def build_user_prompt(question: str, passages: list[Passage]) -> str:
         bloques.append(f"[{n}] {p.label}{aviso}: {_clean(p.text)}")
     return (
         "<fragmentos>\n" + "\n".join(bloques) + "\n</fragmentos>\n"
-        f"<pregunta>\n{_clean(question)}\n</pregunta>"
+        f"<pregunta>\n{_clean(question)}\n</pregunta>\n\n"
+        "Formato de salida obligatorio: después de cada dato, copia la marca numérica "
+        "del fragmento que lo respalda, con sus corchetes. "
+        "Si ningún fragmento respalda el dato, indica que no lo tienes."
     )
 
 

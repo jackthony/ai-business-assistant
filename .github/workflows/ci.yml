@@ -99,6 +99,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Revisar dependencias (cadena de suministro)
-        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4 (pin por SHA)
+        uses: actions/dependency-review-action@bbc44d14a204704ccc493733616cd1e93a0321ec # v4 (pin por SHA)
         with:
           fail-on-severity: high
